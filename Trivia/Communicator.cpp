@@ -16,8 +16,8 @@ void Communicator::startHandleRequests()
 		std::thread user_thread(&Communicator::handleNewClient, this, Client_socket);
 		user_thread.detach();
 
-		LoginRequestHandler Handle;
-		m_clients[Client_socket] = &Handle;
+		LoginRequestHandler* Handler = new LoginRequestHandler();
+		m_clients[Client_socket] = Handler;
 	}
 }
 
