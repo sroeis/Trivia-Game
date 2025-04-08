@@ -1,5 +1,18 @@
+#pragma once
+
 #include <vector>
-typedef std::vector<char> Buffer;
+#include <iostream>
+#include <bitset>
+#include "json.hpp"
+
+
+//just to make typing it easier
+using json = nlohmann::json;
+
+
+typedef std::vector<unsigned char> Buffer;
+
+//structs
 struct LoginResponse
 {
 	unsigned int status;
@@ -10,12 +23,27 @@ struct SignupResponse
 	unsigned int status;
 };
 
-class JsonResponsePacketSerializer 
+struct ErrorResponse
+{
+	std::string message;
+};
+
+
+
+class JsonResponsePacketSerializer  
 {
 public:
-	Buffer serializeResponse(ErrorResponse); 
+	Buffer serializeResponse(ErrorResponse Er); 
+	Buffer serializeResponse(LoginResponse Lr);
+	Buffer serializeResponse(SignupResponse Sr);
 
 private:
-	
+	//turn the input string into a string holding the binary of the original
+	std::string TurnToBinary(std::string Str);
 
 };
+
+//macro from json.hpp that turn struct to json and the other way
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LoginResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SignupResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ErrorResponse, message)
