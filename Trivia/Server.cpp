@@ -2,6 +2,7 @@
 
 
 Server::Server()
+	:m_communicator(Communicator())
 {
 }
 
