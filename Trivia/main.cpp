@@ -2,6 +2,7 @@
 
 #include "Server.h"
 #include "WSAInitializer.h"
+#include "JsonResponsePacketSerializer.h"
 
 int main()
 {

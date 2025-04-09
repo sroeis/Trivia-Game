@@ -1,4 +1,4 @@
-#include "Communicator.h"
+ #include "Communicator.h"
 
 void Communicator::startHandleRequests()
 {
@@ -16,6 +16,7 @@ void Communicator::startHandleRequests()
 		std::thread user_thread(&Communicator::handleNewClient, this, Client_socket);
 		user_thread.detach();
 
+		std::lock_guard<std::mutex> lock(mtx);
 		LoginRequestHandler* Handler = new LoginRequestHandler();
 		m_clients[Client_socket] = Handler;
 	}

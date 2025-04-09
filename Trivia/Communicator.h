@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <mutex>
 #include <map>
 
 #define PORT 6969
@@ -29,6 +30,7 @@ private:
 	void handleNewClient(SOCKET clientSocket);
 
 	SOCKET m_serverSocket;
+	std::mutex mtx;
 	std::map<SOCKET, IRequestHandler*> m_clients;
 
 
