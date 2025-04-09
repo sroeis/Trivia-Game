@@ -11,8 +11,8 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse Er)
 
 	std::string BinaryStr = TurnToBinary(JsonStr);
 
-	Buffer buffer(BinaryStr.begin(), BinaryStr.end());;
-	
+	Buffer buffer = PackIntoBuffer(ERROR_CODE, BinaryStr);
+
 	return buffer;
 }
 
@@ -25,7 +25,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse Lr)
 
 	std::string BinaryStr = TurnToBinary(JsonStr);
 
-	Buffer buffer(BinaryStr.begin(), BinaryStr.end());;
+	Buffer buffer = PackIntoBuffer(LOGIN_CODE, BinaryStr);
 
 	return buffer;
 }
@@ -39,7 +39,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse Sr)
 
 	std::string BinaryStr = TurnToBinary(JsonStr);
 
-	Buffer buffer(BinaryStr.begin(), BinaryStr.end());;
+	Buffer buffer = PackIntoBuffer(SIGNUP_CODE, BinaryStr);
 
 	return buffer;
 }
@@ -55,6 +55,27 @@ std::string JsonResponsePacketSerializer::TurnToBinary(std::string Str)
 	}
 	
 	return BinaryStr;
+}
+
+Buffer JsonResponsePacketSerializer::PackIntoBuffer(int Code, std::string Str)
+{
+	Buffer buffer;
+
+	// first the code 
+	buffer.push_back(Code);
+
+	//then the data size byte by byte
+	uint32_t size = Str.size();
+	for (int i = 0; i < 4; ++i) {
+		//bit shifting the size by a byte=8bits each time and pushing it in
+		buffer.push_back((size >> (8 * i)) & 0xFF);
+	}
+
+	//inserting the string to the end of the buffer 
+	buffer.insert(buffer.end(), Str.begin(), Str.end());
+
+	//now the buffer is complete it has first byte the code then size then string
+	return buffer;
 }
 
 

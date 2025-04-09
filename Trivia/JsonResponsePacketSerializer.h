@@ -5,6 +5,9 @@
 #include <bitset>
 #include "json.hpp"
 
+#define LOGIN_CODE 100
+#define ERROR_CODE 400
+#define SIGNUP_CODE 200
 
 //just to make typing it easier
 using json = nlohmann::json;
@@ -40,6 +43,8 @@ public:
 private:
 	//turn the input string into a string holding the binary of the original
 	std::string TurnToBinary(std::string Str);
+	//get the data into the protocol format : Code - Size - Data
+	Buffer PackIntoBuffer(int Code,std::string Str);
 
 };
 
