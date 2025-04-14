@@ -65,7 +65,7 @@ Buffer JsonResponsePacketSerializer::PackIntoBuffer(int Code, std::string Str)
 	buffer.push_back(Code);
 
 	//then the data size byte by byte
-	uint32_t size = Str.size();
+	uint32_t size = Str.size()/8; // /8 because str is represented as binary so 8 chars represent 1 byte
 	for (int i = 0; i < 4; ++i) {
 		//bit shifting the size by a byte=8bits each time and pushing it in
 		buffer.push_back((size >> (8 * i)) & 0xFF);
