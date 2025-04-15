@@ -34,7 +34,26 @@ LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(Buffer buff
 
 SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer buffer)
 {
-	return SignupRequest();
+	SignupRequest sr;
+	std::string jsonStr = "";
+	uint32_t size = 0;
+	for (int i = SIZE_START; i < SIZE_END; ++i) //read the size 
+	{
+		size |= (buffer[i] << (8 * i));
+	}
+
+	for (int i = MSG_START; i < size + MSG_START; i++)
+	{
+		jsonStr += buffer[i];
+	}
+
+	json parsed = json::parse(jsonStr);
+
+	sr.email = parsed["email"];
+	sr.username = parsed["username"];
+	sr.password = parsed["password"];
+
+	return sr;
 }
 
 bool JsonResponsePacketDeserializer::isRequestRelevant(Requestinfo request)
