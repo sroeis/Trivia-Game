@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
 #include <iostream>
 #include <bitset>
 #include "json.hpp"
+#include "Responses.h"
 
 #define LOGIN_CODE 100
 #define ERROR_CODE 400
@@ -12,24 +12,6 @@
 //just to make typing it easier
 using json = nlohmann::json;
 
-
-typedef std::vector<unsigned char> Buffer;
-
-//structs
-struct LoginResponse
-{
-	unsigned int status;
-};
-
-struct SignupResponse
-{
-	unsigned int status;
-};
-
-struct ErrorResponse
-{
-	std::string message;
-};
 
 
 
