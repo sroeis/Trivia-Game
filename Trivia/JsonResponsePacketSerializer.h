@@ -15,15 +15,15 @@ using json = nlohmann::json;
 class JsonResponsePacketSerializer  
 {
 public:
-	Buffer serializeResponse(ErrorResponse Er); 
-	Buffer serializeResponse(LoginResponse Lr);
-	Buffer serializeResponse(SignupResponse Sr);
+	static Buffer serializeResponse(ErrorResponse Er); 
+	static Buffer serializeResponse(LoginResponse Lr);
+	static Buffer serializeResponse(SignupResponse Sr);
 
 private:
 	//turn the input string into a string holding the binary of the original
-	std::string TurnToBinary(std::string Str);
+	static std::string TurnToBinary(std::string Str);
 	//get the data into the protocol format : Code - Size - Data
-	Buffer PackIntoBuffer(int Code,std::string Str);
+	static Buffer PackIntoBuffer(int Code,std::string Str);
 
 };
 

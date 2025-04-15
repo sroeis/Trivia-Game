@@ -1,5 +1,6 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "json.hpp"
+#include <bitset>
 
 using json = nlohmann::json;
 
@@ -13,6 +14,7 @@ LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(Buffer buff
 {
 	LoginRequest lr;
 	std::string jsonStr = "";
+	std::string BinaryStr = "";
 	uint32_t size = 0;
 	for (int i = SIZE_START; i < SIZE_END; ++i) //read the size 
 	{
@@ -21,8 +23,10 @@ LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(Buffer buff
 
 	for (int i = MSG_START; i < size + MSG_START; i++)
 	{
-		jsonStr += buffer[i];
+		BinaryStr += buffer[i];
 	}
+
+	jsonStr = BinaryToString(BinaryStr);
 
 	json parsed = json::parse(jsonStr);
 
@@ -36,6 +40,7 @@ SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer bu
 {
 	SignupRequest sr;
 	std::string jsonStr = "";
+	std::string BinaryStr = "";
 	uint32_t size = 0;
 	for (int i = SIZE_START; i < SIZE_END; ++i) //read the size 
 	{
@@ -44,8 +49,10 @@ SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer bu
 
 	for (int i = MSG_START; i < size + MSG_START; i++)
 	{
-		jsonStr += buffer[i];
+		BinaryStr += buffer[i];
 	}
+
+	jsonStr = BinaryToString(BinaryStr);
 
 	json parsed = json::parse(jsonStr);
 
@@ -56,14 +63,16 @@ SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer bu
 	return sr;
 }
 
-bool JsonResponsePacketDeserializer::isRequestRelevant(Requestinfo request)
+std::string JsonResponsePacketDeserializer::BinaryToString(std::string BinaryStr)
 {
-	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
-		return false;
-	return true;
-}
+	std::string str = "";
+	std::bitset<8> bits;
+	for (int i = 0; i < BinaryStr.size(); i += 8)
+	{
+		bits = std::bitset<8>(BinaryStr.substr(i, 8));
+		str += static_cast<char>(bits.to_ulong());
+	}
+	return str;
 
-RequestResult JsonResponsePacketDeserializer::handleRequest(Requestinfo request)
-{
-	return RequestResult();
+
 }

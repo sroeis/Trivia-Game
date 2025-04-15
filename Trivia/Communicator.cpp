@@ -54,7 +54,16 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	const std::string helloMsg = "Hello";
 	char buffer[1024] = { 0 };
 
-	//send hello
+
+	int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+	if (bytesReceived <= 0)
+	{
+		std::cerr << "Error receiving message from client socket " << clientSocket << std::endl;
+		closesocket(clientSocket);
+		return;
+	}
+
+
 	int sendResult = send(clientSocket, helloMsg.c_str(), helloMsg.size(), 0);
 	if (sendResult == SOCKET_ERROR)
 	{
@@ -64,17 +73,5 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	}
 
 
-	// get msg from client
-	int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
-	if (bytesReceived <= 0)
-	{
-		std::cerr << "Error receiving message from client socket " << clientSocket << std::endl;
-		closesocket(clientSocket);
-		return;
-	}
-
-	// print the msg
-	std::string receivedMsg(buffer, bytesReceived);
-	std::cout << "Received from client " << clientSocket << ": " << receivedMsg << std::endl;
 
 }

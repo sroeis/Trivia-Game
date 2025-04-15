@@ -3,9 +3,11 @@
 #include "IRequestHandler.h"
 #include "Responses.h"
 
+
+
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	virtual bool isRequestRelevant(Requestinfo request) = 0;
-	virtual RequestResult handleRequest(Requestinfo request) = 0;
+	bool isRequestRelevant(Requestinfo request);
+	RequestResult handleRequest(Requestinfo request);
 };
