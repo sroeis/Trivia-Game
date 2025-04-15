@@ -58,7 +58,9 @@ SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer bu
 
 bool JsonResponsePacketDeserializer::isRequestRelevant(Requestinfo request)
 {
-	return false;
+	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
+		return false;
+	return true;
 }
 
 RequestResult JsonResponsePacketDeserializer::handleRequest(Requestinfo request)
