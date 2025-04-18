@@ -2,12 +2,11 @@
 #include "LoginRequestHandler.h"
 #include "Responses.h"
 
-
-class JsonResponsePacketDeserializer
+class JsonResponsePacketDeserializer : public LoginRequestHandler
 {
 public:
-	LoginRequest deserializeLoginRequest(Buffer buffer);
-	SignupRequest deserializeSignupRequest(Buffer buffer);
+	static LoginRequest deserializeLoginRequest(Buffer buffer);
+	static SignupRequest deserializeSignupRequest(Buffer buffer);
 private:
-
+	static std::string BinaryToString(std::string BinaryStr);
 };

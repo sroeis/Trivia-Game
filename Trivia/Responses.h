@@ -1,6 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include "IRequestHandler.h"
+
+#define LOGIN_CODE 100
+#define ERROR_CODE 400
+#define SIGNUP_CODE 200
 
 
 typedef std::vector<unsigned char> Buffer;

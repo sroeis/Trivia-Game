@@ -5,9 +5,6 @@
 #include "json.hpp"
 #include "Responses.h"
 
-#define LOGIN_CODE 100
-#define ERROR_CODE 400
-#define SIGNUP_CODE 200
 
 //just to make typing it easier
 using json = nlohmann::json;
