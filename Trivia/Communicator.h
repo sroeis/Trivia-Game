@@ -14,7 +14,10 @@
 #include <thread>
 #include <mutex>
 #include <map>
+#include<ctime>
 
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
 #define PORT 6969
 
 
@@ -28,6 +31,8 @@ private:
 
 	void bindAndListen();
 	void handleNewClient(SOCKET clientSocket);
+	int getCode(const char bits[]);
+	void sendMsg(const Buffer& msg, SOCKET clientSocket);
 
 	SOCKET m_serverSocket;
 	std::mutex mtx;
