@@ -1,5 +1,10 @@
  #include "Communicator.h"
 
+#define CODE_POS 0
+#define SIZE_START 1 
+#define SIZE_END 5
+#define MSG_START 5
+
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -51,27 +56,53 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	const std::string helloMsg = "Hello";
-	char buffer[1024] = { 0 };
+	char bitBuff[1024] = { 0 };
+	int bytesReceived = recv(clientSocket, bitBuff, sizeof(bitBuff), 0);
+	Requestinfo ri; 
+	ri.receivalTime = time(nullptr);
+	RequestResult reqResult;
+
+	int reqCode = getCode(bitBuff);
+
+	ri.id = reqCode;
 
 
-	int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
-	if (bytesReceived <= 0)
+	size_t length = std::strlen(bitBuff);  // Get the length of the buffer
+	Buffer bitBuffer(bitBuff, bitBuff + length);
+
+	ri.buffer = bitBuffer;
+
+	if (m_clients[clientSocket]->isRequestRelevant(ri))
 	{
-		std::cerr << "Error receiving message from client socket " << clientSocket << std::endl;
-		closesocket(clientSocket);
-		return;
+		reqResult = m_clients[clientSocket]->handleRequest(ri);
+	}
+	else
+	{
+		ErrorResponse err;
+		err.message = "Error in request code.";
+		throw err;
 	}
 
+	sendMsg(reqResult.response, clientSocket);
+}
 
-	int sendResult = send(clientSocket, helloMsg.c_str(), helloMsg.size(), 0);
+int Communicator::getCode (const char bits[])
+{
+	int result = 0;
+	for (int i = 0; i < 8; ++i) 
+	{
+		result = (result << 1) | (bits[i] - '0');
+	}
+	return result;
+}
+
+void Communicator::sendMsg(const Buffer& msg, SOCKET clientSocket)
+{
+	int sendResult = send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
 	if (sendResult == SOCKET_ERROR)
 	{
 		std::cerr << "Error sending message to client socket " << clientSocket << std::endl;
 		closesocket(clientSocket);
 		return;
 	}
-
-
-
 }
