@@ -13,23 +13,12 @@ using json = nlohmann::json;
 LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(Buffer buffer)
 {
 	LoginRequest lr;
-	std::string jsonStr = "";
-	std::string BinaryStr = "";
-	uint32_t size = 0;
-	for (int i = SIZE_START; i < SIZE_END; ++i) //read the size 
-	{
-		size |= (buffer[i] << (8 * i));
-	}
 
-	for (int i = MSG_START; i < size + MSG_START; i++)
-	{
-		BinaryStr += buffer[i];
-	}
-
-	jsonStr = BinaryToString(BinaryStr);
+	std::string jsonStr(buffer.begin(), buffer.end());
 
 	json parsed = json::parse(jsonStr);
 
+	// Extract data
 	lr.username = parsed["username"];
 	lr.password = parsed["password"];
 
@@ -39,40 +28,15 @@ LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(Buffer buff
 SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer buffer)
 {
 	SignupRequest sr;
-	std::string jsonStr = "";
-	std::string BinaryStr = "";
-	uint32_t size = 0;
-	for (int i = SIZE_START; i < SIZE_END; ++i) //read the size 
-	{
-		size |= (buffer[i] << (8 * i));
-	}
 
-	for (int i = MSG_START; i < size + MSG_START; i++)
-	{
-		BinaryStr += buffer[i];
-	}
-
-	jsonStr = BinaryToString(BinaryStr);
+	std::string jsonStr(buffer.begin(), buffer.end());
 
 	json parsed = json::parse(jsonStr);
 
-	sr.email = parsed["email"];
+	// Extract data
 	sr.username = parsed["username"];
 	sr.password = parsed["password"];
+	sr.email = parsed["email"];
 
 	return sr;
-}
-
-std::string JsonResponsePacketDeserializer::BinaryToString(std::string BinaryStr)
-{
-	std::string str = "";
-	std::bitset<8> bits;
-	for (int i = 0; i < BinaryStr.size(); i += 8)
-	{
-		bits = std::bitset<8>(BinaryStr.substr(i, 8));
-		str += static_cast<char>(bits.to_ulong());
-	}
-	return str;
-
-
 }
