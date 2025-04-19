@@ -92,16 +92,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	sendMsg(reqResult.response, clientSocket);
 }
 
-int Communicator::getCode (const char bits[])
-{
-	int result = 0;
-	for (int i = 0; i < 8; ++i) 
-	{
-		result = (result << 1) | (bits[i] - '0');
-	}
-	return result;
-}
-
 void Communicator::sendMsg(const Buffer& msg, SOCKET clientSocket)
 {
 	int sendResult = send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);

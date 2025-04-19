@@ -20,10 +20,9 @@ public:
 	static Buffer serializeResponse(SignupResponse Sr);
 
 private:
-	//turn the input string into a string holding the binary of the original
-	static std::string TurnToBinary(std::string Str);
 	//get the data into the protocol format : Code - Size - Data
-	static Buffer PackIntoBuffer(int Code,std::string Str);
+	static Buffer PackIntoBuffer(int Code, const Buffer& payload);
+
 
 };
 

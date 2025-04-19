@@ -5,13 +5,13 @@
 Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse Er)
 {
 	//using the macro to turn
-	json J = Er;
+	json j = Er;
 
-	std::string JsonStr = J.dump();
+	std::string jsonStr = j.dump();
 
-	std::string BinaryStr = TurnToBinary(JsonStr);
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(ERROR_CODE, BinaryStr);
+	Buffer buffer = PackIntoBuffer(ERROR_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -19,13 +19,13 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse Er)
 Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse Lr)
 {
 	//using the macro to turn
-	json J = Lr;
+	json j = Lr;
 
-	std::string JsonStr = J.dump();
+	std::string jsonStr = j.dump();
 
-	std::string BinaryStr = TurnToBinary(JsonStr);
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGIN_CODE, BinaryStr);
+	Buffer buffer = PackIntoBuffer(LOGIN_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -33,49 +33,42 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse Lr)
 Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse Sr)
 {
 	//using the macro to turn
-	json J = Sr;
+	json j = Sr;
 
-	std::string JsonStr = J.dump();
+	std::string jsonStr = j.dump();
 
-	std::string BinaryStr = TurnToBinary(JsonStr);
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(SIGNUP_CODE, BinaryStr);
+	Buffer buffer = PackIntoBuffer(SIGNUP_CODE, jsonBuff);
 
 	return buffer;
 }
 
-std::string JsonResponsePacketSerializer::TurnToBinary(std::string Str)
-{
 
-	std::string BinaryStr = "";
 
-	for (char& _char : Str)
-	{
-		BinaryStr += std::bitset<8>(_char).to_string();
-	}
-	
-	return BinaryStr;
-}
-
-Buffer JsonResponsePacketSerializer::PackIntoBuffer(int Code, std::string Str)
+// Modified PackIntoBuffer to take Buffer (raw bytes) directly
+Buffer JsonResponsePacketSerializer::PackIntoBuffer(int Code, const Buffer& payload)
 {
 	Buffer buffer;
 
-	// first the code 
-	buffer.push_back(Code);
+	// Push the code 
+	buffer.push_back(static_cast<unsigned char>(Code));
 
-	//then the data size byte by byte
-	uint32_t size = Str.size()/8; //8 because str is represented as binary so 8 chars represent 1 byte
-	for (int i = 0; i < 4; ++i) {
-		//bit shifting the size by a byte=8bits each time and pushing it in
-		buffer.push_back((size >> (8 * i)) & 0xFF);
-	}
+	// Push the Msg size 
+	uint32_t size = payload.size();
+	unsigned char sizeBytes[4];
+	// Manually pack as little-endian
+	sizeBytes[0] = size & 0xFF;
+	sizeBytes[1] = (size >> 8) & 0xFF;
+	sizeBytes[2] = (size >> 16) & 0xFF;
+	sizeBytes[3] = (size >> 24) & 0xFF;
+	buffer.insert(buffer.end(), sizeBytes, sizeBytes + 4);
 
-	//inserting the string to the end of the buffer 
-	buffer.insert(buffer.end(), Str.begin(), Str.end());
+	// Append the actual payload bytes
+	buffer.insert(buffer.end(), payload.begin(), payload.end());
 
-	//now the buffer is complete it has first byte the code then size then string
 	return buffer;
 }
+
 
 
