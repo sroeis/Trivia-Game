@@ -1,10 +1,9 @@
  #include "Communicator.h"
 
 #define CODE_POS 0
-#define SIZE_START 1 
-#define SIZE_END 5
+#define SIZE_LENGTH 4
 #define MSG_START 5
-
+#define HEADER_SIZE 5 //code + size
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -56,21 +55,28 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	char bitBuff[1024] = { 0 };
-	int bytesReceived = recv(clientSocket, bitBuff, sizeof(bitBuff), 0);
-	Requestinfo ri; 
-	ri.receivalTime = time(nullptr);
+	char headerBuff[HEADER_SIZE] = { 0 }; //size + code
+	unsigned int msgSize = 0;
+	Requestinfo ri;
+	
 	RequestResult reqResult;
 
-	int reqCode = getCode(bitBuff);
+	int bytesReceived = recv(clientSocket, headerBuff, HEADER_SIZE, 0); //recive size and code
+	ri.receivalTime = time(nullptr);
 
+	// Code = 1 byte
+	int reqCode = headerBuff[CODE_POS];
+	// Size = 4 bytes
+	std::memcpy(&msgSize, &headerBuff[CODE_POS], SIZE_LENGTH);
+	// Make buffer with the correct size
+	Buffer buffer(msgSize);
+
+	// Receive the payload
+	bytesReceived = recv(clientSocket, reinterpret_cast<char*>(buffer.data()), msgSize, MSG_WAITALL);
+
+	// Complete RequestInfo
+	ri.buffer = buffer;
 	ri.id = reqCode;
-
-
-	size_t length = std::strlen(bitBuff);  // Get the length of the buffer
-	Buffer bitBuffer(bitBuff, bitBuff + length);
-
-	ri.buffer = bitBuffer;
 
 	if (m_clients[clientSocket]->isRequestRelevant(ri))
 	{
