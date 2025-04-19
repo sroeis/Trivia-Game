@@ -17,6 +17,7 @@ def build_message(code, message_dict):
     size_in_bytes = len(data_bytes)
 
     header = struct.pack('<BI', code, size_in_bytes)  # < = little endian, B = unsigned char, I = unsigned int
+    print(size_in_bytes)
     full_message = header + data_bytes
     return full_message  # Return the byte string directly!
 
