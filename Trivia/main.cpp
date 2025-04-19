@@ -19,5 +19,6 @@ int main()
 	}
 	system("PAUSE");
 
+	std::cout << "Returning from main at line " << __LINE__ << std::endl;
 	return 0;
 }
