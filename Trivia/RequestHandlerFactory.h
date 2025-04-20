@@ -1,13 +1,14 @@
 #pragma once
 //#include "IDataBase.h"
 #include "LoginManager.h"
+class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
 #include "IRequestHandler.h"
 
 class RequestHandlerFactory
 {
 public:
-	LoginRequestHandler createLoginRequestHandler();
+	LoginRequestHandler* createLoginRequestHandler();
 	LoginManager& getLoginManager();
 
 	//MenuRequestHandler createMenuRequestHandler(LoggedUser user);

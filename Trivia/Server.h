@@ -7,7 +7,7 @@
 #include <iostream>
 #include <thread>
 #include <string>
-#include "SqliteDataBase.h"
+#include "SqliteDatabase.h"
 #include "Communicator.h"
 #include "RequestHandlerFactory.h"
 
