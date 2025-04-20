@@ -4,6 +4,7 @@
 class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
 #include "IRequestHandler.h"
+#include "IDatabase.h"
 
 class RequestHandlerFactory
 {
@@ -22,8 +23,8 @@ public:
 	//GameManager& getGameManager()
 
 private:
-	//IdataBase* m_dataBase;
-	LoginManager m_loginManager;
+	IDataBase* m_dataBase;
+	LoginManager& m_loginManager;
 	//RoomManager m_roomManager;
 	//GameManager m_gameManager;
 };
