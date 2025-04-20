@@ -7,8 +7,9 @@
 #include <iostream>
 #include <thread>
 #include <string>
-
+#include "SqliteDataBase.h"
 #include "Communicator.h"
+#include "RequestHandlerFactory.h"
 
 
 class Server
@@ -18,4 +19,8 @@ public:
 	void run();
 private:
 	Communicator m_communicator;
+	IDataBase* m_database;
+	RequestHandlerFactory m_handlerFactory;
+
+	
 };
