@@ -1,6 +1,7 @@
 #include "LoginRequestHandler.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
+#include "RequestHandlerFactory.h"
 bool LoginRequestHandler::isRequestRelevant(Requestinfo request)
 {
 	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
@@ -37,4 +38,14 @@ RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
 	}
 
 	return result;
+}
+
+RequestResult LoginRequestHandler::login(Requestinfo ri)
+{
+	return RequestResult();
+}
+
+RequestResult LoginRequestHandler::signup(Requestinfo ri)
+{
+	return RequestResult();
 }
