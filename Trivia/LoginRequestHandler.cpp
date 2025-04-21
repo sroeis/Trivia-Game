@@ -22,11 +22,11 @@ RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
 	}
 	if (request.id == LOGIN_CODE)
 	{
-		login(request);
+		result = login(request);
 	}
 	else if(request.id == SIGNUP_CODE)
 	{
-		signup(request);
+		result = signup(request);
 	}
 
 	return result;
@@ -64,7 +64,7 @@ RequestResult LoginRequestHandler::signup(Requestinfo ri)
 	
 	SignupRequest sr;
 	sr = JsonResponsePacketDeserializer::deserializeSignupRequest(ri.buffer);
-	if(m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email));
+	if(m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email))
 	{
 		SignupResponse response;
 		response.status = 100;

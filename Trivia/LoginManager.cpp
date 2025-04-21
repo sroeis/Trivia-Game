@@ -16,16 +16,20 @@ SignUpStatus LoginManager::signup(const string username, const string password, 
 
 LoginStatus LoginManager::login(const string username, const string password)
 {
-	if (m_dataBase->DoesUserExist(username) && m_dataBase->doesPasswordMatch(username, password))
+	for (auto it = m_loggedUsers.begin(); it != m_loggedUsers.end(); ++it) {
+		if (it->getUsername() == username) {
+			return false; // User is already logged in
+		}
+	}	
+
+	if ((m_dataBase->DoesUserExist(username)) && m_dataBase->doesPasswordMatch(username, password))
 	{
 		LoggedUser newUser(username);
 		m_loggedUsers.push_back(newUser);
 		return true; // Login successful
 	}
-	else
-	{
-		return false; // Login failed
-	}
+
+	return false; // Login failed
 }
 
 void LoginManager::logout(const string username)

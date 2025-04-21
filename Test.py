@@ -21,20 +21,12 @@ def build_message(code, message_dict):
     full_message = header + data_bytes
     return full_message  # Return the byte string directly!
 
-def main():
-    port = input("What port to use? ")
-    if int(port) > 65535 or int(port) < 1024:
-        print("Can't use this port")
-        return
-
-    try:
-        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(('127.0.0.1', int(port)))
-    except socket.error:
-        print("An error occurred while connecting!")
-        return
-
-    msg_type = input("Choose message type (login/signup): ").strip().lower()
+def send_request(client):
+    while True:
+        msg_type = input("Choose message type (login/signup): ").strip().lower()
+        if msg_type in ['login', 'signup']:
+            break
+        print("Invalid message type! Please enter either 'login' or 'signup'")
 
     if msg_type == 'login':
         username = input("Username: ")
@@ -44,7 +36,7 @@ def main():
             "password": password
         }
         code = LOGIN_CODE
-    elif msg_type == 'signup':
+    else:  # signup
         username = input("Username: ")
         password = input("Password: ")
         email = input("Email: ")
@@ -54,19 +46,12 @@ def main():
             "email": email
         }
         code = SIGNUP_CODE
-    else:
-        print("Invalid message type!")
-        return
-
-
 
     # Build the message (byte string)
     full_message = build_message(code, message)
     print(full_message)
     # Send message
     client.sendall(full_message)
-
-
 
     # Receive response
     response = client.recv(4096)
@@ -76,7 +61,7 @@ def main():
             # Ensure we have enough bytes for header
             if len(response) < 5:
                 print(f"Error: Received incomplete header ({len(response)} bytes)")
-                return # Or handle differently
+                return True # Continue the loop
 
             # Parse the header
             code = response[0]
@@ -88,7 +73,7 @@ def main():
             if len(response) < payload_end_index:
                  print(f"Error: Received incomplete payload. Expected {size} bytes, got {len(response) - header_size}")
                  # Consider receiving more data if payload might be fragmented
-                 return # Or handle differently
+                 return True # Continue the loop
 
             # Extract *only* the payload bytes using the size
             data_bytes = response[header_size:payload_end_index]
@@ -110,6 +95,31 @@ def main():
              print("Error: Not enough data received to parse header or payload.")
         except Exception as e:
             print(f"Error parsing response: {e}")
+    
+    return True # Continue the loop
+
+def main():
+    port = input("What port to use? ")
+    if int(port) > 65535 or int(port) < 1024:
+        print("Can't use this port")
+        return
+
+    try:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect(('127.0.0.1', int(port)))
+    except socket.error:
+        print("An error occurred while connecting!")
+        return
+
+    # Main loop for sending requests
+    while True:
+        if not send_request(client):
+            break
+        
+        # Ask if user wants to send another request
+        continue_sending = input("Do you want to send another request? (y/n): ").strip().lower()
+        if continue_sending != 'y':
+            break
 
     client.close()
 
