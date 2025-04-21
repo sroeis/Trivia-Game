@@ -70,11 +70,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	int bytesReceived = recv(clientSocket, headerBuff, HEADER_SIZE, 0); //recive size and code
 	ri.receivalTime = time(nullptr);
 
-	for (int i = 0; i < HEADER_SIZE; i++)
-	{
-		char niga = headerBuff[i];
-		std::cout << headerBuff[i];
-	}
 	// Code = 1 byte
 	int reqCode = headerBuff[CODE_POS];
 	// Size = 4 bytes
@@ -107,10 +102,10 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 void Communicator::sendMsg(const Buffer& msg, SOCKET clientSocket)
 {
 	int sendResult = send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
-	for (char cha : msg)
+	/*for (char cha : msg)
 	{
 		std::cout << cha;
-	}
+	}*/
 	if (sendResult == SOCKET_ERROR)
 	{
 		std::cerr << "Error sending message to client socket " << clientSocket << std::endl;
