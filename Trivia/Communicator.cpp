@@ -3,7 +3,13 @@
 #define CODE_POS 0
 #define SIZE_LENGTH 4
 #define MSG_START 5
-#define HEADER_SIZE 5 //code + size
+#define HEADER_SIZE 5 
+Communicator::Communicator(RequestHandlerFactory handler) : m_handlerFactory(handler), m_serverSocket(INVALID_SOCKET)
+{
+	
+}
+
+//code + size
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -21,7 +27,7 @@ void Communicator::startHandleRequests()
 		user_thread.detach();
 
 		std::lock_guard<std::mutex> lock(mtx);
-		LoginRequestHandler* Handler = new LoginRequestHandler();
+		LoginRequestHandler* Handler = new LoginRequestHandler(this->m_handlerFactory);
 		m_clients[Client_socket] = Handler;
 	}
 }

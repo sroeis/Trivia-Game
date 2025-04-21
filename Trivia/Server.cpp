@@ -1,7 +1,7 @@
 #include "Server.h"
 
 
-Server::Server()
+Server::Server(IDataBase* db) : m_database(db), m_handlerFactory(db), m_communicator(m_handlerFactory)
 {
 }
 

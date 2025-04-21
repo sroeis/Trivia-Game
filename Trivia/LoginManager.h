@@ -16,6 +16,7 @@ private:
 	IDataBase* m_dataBase;
 	vector<LoggedUser> m_loggedUsers;
 public:
+	LoginManager(IDataBase* db) : m_dataBase(db), m_loggedUsers() {}
 	SignUpStatus signup(const string username, const string password, const string email);
 	LoginStatus login(const string username, const string password);
 	void logout(const string username);

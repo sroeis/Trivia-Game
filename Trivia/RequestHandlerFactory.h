@@ -4,11 +4,12 @@
 class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
 #include "IRequestHandler.h"
-#include "IDatabase.h"
+#include "SqliteDatabase.h"
 
 class RequestHandlerFactory
 {
 public:
+	RequestHandlerFactory(IDataBase* db);
 	LoginRequestHandler* createLoginRequestHandler();
 	LoginManager& getLoginManager();
 
@@ -23,8 +24,8 @@ public:
 	//GameManager& getGameManager()
 
 private:
+	LoginManager m_loginManager;
 	IDataBase* m_dataBase;
-	LoginManager& m_loginManager;
 	//RoomManager m_roomManager;
 	//GameManager m_gameManager;
 };

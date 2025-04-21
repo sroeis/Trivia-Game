@@ -31,8 +31,9 @@ bool SqliteDatabase::open()
 
 bool SqliteDatabase::close()
 {
-    sqlite3_close(_db);
-	_db = nullptr;
+    int res = sqlite3_close(_db);
+    _db = nullptr;
+    return res == SQLITE_OK;
 }
 
 

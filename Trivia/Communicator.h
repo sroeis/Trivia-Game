@@ -27,18 +27,18 @@ class Communicator
 {
 
 public:
+	Communicator(RequestHandlerFactory handler);
 	void startHandleRequests();
 
 private:
-
 	void bindAndListen();
 	void handleNewClient(SOCKET clientSocket);
 	void sendMsg(const Buffer& msg, SOCKET clientSocket);
 
+	RequestHandlerFactory m_handlerFactory;
 	SOCKET m_serverSocket;
 	std::mutex mtx;
 	std::map<SOCKET, IRequestHandler*> m_clients;
-
 
 };
 

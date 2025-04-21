@@ -16,7 +16,10 @@ RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
 {
 	RequestResult result;
 
+	if (!isRequestRelevant(request))
+	{
 
+	}
 	if (request.id == LOGIN_CODE)
 	{
 		login(request);
@@ -33,40 +36,45 @@ RequestResult LoginRequestHandler::login(Requestinfo ri)
 {
 	RequestResult result;
 	LoginRequest Lr;
-	LoginResponse response;
+	
+	
 	Lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
 
-	if(!m_loginManager.login(Lr.username, Lr.password));
-	{	
-		ErrorResponse err;
-		err.message = "Error in login request.";
-		throw err;
+	if(m_handlerFactory.getLoginManager().login(Lr.username, Lr.password))
+	{
+		LoginResponse logResp;
+		logResp.status = 100;
+
+		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
+		result.newHandler = this; //probably need to change in v2
+
+		return result;
+
 	}
-	response.status = 100;
-
-	result.response = JsonResponsePacketSerializer::serializeResponse(response);
+	ErrorResponse errResp;
+	errResp.message = "Error in login request.";
+	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
 	result.newHandler = this; //probably need to change in v2
-
 	return result;
 }
 
 RequestResult LoginRequestHandler::signup(Requestinfo ri)
 {
 	RequestResult result;
+	
 	SignupRequest sr;
-	SignupResponse response;
 	sr = JsonResponsePacketDeserializer::deserializeSignupRequest(ri.buffer);
-
-	if(!m_loginManager.signup(sr.username, sr.password, sr.email));
+	if(m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email));
 	{
-		ErrorResponse err;
-		err.message = "Error in signup request.";
-		throw err;
+		SignupResponse response;
+		response.status = 100;
+		result.response = JsonResponsePacketSerializer::serializeResponse(response);
+		result.newHandler = this; //probably need to change in v2
+		return result;
 	}
-	response.status = 100;
-
-	result.response = JsonResponsePacketSerializer::serializeResponse(response);
+	ErrorResponse errResp;
+	errResp.message = "Error in signup request.";
+	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
 	result.newHandler = this; //probably need to change in v2
-
 	return result;
 }

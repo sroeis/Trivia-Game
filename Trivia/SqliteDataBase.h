@@ -3,7 +3,7 @@
 #include "IDatabase.h"
 #include <string>
 #include <iostream>
-#define DB_PATH "triviaDB"
+#define DB_PATH "triviaDB.db"
 
 using std::string;
 

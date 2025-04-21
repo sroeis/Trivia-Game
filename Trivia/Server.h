@@ -15,12 +15,12 @@
 class Server
 {
 public:
-	Server();
+	Server(IDataBase* db);
 	void run();
 private:
-	Communicator m_communicator;
 	IDataBase* m_database;
 	RequestHandlerFactory m_handlerFactory;
+	Communicator m_communicator;
 
 	
 };
