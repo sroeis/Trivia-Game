@@ -1,0 +1,32 @@
+#pragma once
+
+#include <iostream>
+#include <bitset>
+#include "json.hpp"
+#include "Responses.h"
+
+
+//just to make typing it easier
+using json = nlohmann::json;
+
+
+
+
+class JsonResponsePacketSerializer  
+{
+public:
+	static Buffer serializeResponse(ErrorResponse Er); 
+	static Buffer serializeResponse(LoginResponse Lr);
+	static Buffer serializeResponse(SignupResponse Sr);
+
+private:
+	//get the data into the protocol format : Code - Size - Data
+	static Buffer PackIntoBuffer(int Code, const Buffer& payload);
+
+
+};
+
+//macro from json.hpp that turn struct to json and the other way
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LoginResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SignupResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ErrorResponse, message)
