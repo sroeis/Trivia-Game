@@ -16,10 +16,6 @@ RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
 {
 	RequestResult result;
 
-	if (!isRequestRelevant(request))
-	{
-
-	}
 	if (request.id == LOGIN_CODE)
 	{
 		result = login(request);

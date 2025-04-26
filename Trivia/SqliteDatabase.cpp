@@ -98,6 +98,62 @@ bool SqliteDatabase::addNewUser(const std::string& username, const std::string& 
     return true;
 }
 
+void SqliteDatabase::CreateQuestionTable()
+{
+	string sqlStatement = "CREATE TABLE IF NOT EXISTS Questions("
+            "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "Question TEXT NOT NULL,"
+            "OptionA TEXT NOT NULL,"
+            "OptionB TEXT NOT NULL,"
+            "OptionC TEXT NOT NULL,"
+            "OptionD TEXT NOT NULL,"
+            "CorrectOption CHAR(1) NOT NULL);" ;//like 'A', 'B', 'C', or 'D'
+
+	char* errMsg = nullptr;
+	int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
+
+	if (res != SQLITE_OK)
+	{
+		std::cerr << "Error creating Questions table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+	}
+}
+
+void SqliteDatabase::insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, int correctAnswer)
+{
+    char ans = ' ';
+    switch (correctAnswer)
+    {
+	case 1:
+        ans = 'A';
+		break;
+	case 2:
+        ans = 'B';
+		break;
+	case 3:
+        ans = 'C';
+		break;
+	case 4:
+        ans = 'D';
+		break;
+    default:
+        break;
+    }
+
+	string sqlStatement = "INSERT INTO Questions (Question, OptionA, OptionB, OptionC, OptionD, CorrectOption) VALUES ('" +
+		question + "', '" + answer1 + "', '" + answer2 + "', '" + answer3 + "', '" + answer4 + "', '" + ans + "');";
+
+	char* errMsg = nullptr;
+	int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
+
+	if (res != SQLITE_OK)
+	{
+		std::cerr << "Error adding new question: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+	}
+
+}
+
 int SqliteDatabase::callback(void* data, int argc, char** argv, char** azColName)
 {
     int* count = static_cast<int*>(data);

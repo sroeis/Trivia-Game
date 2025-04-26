@@ -35,7 +35,12 @@ LoginStatus LoginManager::login(const string username, const string password)
 void LoginManager::logout(const string username)
 {
 	// Find the user in the loggedUsers vector and remove them
-	auto it = std::remove_if(m_loggedUsers.begin(), m_loggedUsers.end(),
-		[&username](const LoggedUser& user) { return user.getUsername() == username; });
+	auto it = std::remove_if
+	(m_loggedUsers.begin(), m_loggedUsers.end(),
+		[&username](const LoggedUser& user) 
+		{
+			return user.getUsername() == username;
+		}
+	);
 	m_loggedUsers.erase(it, m_loggedUsers.end());
 }
