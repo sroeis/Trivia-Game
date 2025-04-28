@@ -19,6 +19,7 @@ int main()
 			throw std::runtime_error("Failed to open database");
 		}
 
+		
 		Questions::getQuestions(10, "EntertainmentFilm", "medium", db);
 		// Create server with database
 		Server myServer(&db);
