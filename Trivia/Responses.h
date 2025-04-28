@@ -7,34 +7,59 @@
 #define ERROR_CODE 3
 #define SIGNUP_CODE 2
 
-
 typedef std::vector<unsigned char> Buffer;
 
 //structs
-typedef struct LoginResponse
-{
+struct LogoutResponse {
     unsigned int status;
-}LoginResponse;
+};
 
-typedef struct SignupResponse
-{
+struct JoinRoomResponse {
     unsigned int status;
-}SignupResponse;
+};
 
-typedef struct ErrorResponse
-{
+struct GetRoomsResponse {
+    unsigned int status;
+   // std::vector<RoomData> rooms;
+};
+
+struct CreateRoomResponse {
+    unsigned int status;
+};
+
+struct GetPlayersInRoomResponse {
+    std::vector<std::string> players;
+};
+
+struct getHighScoreResponse {
+    unsigned int status;
+    std::vector<std::string> statistics;
+};
+
+struct getPersonalStatsResponse {
+    unsigned int status;
+    std::vector<std::string> statistics;
+};
+
+typedef struct LoginResponse {
+    unsigned int status;
+} LoginResponse;
+
+typedef struct SignupResponse {
+    unsigned int status;
+} SignupResponse;
+
+typedef struct ErrorResponse {
     std::string message;
-}ErrorResponse;
+} ErrorResponse;
 
-typedef struct LoginRequest
-{
+typedef struct LoginRequest {
     std::string username;
     std::string password;
-}LoginRequest;
+} LoginRequest;
 
-typedef struct SignupRequest
-{
+typedef struct SignupRequest {
     std::string username;
     std::string password;
     std::string email;
-}SignupRequest;
+} SignupRequest;
