@@ -20,7 +20,8 @@ public:
 
 private:
     static std::string buildUrl(int numOfQuestions, std::string category, std::string difficulty);
-    static std::ostringstream getResponse(std::string url);
     static std::unordered_map<std::string, int> categoryMap;
+    static std::string getResponse(std::string url);
+
 
 };
