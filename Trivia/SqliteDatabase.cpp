@@ -1,5 +1,6 @@
 #include "SqliteDatabase.h"
 #include <io.h>
+#include <algorithm>
 
 
 SqliteDatabase::SqliteDatabase()
@@ -33,7 +34,6 @@ bool SqliteDatabase::open()
 		"CorrectAnswers INTEGER, "
 		"TotalAnswers INTEGER, "
 		"GamesPlayed INTEGER, "
-		"Score INTEGER, "
 		"FOREIGN KEY(UserID) REFERENCES Users(ID));";
 	res = sqlite3_exec(_db, statisticsTableSql, nullptr, nullptr, &errMsg);
 	if (res != SQLITE_OK) {
@@ -62,7 +62,6 @@ bool SqliteDatabase::close()
     _db = nullptr;
     return res == SQLITE_OK;
 }
-
 
 bool SqliteDatabase::DoesUserExist(const std::string& username)
 {
@@ -267,19 +266,20 @@ int SqliteDatabase::getNumOfPlayerGames(const string& username) const
 
 int SqliteDatabase::getPlayerScore(const string& username) const
 {
-    int score = 0;
-    int userId = getUserIdByUsername(username);
-    if (userId == -1) return 0;
-    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
-        if (argc > 0 && argv[0])
-            *static_cast<int*>(data) = std::stoi(argv[0]);
-        return 0;
-    };
-    std::string sql = "SELECT Score FROM Statistics WHERE UserID = " + std::to_string(userId) + ";";
-    char* errMsg = nullptr;
-    sqlite3_exec(_db, sql.c_str(), callback, &score, &errMsg);
-    if (errMsg) sqlite3_free(errMsg);
-    return score;
+    int correct = getNumOfCorrectAnswers(username);
+    int total = getNumOfTotalAnswers(username);
+    int games = getNumOfPlayerGames(username);
+    double avgTime = getPlayerAverageAnswerTime(username);
+
+    double accuracy = total > 0 ? (double)correct / total : 0;
+    double accuracyMultiplier = 1.0 + (accuracy * 0.5); // bonus for higher accuracy
+
+    int basePoints = 100;
+    int timePenalty = 2;
+
+    int score = (correct * basePoints) * accuracyMultiplier - (avgTime * timePenalty);
+    score = std::max(score, 0); // prevent negative score
+
 }
 
 vector<string> SqliteDatabase::getHighScores() const
