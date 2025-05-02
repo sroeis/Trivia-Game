@@ -40,3 +40,46 @@ SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(Buffer bu
 
 	return sr;
 }
+
+GetPlayersInRoomRequest JsonResponsePacketDeserializer::deserializeGetPlayersInRoomRequest(Buffer buffer)
+{
+	GetPlayersInRoomRequest req;
+
+	std::string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.roomId = parsed["roomId"];
+
+	return req;
+}
+
+JoinRoomRequest JsonResponsePacketDeserializer::deserializeJoinRoomRequest(Buffer buffer)
+{
+	JoinRoomRequest req;
+
+	std::string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.roomId = parsed["roomId"];
+}
+
+CreateRoomRequest JsonResponsePacketDeserializer::deserializeCreateRoomRequest(Buffer buffer)
+{
+	CreateRoomRequest req;
+
+	std::string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.roomName = parsed["roomName"];
+	req.answerTimeOut = parsed["answerTimeOut"];
+	req.maxUsers = parsed["maxUsers"];
+	req.questionCount = parsed["questionCount"];
+
+	return req;
+}

@@ -2,26 +2,23 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
-
+#include "RoomData.h"
 #define LOGIN_CODE 1
 #define SIGNUP_CODE 2
 #define ERROR_CODE 3
 #define LOGOUT_CODE 4
+#define GET_ROOMS_CODE 5
+#define JOIN_ROOM_CODE 6
+#define CREATE_ROOM_CODE 7
+#define GET_PLAYERS_IN_ROOM_CODE 8
+#define GET_HIGH_SCORE_CODE 9
+#define GET_PERSONAL_STATS_CODE 10
+
 
 typedef std::vector<unsigned char> Buffer;
 
 //structs
-typedef struct RoomData
-{
-    unsigned int id;
-    std::string name;
-    unsigned int maxPlayers;
-    unsigned int numOfQuestionsInGame;
-    unsigned int timePerQuestion;
-    //RoomStatus status; 
-    //idk what they meant by this so i did this 
-    unsigned int status;
-}RoomData;
+
 
 struct LogoutResponse {
     unsigned int status;
@@ -76,3 +73,18 @@ typedef struct SignupRequest {
     std::string password;
     std::string email;
 } SignupRequest;
+
+typedef struct GetPlayersInRoomRequest {
+	unsigned int roomId;
+} GetPlayersInRoomRequest;
+
+typedef struct JoinRoomRequest {
+    unsigned int roomId;
+} JoinRoomRequest;
+
+typedef struct CreateRoomRequest {
+	std::string roomName;
+	unsigned int maxUsers;
+	unsigned int questionCount;
+	unsigned int answerTimeOut;
+} CreateRoomRequest;

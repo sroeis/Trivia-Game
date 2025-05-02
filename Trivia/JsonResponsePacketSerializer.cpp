@@ -59,7 +59,15 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LogoutResponse lr)
 
 Buffer JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse r)
 {
-	return Buffer();
+	json j = r;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_ROOMS_CODE, jsonBuff);
+
+	return buffer;
 }
 
 Buffer JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse pr)
@@ -70,7 +78,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse 
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(GET_PLAYERS_IN_ROOM_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -83,7 +91,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse jr)
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(JOIN_ROOM_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -96,7 +104,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse cr)
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(CREATE_ROOM_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -109,7 +117,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse gr)
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(GET_HIGH_SCORE_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -122,7 +130,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetPersonalStatsResponse 
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(GET_PERSONAL_STATS_CODE, jsonBuff);
 
 	return buffer;
 }

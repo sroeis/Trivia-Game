@@ -2,8 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "LoggedUser.h"
-#include "Responses.h"
-
+#include "RoomData.h"
 
 class Room 
 {

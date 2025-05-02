@@ -56,6 +56,7 @@ inline void to_json(json& j, const GetPlayersInRoomResponse& pr) {
 
 inline void to_json(json& j, const GetRoomsResponse& pr) {
 	j = json{
+		{"status", pr.status},
 		{"Rooms", pr.rooms}
 	};
 }
