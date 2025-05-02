@@ -65,6 +65,8 @@ JoinRoomRequest JsonResponsePacketDeserializer::deserializeJoinRoomRequest(Buffe
 
 	// Extract data
 	req.roomId = parsed["roomId"];
+
+	return req;
 }
 
 CreateRoomRequest JsonResponsePacketDeserializer::deserializeCreateRoomRequest(Buffer buffer)

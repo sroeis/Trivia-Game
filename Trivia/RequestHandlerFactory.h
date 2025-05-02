@@ -5,6 +5,7 @@ class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
 #include "IRequestHandler.h"
 #include "SqliteDatabase.h"
+#include "RoomManager.h"
 
 class RequestHandlerFactory
 {
