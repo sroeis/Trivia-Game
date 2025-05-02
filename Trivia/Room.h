@@ -9,11 +9,11 @@ class Room
 public:
 	Room() = default;
 	Room(const RoomData& metadata,const LoggedUser& user);
-	void addUser(LoggedUser user);
-	void removeUser(LoggedUser user);
-	std::vector<std::string> getAllUsers();
+	void addUser(const LoggedUser& user);
+	void removeUser(const LoggedUser& user);
+	std::vector<std::string> getAllUsers() const;
 
-	RoomData getRoomData();
+	RoomData getRoomData() const;
 
 
 private:

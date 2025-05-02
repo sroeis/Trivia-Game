@@ -7,12 +7,12 @@ Room::Room(const RoomData& metadata, const LoggedUser& user)
 	this->addUser(user);
 }
 
-void Room::addUser(LoggedUser user)
+void Room::addUser(const LoggedUser& user)
 {
 	m_users.push_back(user);
 }
 
-void Room::removeUser(LoggedUser user)
+void Room::removeUser(const LoggedUser& user)
 {
 	for (auto it = m_users.begin(); it != m_users.end(); ++it)
 	{
@@ -25,7 +25,7 @@ void Room::removeUser(LoggedUser user)
 
 }
 
-std::vector<std::string> Room::getAllUsers()
+std::vector<std::string> Room::getAllUsers() const
 {
 	std::string str;
 	std::vector<std::string> Users;
@@ -37,7 +37,7 @@ std::vector<std::string> Room::getAllUsers()
 	return Users;
 }
 
-RoomData Room::getRoomData()
+RoomData Room::getRoomData() const
 {
 	return m_metadata;
 }

@@ -14,6 +14,8 @@
 #define GET_HIGH_SCORE_CODE 9
 #define GET_PERSONAL_STATS_CODE 10
 
+#define STATUS_OK 200
+
 
 typedef std::vector<unsigned char> Buffer;
 

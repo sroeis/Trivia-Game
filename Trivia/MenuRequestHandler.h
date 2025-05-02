@@ -1,8 +1,13 @@
 #pragma once
 #include "IRequestHandler.h"
 #include "LoggedUser.h"
-#include "RequestHandlerFactory.h"
 #include "JsonResponsePacketSerializer.h"
+#include "JsonRequestPacketDeserializer.h"
+class RequestHandlerFactory; // Forward declaration
+#include "RequestHandlerFactory.h"
+#include <vector>
+#include "Room.h"
+using std::vector;
 
 class MenuRequestHandler : public IRequestHandler
 {

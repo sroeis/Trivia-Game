@@ -35,7 +35,7 @@ RequestResult MenuRequestHandler::signout(const RequestInfo& ri)
 	this->m_handlerFactory.getLoginManager().logout(m_user.getUsername());
 	RequestResult result;
 	LogoutResponse logResp;
-	logResp.status = 100;
+	logResp.status = STATUS_OK;
 	result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
 	result.newHandler = nullptr;
 	return result;
@@ -43,12 +43,36 @@ RequestResult MenuRequestHandler::signout(const RequestInfo& ri)
 
 RequestResult MenuRequestHandler::getRooms(const RequestInfo& ri)
 {
-    
+	RequestResult result;
+	GetRoomsResponse getRoomsResp;
+	vector<Room> allRooms = this->m_handlerFactory.getRoomManager().getRooms();
+
+	for (const auto& room : allRooms)
+	{
+		getRoomsResp.rooms.push_back(room.getRoomData());
+	}
+	getRoomsResp.status = STATUS_OK;
+
+	// Serialize the response
+	result.response = JsonResponsePacketSerializer::serializeResponse(getRoomsResp);
+	result.newHandler = this;
+	return result;
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(const RequestInfo& ri)
 {
-    return RequestResult();
+	RequestResult result;
+	GetPlayersInRoomResponse getPlayersResp;
+	GetPlayersInRoomRequest getPlayersReq = JsonResponsePacketDeserializer::deserializeGetPlayersInRoomRequest(ri.buffer);
+
+	Room room = this->m_handlerFactory.getRoomManager().getRoom(getPlayersReq.roomId);
+
+	getPlayersResp.players = room.getAllUsers();
+	
+	result.response = JsonResponsePacketSerializer::serializeResponse(getPlayersResp);
+	result.newHandler = this;
+
+	return result;
 }
 
 RequestResult MenuRequestHandler::getPersonalStats(const RequestInfo& ri)
