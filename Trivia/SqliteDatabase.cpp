@@ -1,5 +1,6 @@
 #include "SqliteDatabase.h"
 #include <io.h>
+#include <algorithm>
 
 
 SqliteDatabase::SqliteDatabase()
@@ -26,6 +27,32 @@ bool SqliteDatabase::open()
 	char* errMsg = nullptr;
 	res = sqlite3_exec(_db, sqlStatement, nullptr, nullptr, &errMsg);
 
+	// Create Statistics table
+	const char* statisticsTableSql = "CREATE TABLE IF NOT EXISTS Statistics ("
+		"UserID INTEGER PRIMARY KEY, "
+		"AvgAnswerTime REAL, "
+		"CorrectAnswers INTEGER, "
+		"TotalAnswers INTEGER, "
+		"GamesPlayed INTEGER, "
+		"FOREIGN KEY(UserID) REFERENCES Users(ID));";
+	res = sqlite3_exec(_db, statisticsTableSql, nullptr, nullptr, &errMsg);
+	if (res != SQLITE_OK) {
+		std::cerr << "Error creating Statistics table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+	}
+
+	// Create HighScores table
+	const char* highScoresTableSql = "CREATE TABLE IF NOT EXISTS HighScores ("
+		"ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+		"UserID INTEGER UNIQUE, "
+		"Score INTEGER, "
+		"FOREIGN KEY(UserID) REFERENCES Users(ID));";
+	res = sqlite3_exec(_db, highScoresTableSql, nullptr, nullptr, &errMsg);
+	if (res != SQLITE_OK) {
+		std::cerr << "Error creating HighScores table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+	}
+
 	return true;
 }
 
@@ -35,7 +62,6 @@ bool SqliteDatabase::close()
     _db = nullptr;
     return res == SQLITE_OK;
 }
-
 
 bool SqliteDatabase::DoesUserExist(const std::string& username)
 {
@@ -101,13 +127,13 @@ bool SqliteDatabase::addNewUser(const std::string& username, const std::string& 
 void SqliteDatabase::CreateQuestionTable()
 {
 	string sqlStatement = "CREATE TABLE IF NOT EXISTS Questions("
-            "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "Question TEXT NOT NULL,"
-            "OptionA TEXT NOT NULL,"
-            "OptionB TEXT NOT NULL,"
-            "OptionC TEXT NOT NULL,"
-            "OptionD TEXT NOT NULL,"
-            "CorrectOption CHAR(1) NOT NULL);" ;//like 'A', 'B', 'C', or 'D'
+            "ID INTEGER PRIMARY KEY AUTOINCREMENT," //argv [0]
+		    "Question TEXT NOT NULL," // argv [1]
+		    "OptionA TEXT NOT NULL," // argv [2]
+            "OptionB TEXT NOT NULL," // argv [3]
+            "OptionC TEXT NOT NULL," // argv[4]
+            "OptionD TEXT NOT NULL," // argv[5]
+            "CorrectOption INTEGER NOT NULL);"; // argv[6]
 
 	char* errMsg = nullptr;
 	int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
@@ -119,39 +145,159 @@ void SqliteDatabase::CreateQuestionTable()
 	}
 }
 
-void SqliteDatabase::insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, int correctAnswer)
+void SqliteDatabase::insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, const int& correctAnswer)
 {
-    char ans = ' ';
-    switch (correctAnswer)
+    // correctAnswer should be 1, 2, 3, or 4
+    string sqlStatement = "INSERT INTO Questions (Question, OptionA, OptionB, OptionC, OptionD, CorrectOption) VALUES ('" +
+        question + "', '" + answer1 + "', '" + answer2 + "', '" + answer3 + "', '" + answer4 + "', " + std::to_string(correctAnswer) + ");";
+
+    char* errMsg = nullptr;
+    int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
+
+    if (res != SQLITE_OK)
     {
-	case 1:
-        ans = 'A';
-		break;
-	case 2:
-        ans = 'B';
-		break;
-	case 3:
-        ans = 'C';
-		break;
-	case 4:
-        ans = 'D';
-		break;
-    default:
-        break;
+        std::cerr << "Error adding new question: " << errMsg << std::endl;
+        sqlite3_free(errMsg);
     }
+}
 
-	string sqlStatement = "INSERT INTO Questions (Question, OptionA, OptionB, OptionC, OptionD, CorrectOption) VALUES ('" +
-		question + "', '" + answer1 + "', '" + answer2 + "', '" + answer3 + "', '" + answer4 + "', '" + ans + "');";
+list<Question> SqliteDatabase::getQuestions(const int& count) const
+{
+    std::list<Question> questions;
+    struct QuestionsHolder { std::list<Question>* list; } holder{&questions};
 
-	char* errMsg = nullptr;
-	int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc >= 7) {
+            std::string questionText = argv[1] ? argv[1] : "";
+            std::vector<std::string> possibleAnswers = {
+                argv[2] ? argv[2] : "",
+                argv[3] ? argv[3] : "",
+                argv[4] ? argv[4] : "",
+                argv[5] ? argv[5] : ""
+            };
+            unsigned int correctIndex = 0;
+            if (argv[6]) {
+                int dbIndex = std::stoi(argv[6]);
+                if (dbIndex >= 1 && dbIndex <= 4)
+                    correctIndex = dbIndex - 1;
+            }
+            Question q(questionText, possibleAnswers, correctIndex);
+            static_cast<QuestionsHolder*>(data)->list->push_back(q);
+        }
+        return 0;
+    };
 
-	if (res != SQLITE_OK)
-	{
-		std::cerr << "Error adding new question: " << errMsg << std::endl;
-		sqlite3_free(errMsg);
-	}
+    std::string sql = "SELECT * FROM Questions LIMIT " + std::to_string(count) + ";";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &holder, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
 
+    return questions;
+}
+
+float SqliteDatabase::getPlayerAverageAnswerTime(const string& username) const
+{
+    float avgTime = 0.0f;
+    int userId = getUserIdByUsername(username);
+    if (userId == -1) return 0.0f;
+    struct FloatHolder { float value = 0.0f; } holder;
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 0 && argv[0])
+            static_cast<FloatHolder*>(data)->value = std::stof(argv[0]);
+        return 0;
+    };
+    std::string sql = "SELECT AvgAnswerTime FROM Statistics WHERE UserID = " + std::to_string(userId) + ";";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &holder, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
+    return holder.value;
+}
+
+int SqliteDatabase::getNumOfCorrectAnswers(const string& username) const
+{
+    int correct = 0;
+    int userId = getUserIdByUsername(username);
+    if (userId == -1) return 0;
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 0 && argv[0])
+            *static_cast<int*>(data) = std::stoi(argv[0]);
+        return 0;
+    };
+    std::string sql = "SELECT CorrectAnswers FROM Statistics WHERE UserID = " + std::to_string(userId) + ";";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &correct, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
+    return correct;
+}
+
+int SqliteDatabase::getNumOfTotalAnswers(const string& username) const
+{
+    int total = 0;
+    int userId = getUserIdByUsername(username);
+    if (userId == -1) return 0;
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 0 && argv[0])
+            *static_cast<int*>(data) = std::stoi(argv[0]);
+        return 0;
+    };
+    std::string sql = "SELECT TotalAnswers FROM Statistics WHERE UserID = " + std::to_string(userId) + ";";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &total, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
+    return total;
+}
+
+int SqliteDatabase::getNumOfPlayerGames(const string& username) const
+{
+    int games = 0;
+    int userId = getUserIdByUsername(username);
+    if (userId == -1) return 0;
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 0 && argv[0])
+            *static_cast<int*>(data) = std::stoi(argv[0]);
+        return 0;
+    };
+    std::string sql = "SELECT GamesPlayed FROM Statistics WHERE UserID = " + std::to_string(userId) + ";";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &games, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
+    return games;
+}
+
+int SqliteDatabase::getPlayerScore(const string& username) const
+{
+    int correct = getNumOfCorrectAnswers(username);
+    int total = getNumOfTotalAnswers(username);
+    int games = getNumOfPlayerGames(username);
+    double avgTime = getPlayerAverageAnswerTime(username);
+
+    double accuracy = total > 0 ? (double)correct / total : 0;
+    double accuracyMultiplier = 1.0 + (accuracy * 0.5); // bonus for higher accuracy
+
+    int basePoints = 100;
+    int timePenalty = 2;
+
+    int score = (correct * basePoints) * accuracyMultiplier - (avgTime * timePenalty);
+    score = std::max(score, 0); // prevent negative score
+
+}
+
+vector<string> SqliteDatabase::getHighScores() const
+{
+    std::vector<std::string> topUsers;
+    struct UserScoreHolder { std::vector<std::string>* vec; } holder{&topUsers};
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 1 && argv[0] && argv[1]) {
+            std::string entry = std::string(argv[0]) + ": " + argv[1];
+            static_cast<UserScoreHolder*>(data)->vec->push_back(entry);
+        }
+        return 0;
+    };
+    std::string sql = "SELECT Users.Username, HighScores.Score FROM HighScores JOIN Users ON HighScores.UserID = Users.ID ORDER BY HighScores.Score DESC LIMIT 5;";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &holder, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
+    return topUsers;
 }
 
 int SqliteDatabase::callback(void* data, int argc, char** argv, char** azColName)
@@ -159,6 +305,27 @@ int SqliteDatabase::callback(void* data, int argc, char** argv, char** azColName
     int* count = static_cast<int*>(data);
     if (argc > 0 && argv[0]) {
         *count = std::stoi(argv[0]);
+    }
+    return 0;
+}
+
+int SqliteDatabase::getUserIdByUsername(const std::string& username) const
+{
+    int userId = -1;
+    std::string sql = "SELECT ID FROM Users WHERE Username = '" + username + "';";
+    char* errMsg = nullptr;
+    int res = sqlite3_exec(_db, sql.c_str(), userIdCallback, &userId, &errMsg);
+    if (res != SQLITE_OK) {
+        std::cerr << "Error getting user ID: " << (errMsg ? errMsg : "") << std::endl;
+        if (errMsg) sqlite3_free(errMsg);
+    }
+    return userId;
+}
+
+static int userIdCallback(void* data, int argc, char** argv, char** azColName) {
+    if (argc > 0 && argv[0]) {
+        int* idPtr = static_cast<int*>(data);
+        *idPtr = std::stoi(argv[0]);
     }
     return 0;
 }

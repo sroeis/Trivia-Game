@@ -2,10 +2,10 @@
 
 
 
-Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse Er)
+Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse er)
 {
 	//using the macro to turn
-	json j = Er;
+	json j = er;
 
 	std::string jsonStr = j.dump();
 
@@ -16,10 +16,10 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse Er)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse Lr)
+Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse lr)
 {
 	//using the macro to turn
-	json j = Lr;
+	json j = lr;
 
 	std::string jsonStr = j.dump();
 
@@ -30,16 +30,107 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse Lr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse Sr)
+Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse sr)
 {
 	//using the macro to turn
-	json j = Sr;
+	json j = sr;
 
 	std::string jsonStr = j.dump();
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
 	Buffer buffer = PackIntoBuffer(SIGNUP_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(LogoutResponse lr)
+{
+	json j = lr; // lr must contain the status 1. check if its like that from the source that the req is sent from
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(LOGOUT_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse r)
+{
+	json j = r;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_ROOMS_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse pr)
+{
+	json j = pr;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_PLAYERS_IN_ROOM_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse jr)
+{
+	json j = jr;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(JOIN_ROOM_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse cr)
+{
+	json j = cr;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(CREATE_ROOM_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse gr)
+{
+	json j = gr;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_HIGH_SCORE_CODE, jsonBuff);
+
+	return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(GetPersonalStatsResponse gr)
+{
+	json j = gr;
+
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_PERSONAL_STATS_CODE, jsonBuff);
 
 	return buffer;
 }

@@ -31,6 +31,7 @@ std::unordered_map<std::string, int> Questions::categoryMap = {
 void Questions::getQuestions(int numOfQuestions, std::string category, std::string difficulty, SqliteDatabase db)
 {
 	std::string URl = buildUrl(numOfQuestions, category, difficulty);
+    std::cout << URl << std::endl;
 	std::string response = getResponse(URl);
 
 	nlohmann::json jsonResponse = nlohmann::json::parse(response);
@@ -59,7 +60,7 @@ void Questions::getQuestions(int numOfQuestions, std::string category, std::stri
         }
         
         //std::cout << "Question:" << question << all_answers[0] << all_answers[1] << all_answers[2] << all_answers[3] << "Correct Answer: " << correct_answer << std::endl;
-		//db.insertQuestion(question, all_answers[0], all_answers[1], all_answers[2], all_answers[3], correctAnswerIndex);
+		db.insertQuestion(question, all_answers[0], all_answers[1], all_answers[2], all_answers[3], correctAnswerIndex);
     }
 }
 
