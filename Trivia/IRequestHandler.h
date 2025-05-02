@@ -2,12 +2,12 @@
 #include "Responses.h"
 
 class IRequestHandler;
-typedef struct Requestinfo
+typedef struct RequestInfo
 {
     unsigned char id;
     time_t receivalTime;
     Buffer buffer;
-}Requestinfo;
+}RequestInfo;
 
 typedef struct RequestResult
 {
@@ -18,6 +18,6 @@ typedef struct RequestResult
 class IRequestHandler
 {
 public:
-    virtual bool isRequestRelevant(Requestinfo request) = 0;
-    virtual RequestResult handleRequest(Requestinfo request) = 0;
+    virtual bool isRequestRelevant(const RequestInfo& request) = 0;
+    virtual RequestResult handleRequest(const RequestInfo& request) = 0;
 };

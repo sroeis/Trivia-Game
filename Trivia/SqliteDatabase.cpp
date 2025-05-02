@@ -280,6 +280,7 @@ int SqliteDatabase::getPlayerScore(const string& username) const
     int score = (correct * basePoints) * accuracyMultiplier - (avgTime * timePenalty);
     score = std::max(score, 0); // prevent negative score
 
+    return score;
 }
 
 vector<string> SqliteDatabase::getHighScores() const
@@ -322,7 +323,7 @@ int SqliteDatabase::getUserIdByUsername(const std::string& username) const
     return userId;
 }
 
-static int userIdCallback(void* data, int argc, char** argv, char** azColName) {
+int SqliteDatabase::userIdCallback(void* data, int argc, char** argv, char** azColName) {
     if (argc > 0 && argv[0]) {
         int* idPtr = static_cast<int*>(data);
         *idPtr = std::stoi(argv[0]);

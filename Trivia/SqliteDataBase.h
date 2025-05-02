@@ -34,4 +34,5 @@ private:
 	sqlite3* _db;
 	static int callback(void* data, int argc, char** argv, char** azColName);
 	int getUserIdByUsername(const std::string& username) const;
+	static int userIdCallback(void* data, int argc, char** argv, char** azColName);
 };
