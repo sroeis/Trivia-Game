@@ -37,7 +37,7 @@ RequestResult MenuRequestHandler::signout(const RequestInfo& ri)
 	LogoutResponse logResp;
 	logResp.status = 100;
 	result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-	result.newHandler = m_handlerFactory.createLoginRequestHandler();
+	result.newHandler = nullptr;
 	return result;
 }
 

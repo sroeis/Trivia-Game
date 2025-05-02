@@ -2,7 +2,7 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
-bool LoginRequestHandler::isRequestRelevant(const Requestinfo& request)
+bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
 	{
@@ -12,7 +12,7 @@ bool LoginRequestHandler::isRequestRelevant(const Requestinfo& request)
 	return true;
 }
 
-RequestResult LoginRequestHandler::handleRequest(const Requestinfo& request)
+RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 {
 	RequestResult result;
 
@@ -28,7 +28,7 @@ RequestResult LoginRequestHandler::handleRequest(const Requestinfo& request)
 	return result;
 }
 
-RequestResult LoginRequestHandler::login(Requestinfo ri)
+RequestResult LoginRequestHandler::login(RequestInfo ri)
 {
 	RequestResult result;
 	LoginRequest Lr;
@@ -54,7 +54,7 @@ RequestResult LoginRequestHandler::login(Requestinfo ri)
 	return result;
 }
 
-RequestResult LoginRequestHandler::signup(Requestinfo ri)
+RequestResult LoginRequestHandler::signup(RequestInfo ri)
 {
 	RequestResult result;
 	
