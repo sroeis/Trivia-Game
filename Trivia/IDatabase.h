@@ -20,11 +20,11 @@ public:
 	virtual void CreateQuestionTable() = 0;
 	virtual void insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, const int& correctAnswer) = 0;
 
-	virtual list<Question> getQuestions(const int& count) const = 0;
+	virtual const list<Question>& getQuestions(const int count) const = 0;
 	virtual float getPlayerAverageAnswerTime(const string& username) const = 0;
 	virtual int getNumOfCorrectAnswers(const string& username) const = 0;
 	virtual int getNumOfTotalAnswers(const string& username) const = 0;
 	virtual int getNumOfPlayerGames(const string& username) const = 0;
 	virtual int getPlayerScore(const string& username) const = 0;
-	virtual vector<string> getHighScores() const = 0;
+	virtual const vector<string>& getHighScores() const = 0;
 };

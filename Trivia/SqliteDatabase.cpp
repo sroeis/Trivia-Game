@@ -161,7 +161,7 @@ void SqliteDatabase::insertQuestion(const std::string& question, const std::stri
     }
 }
 
-list<Question> SqliteDatabase::getQuestions(const int& count) const
+const list<Question>& SqliteDatabase::getQuestions(const int count) const
 {
     std::list<Question> questions;
     struct QuestionsHolder { std::list<Question>* list; } holder{&questions};
@@ -283,7 +283,7 @@ int SqliteDatabase::getPlayerScore(const string& username) const
     return score;
 }
 
-vector<string> SqliteDatabase::getHighScores() const
+const vector<string>& SqliteDatabase::getHighScores() const
 {
     std::vector<std::string> topUsers;
     struct UserScoreHolder { std::vector<std::string>* vec; } holder{&topUsers};
