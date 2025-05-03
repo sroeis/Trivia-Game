@@ -33,7 +33,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 	return result;
 }
 
-RequestResult LoginRequestHandler::login(RequestInfo ri)
+RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 {
 	RequestResult result;
 	LoginRequest Lr;
@@ -47,7 +47,7 @@ RequestResult LoginRequestHandler::login(RequestInfo ri)
 		logResp.status = 100;
 
 		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-		result.newHandler = this->m_handlerFactory.createMenuRequestHandler(Lr.username); //Last changed: V2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(Lr.username); //Last changed: V2
 
 		return result;
 
@@ -59,7 +59,7 @@ RequestResult LoginRequestHandler::login(RequestInfo ri)
 	return result;
 }
 
-RequestResult LoginRequestHandler::signup(RequestInfo ri)
+RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 {
 	RequestResult result;
 	
@@ -70,7 +70,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo ri)
 		SignupResponse response;
 		response.status = 100;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-		result.newHandler = this->m_handlerFactory.createMenuRequestHandler(sr.username); // Last changed: V2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(sr.username); // Last changed: V2
 		return result;
 	}
 	ErrorResponse errResp;

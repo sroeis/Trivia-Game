@@ -2,7 +2,7 @@
 
 
 
-Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse er)
+Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& er)
 {
 	//using the macro to turn
 	json j = er;
@@ -16,7 +16,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse er)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse lr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse& lr)
 {
 	//using the macro to turn
 	json j = lr;
@@ -30,7 +30,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse lr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse sr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& sr)
 {
 	//using the macro to turn
 	json j = sr;
@@ -44,7 +44,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse sr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(LogoutResponse lr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const LogoutResponse& lr)
 {
 	json j = lr; // lr must contain the status 1. check if its like that from the source that the req is sent from
 
@@ -57,7 +57,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LogoutResponse lr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse r)
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& r)
 {
 	json j = r;
 
@@ -70,7 +70,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse r)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse pr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse& pr)
 {
 	json j = pr;
 
@@ -83,7 +83,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse 
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse jr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse& jr)
 {
 	json j = jr;
 
@@ -96,7 +96,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse jr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse cr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse& cr)
 {
 	json j = cr;
 
@@ -109,7 +109,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse cr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse gr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreResponse& gr)
 {
 	json j = gr;
 
@@ -122,7 +122,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse gr)
 	return buffer;
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(GetPersonalStatsResponse gr)
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& gr)
 {
 	json j = gr;
 

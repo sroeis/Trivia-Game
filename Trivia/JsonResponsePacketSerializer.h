@@ -16,16 +16,16 @@ using json = nlohmann::json;
 class JsonResponsePacketSerializer  
 {
 public:
-	static Buffer serializeResponse(ErrorResponse er); 
-	static Buffer serializeResponse(LoginResponse lr);
-	static Buffer serializeResponse(SignupResponse sr);
-	static Buffer serializeResponse(LogoutResponse lr);
-	static Buffer serializeResponse(GetRoomsResponse r);
-	static Buffer serializeResponse(GetPlayersInRoomResponse pr);
-	static Buffer serializeResponse(JoinRoomResponse jr);
-	static Buffer serializeResponse(CreateRoomResponse cr);
-	static Buffer serializeResponse(GetHighScoreResponse gr);
-	static Buffer serializeResponse(GetPersonalStatsResponse gr);
+	static Buffer serializeResponse(const ErrorResponse& er); 
+	static Buffer serializeResponse(const LoginResponse& lr);
+	static Buffer serializeResponse(const SignupResponse& sr);
+	static Buffer serializeResponse(const LogoutResponse& lr);
+	static Buffer serializeResponse(const GetRoomsResponse& r);
+	static Buffer serializeResponse(const GetPlayersInRoomResponse& pr);
+	static Buffer serializeResponse(const JoinRoomResponse& jr);
+	static Buffer serializeResponse(const CreateRoomResponse& cr);
+	static Buffer serializeResponse(const GetHighScoreResponse& gr);
+	static Buffer serializeResponse(const GetPersonalStatsResponse& gr);
 
 private:
 	//get the data into the protocol format : Code - Size - Data

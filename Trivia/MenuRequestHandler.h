@@ -19,7 +19,7 @@ public:
 private:
 	LoggedUser m_user;
 	RequestHandlerFactory& m_handlerFactory;
-	static unsigned int m_roomCounter;
+	static unsigned int m_newRoomId;
 
 	RequestResult signout(const RequestInfo& ri);
 	RequestResult getRooms(const RequestInfo& ri);

@@ -6,7 +6,7 @@
 Note: every version check the new handler of evry Request result, maybe a new handler was created that would be better to use
 -------------------------------------------------------------------------------------------------------------------------------*/
 
-unsigned int MenuRequestHandler::m_roomCounter = 1;
+unsigned int MenuRequestHandler::m_newRoomId = 1;
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
@@ -39,7 +39,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request)
 
 RequestResult MenuRequestHandler::signout(const RequestInfo& ri)
 {
-	this->m_handlerFactory.getLoginManager().logout(m_user.getUsername());
+	m_handlerFactory.getLoginManager().logout(m_user.getUsername());
 	RequestResult result;
 	LogoutResponse logResp;
 	logResp.status = STATUS_OK;
@@ -52,7 +52,7 @@ RequestResult MenuRequestHandler::getRooms(const RequestInfo& ri)
 {
 	RequestResult result;
 	GetRoomsResponse getRoomsResp;
-	vector<Room> allRooms = this->m_handlerFactory.getRoomManager().getRooms();
+	vector<Room> allRooms = m_handlerFactory.getRoomManager().getRooms();
 
 	for (const auto& room : allRooms)
 	{
@@ -74,7 +74,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(const RequestInfo& ri)
 	
 	try
 	{
-		Room& room = this->m_handlerFactory.getRoomManager().getRoom(getPlayersReq.roomId);
+		Room& room = m_handlerFactory.getRoomManager().getRoom(getPlayersReq.roomId);
 		getPlayersResp.players = room.getAllUsers();
 
 		result.response = JsonResponsePacketSerializer::serializeResponse(getPlayersResp);
@@ -98,7 +98,7 @@ RequestResult MenuRequestHandler::getPersonalStats(const RequestInfo& ri)
 
 	try
 	{
-		getPersonalStatsResp.statistics = this->m_handlerFactory.getStatisticsManager().getUserStatistics(m_user.getUsername());
+		getPersonalStatsResp.statistics = m_handlerFactory.getStatisticsManager().getUserStatistics(m_user.getUsername());
 		getPersonalStatsResp.status = STATUS_OK;
 
 		// Serialize the response
@@ -118,7 +118,7 @@ RequestResult MenuRequestHandler::getPersonalStats(const RequestInfo& ri)
 RequestResult MenuRequestHandler::getHighScore(const RequestInfo& ri)
 {
 	GetHighScoreResponse getHighScoreResp;
-	getHighScoreResp.statistics = this->m_handlerFactory.getStatisticsManager().getHighScore();
+	getHighScoreResp.statistics = m_handlerFactory.getStatisticsManager().getHighScore();
 	getHighScoreResp.status = STATUS_OK;
 
 	// Serialize the response
@@ -134,7 +134,7 @@ RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
 	JoinRoomRequest joinRoomReq = JsonResponsePacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
 	RequestResult result;
 
-	Room& room = this->m_handlerFactory.getRoomManager().getRoom(joinRoomReq.roomId);
+	Room& room = m_handlerFactory.getRoomManager().getRoom(joinRoomReq.roomId);
 	if (room.getRoomData().maxPlayers == room.getAllUsers().size())
 	{
 		ErrorResponse errorResp;
@@ -161,7 +161,7 @@ RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 	RoomData roomData;
 
 	
-	roomData.id = m_roomCounter++;
+	roomData.id = m_newRoomId++;
 	roomData.maxPlayers = createRoomReq.maxUsers; 
 	roomData.name = createRoomReq.roomName;
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;

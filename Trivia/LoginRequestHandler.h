@@ -15,6 +15,6 @@ public:
 private:
 	//LoginManager& m_loginManager;
 	RequestHandlerFactory& m_handlerFactory;
-	RequestResult login(RequestInfo ri);
-	RequestResult signup(RequestInfo ri);
+	RequestResult login(const RequestInfo& ri);
+	RequestResult signup(const RequestInfo& ri);
 };

@@ -5,9 +5,9 @@
 class JsonResponsePacketDeserializer : public LoginRequestHandler
 {
 public:
-	static LoginRequest deserializeLoginRequest(Buffer buffer);
-	static SignupRequest deserializeSignupRequest(Buffer buffer);
-	static GetPlayersInRoomRequest deserializeGetPlayersInRoomRequest(Buffer buffer);
-	static JoinRoomRequest deserializeJoinRoomRequest(Buffer buffer);
-	static CreateRoomRequest deserializeCreateRoomRequest(Buffer buffer);
+	static LoginRequest deserializeLoginRequest(const Buffer& buffer);
+	static SignupRequest deserializeSignupRequest(const Buffer& buffer);
+	static GetPlayersInRoomRequest deserializeGetPlayersInRoomRequest(const Buffer& buffer);
+	static JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
+	static CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
 };

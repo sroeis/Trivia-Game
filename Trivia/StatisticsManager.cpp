@@ -1,11 +1,11 @@
 #include "StatisticsManager.h"
 
-vector<string> StatisticsManager::getHighScore()
+vector<string> StatisticsManager::getHighScore() const
 {
-    return this->m_dataBase->getHighScores();
+    return m_dataBase->getHighScores();
 }
 
-vector<string> StatisticsManager::getUserStatistics(const string& username)
+vector<string> StatisticsManager::getUserStatistics(const string& username) const
 {
 	vector<string> userStatistics;
 	float avgTime = m_dataBase->getPlayerAverageAnswerTime(username);
