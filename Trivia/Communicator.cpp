@@ -63,7 +63,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	char headerBuff[HEADER_SIZE] = { 0 }; //size + code
 	unsigned int msgSize = 0;
-	Requestinfo ri;
+	RequestInfo ri;
 	
 	RequestResult reqResult;
 

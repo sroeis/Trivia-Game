@@ -2,7 +2,12 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
-bool LoginRequestHandler::isRequestRelevant(Requestinfo request)
+
+/*-------------------------------------------------------------------------------------------------------------------------------
+Note: every version check the new handler of evry Request result, maybe a new handler was created that would be better to use
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
 	{
@@ -12,14 +17,10 @@ bool LoginRequestHandler::isRequestRelevant(Requestinfo request)
 	return true;
 }
 
-RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
+RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 {
 	RequestResult result;
 
-	if (!isRequestRelevant(request))
-	{
-
-	}
 	if (request.id == LOGIN_CODE)
 	{
 		result = login(request);
@@ -32,21 +33,21 @@ RequestResult LoginRequestHandler::handleRequest(Requestinfo request)
 	return result;
 }
 
-RequestResult LoginRequestHandler::login(Requestinfo ri)
+RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 {
 	RequestResult result;
-	LoginRequest Lr;
+	LoginRequest lr;
 	
 	
-	Lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
+	lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
 
-	if(m_handlerFactory.getLoginManager().login(Lr.username, Lr.password))
+	if(m_handlerFactory.getLoginManager().login(lr.username, lr.password))
 	{
 		LoginResponse logResp;
 		logResp.status = 100;
 
 		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-		result.newHandler = this; //probably need to change in v2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(lr.username)); //Last changed: V2
 
 		return result;
 
@@ -54,11 +55,11 @@ RequestResult LoginRequestHandler::login(Requestinfo ri)
 	ErrorResponse errResp;
 	errResp.message = "Error in login request.";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; //probably need to change in v2
+	result.newHandler = this; // Last changed V2
 	return result;
 }
 
-RequestResult LoginRequestHandler::signup(Requestinfo ri)
+RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 {
 	RequestResult result;
 	
@@ -69,12 +70,12 @@ RequestResult LoginRequestHandler::signup(Requestinfo ri)
 		SignupResponse response;
 		response.status = 100;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-		result.newHandler = this; //probably need to change in v2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(sr.username)); // Last changed: V2
 		return result;
 	}
 	ErrorResponse errResp;
 	errResp.message = "Error in signup request.";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; //probably need to change in v2
+	result.newHandler = this; // Last changed: V2
 	return result;
 }

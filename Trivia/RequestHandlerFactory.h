@@ -3,8 +3,13 @@
 #include "LoginManager.h"
 class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
+class MenuRequestHandler; // Forward declaration
+#include "MenuRequestHandler.h"
 #include "IRequestHandler.h"
 #include "SqliteDatabase.h"
+#include "RoomManager.h"
+#include "StatisticsManager.h"
+
 
 class RequestHandlerFactory
 {
@@ -13,9 +18,9 @@ public:
 	LoginRequestHandler* createLoginRequestHandler();
 	LoginManager& getLoginManager();
 
-	//MenuRequestHandler createMenuRequestHandler(LoggedUser user);
-	//StatisticsManager& getStatisticsManager();
-	//RoomManager& getRoomManager();
+	MenuRequestHandler* createMenuRequestHandler(const LoggedUser& user);
+	StatisticsManager& getStatisticsManager();
+	RoomManager& getRoomManager();
 
 	//RoomAdminRequestHandler* createRoomAdminRequestHandler(LoggedUser user);
 	//RoomMemberRequestHandler* createRoomMemberRequestHandler(LoggedUser user);
@@ -26,6 +31,7 @@ public:
 private:
 	LoginManager m_loginManager;
 	IDataBase* m_dataBase;
-	//RoomManager m_roomManager;
+	RoomManager m_roomManager;
+	StatisticsManager m_statisticsManager;
 	//GameManager m_gameManager;
 };

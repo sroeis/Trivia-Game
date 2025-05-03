@@ -4,6 +4,7 @@
 #include "WSAInitializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "SqliteDatabase.h"
+#include "Questions.h"
 
 int main()
 {
@@ -18,6 +19,8 @@ int main()
 			throw std::runtime_error("Failed to open database");
 		}
 
+		
+		Questions::getQuestions(10, "EntertainmentFilm", "medium", db);
 		// Create server with database
 		Server myServer(&db);
 		myServer.run();

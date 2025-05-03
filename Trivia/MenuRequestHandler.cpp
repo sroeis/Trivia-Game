@@ -1,0 +1,179 @@
+#include "MenuRequestHandler.h"
+#include "Responses.h"
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------
+Note: every version check the new handler of evry Request result, maybe a new handler was created that would be better to use
+-------------------------------------------------------------------------------------------------------------------------------*/
+
+unsigned int MenuRequestHandler::m_newRoomId = 1;
+
+bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
+{
+    return request.id == GET_ROOMS_CODE ||
+        request.id == GET_PLAYERS_IN_ROOM_CODE ||
+        request.id == CREATE_ROOM_CODE ||
+        request.id == LOGOUT_CODE ||
+        request.id == JOIN_ROOM_CODE ||
+        request.id == GET_PERSONAL_STATS_CODE;
+}
+
+RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request)
+{
+    switch (request.id)
+    {
+	case CREATE_ROOM_CODE:
+		return createRoom(request);
+	case GET_ROOMS_CODE:
+	    return getRooms(request);
+	case GET_PLAYERS_IN_ROOM_CODE:
+		return getPlayersInRoom(request);
+	case GET_PERSONAL_STATS_CODE:
+		return getPersonalStats(request);
+	case LOGOUT_CODE:
+		return signout(request);
+	case JOIN_ROOM_CODE:
+		return joinRoom(request);
+    }
+}
+
+RequestResult MenuRequestHandler::signout(const RequestInfo& ri)
+{
+	m_handlerFactory.getLoginManager().logout(m_user.getUsername());
+	RequestResult result;
+	LogoutResponse logResp;
+	logResp.status = STATUS_OK;
+	result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
+	result.newHandler = m_handlerFactory.createLoginRequestHandler(); // Last changed: V2
+	return result;
+}
+
+RequestResult MenuRequestHandler::getRooms(const RequestInfo& ri)
+{
+	RequestResult result;
+	GetRoomsResponse getRoomsResp;
+	vector<Room> allRooms = m_handlerFactory.getRoomManager().getRooms();
+
+	for (const auto& room : allRooms)
+	{
+		getRoomsResp.rooms.push_back(room.getRoomData());
+	}
+	getRoomsResp.status = STATUS_OK;
+
+	// Serialize the response
+	result.response = JsonResponsePacketSerializer::serializeResponse(getRoomsResp);
+	result.newHandler = this; // Last changed: V2
+	return result;
+}
+
+RequestResult MenuRequestHandler::getPlayersInRoom(const RequestInfo& ri)
+{
+	RequestResult result;
+	GetPlayersInRoomResponse getPlayersResp;
+	GetPlayersInRoomRequest getPlayersReq = JsonResponsePacketDeserializer::deserializeGetPlayersInRoomRequest(ri.buffer);
+	
+	try
+	{
+		Room& room = m_handlerFactory.getRoomManager().getRoom(getPlayersReq.roomId);
+		getPlayersResp.players = room.getAllUsers();
+
+		result.response = JsonResponsePacketSerializer::serializeResponse(getPlayersResp);
+		result.newHandler = this; // Last changed: V2
+	}
+	catch (std::out_of_range e)
+	{
+		ErrorResponse errorResp;
+		errorResp.message = "Error, Room not found";
+		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
+		result.newHandler = this; // Last changed: V2
+	}
+
+	return result;
+}
+
+RequestResult MenuRequestHandler::getPersonalStats(const RequestInfo& ri)
+{
+	RequestResult result;
+	GetPersonalStatsResponse getPersonalStatsResp;
+
+	try
+	{
+		getPersonalStatsResp.statistics = m_handlerFactory.getStatisticsManager().getUserStatistics(m_user.getUsername());
+		getPersonalStatsResp.status = STATUS_OK;
+
+		// Serialize the response
+		result.response = JsonResponsePacketSerializer::serializeResponse(getPersonalStatsResp);
+		result.newHandler = this; // Last changed: V2
+	}
+	catch (std::out_of_range e)
+	{
+		ErrorResponse errorResp;
+		errorResp.message = "Error, User not found";
+		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
+		result.newHandler = this; // Last changed: V2
+	}
+	return result;
+}
+
+RequestResult MenuRequestHandler::getHighScore(const RequestInfo& ri)
+{
+	GetHighScoreResponse getHighScoreResp;
+	getHighScoreResp.statistics = m_handlerFactory.getStatisticsManager().getHighScore();
+	getHighScoreResp.status = STATUS_OK;
+
+	// Serialize the response
+	RequestResult result;
+	result.response = JsonResponsePacketSerializer::serializeResponse(getHighScoreResp);
+	result.newHandler = this; // Last changed: V2
+
+	return result;
+}
+
+RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
+{
+	JoinRoomRequest joinRoomReq = JsonResponsePacketDeserializer::deserializeJoinRoomRequest(ri.buffer);
+	RequestResult result;
+
+	Room& room = m_handlerFactory.getRoomManager().getRoom(joinRoomReq.roomId);
+	if (room.getRoomData().maxPlayers == room.getAllUsers().size())
+	{
+		ErrorResponse errorResp;
+		errorResp.message = "Error, Room is full";
+		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
+		result.newHandler = this; // Last changed: V2
+		return result;
+	}
+	else
+	{
+		JoinRoomResponse joinRoomResp;
+		room.addUser(m_user.getUsername());
+		joinRoomResp.status = STATUS_OK;
+		result.response = JsonResponsePacketSerializer::serializeResponse(joinRoomResp);
+		result.newHandler = this; // Last changed: V2
+	}
+
+	return result;
+}
+
+RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
+{
+	CreateRoomRequest createRoomReq = JsonResponsePacketDeserializer::deserializeCreateRoomRequest(ri.buffer);
+	RoomData roomData;
+
+	
+	roomData.id = m_newRoomId++;
+	roomData.maxPlayers = createRoomReq.maxUsers; 
+	roomData.name = createRoomReq.roomName;
+	roomData.numOfQuestionsInGame = createRoomReq.questionCount;
+	roomData.timePerQuestion = createRoomReq.answerTimeOut;
+	roomData.status = STATUS_OK;
+	m_handlerFactory.getRoomManager().CreateRoom(createRoomReq.roomName, roomData);
+
+	RequestResult result;
+	CreateRoomResponse createRoomResp;
+	createRoomResp.status = STATUS_OK;
+	result.response = JsonResponsePacketSerializer::serializeResponse(createRoomResp);
+
+	return result;
+}
+

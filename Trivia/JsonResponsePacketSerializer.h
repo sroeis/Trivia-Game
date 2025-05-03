@@ -12,12 +12,20 @@ using json = nlohmann::json;
 
 
 
+
 class JsonResponsePacketSerializer  
 {
 public:
-	static Buffer serializeResponse(ErrorResponse Er); 
-	static Buffer serializeResponse(LoginResponse Lr);
-	static Buffer serializeResponse(SignupResponse Sr);
+	static Buffer serializeResponse(const ErrorResponse& er); 
+	static Buffer serializeResponse(const LoginResponse& lr);
+	static Buffer serializeResponse(const SignupResponse& sr);
+	static Buffer serializeResponse(const LogoutResponse& lr);
+	static Buffer serializeResponse(const GetRoomsResponse& r);
+	static Buffer serializeResponse(const GetPlayersInRoomResponse& pr);
+	static Buffer serializeResponse(const JoinRoomResponse& jr);
+	static Buffer serializeResponse(const CreateRoomResponse& cr);
+	static Buffer serializeResponse(const GetHighScoreResponse& gr);
+	static Buffer serializeResponse(const GetPersonalStatsResponse& gr);
 
 private:
 	//get the data into the protocol format : Code - Size - Data
@@ -30,3 +38,25 @@ private:
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LoginResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SignupResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ErrorResponse, message)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LogoutResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(JoinRoomResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CreateRoomResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetHighScoreResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetPersonalStatsResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, status)
+
+
+// Custom JSON serialization for GetPlayersInRoomResponse (change "players" to "PlayersInRoom")
+//NOTE: same as macro
+inline void to_json(json& j, const GetPlayersInRoomResponse& pr) {
+	j = json{
+		{"PlayersInRoom", pr.players}  // "players" in struct becomes "PlayersInRoom" in JSON
+	};
+}
+
+inline void to_json(json& j, const GetRoomsResponse& pr) {
+	j = json{
+		{"status", pr.status},
+		{"Rooms", pr.rooms}
+	};
+}
