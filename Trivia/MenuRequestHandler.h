@@ -19,6 +19,7 @@ public:
 private:
 	LoggedUser m_user;
 	RequestHandlerFactory& m_handlerFactory;
+	static unsigned int m_roomCounter;
 
 	RequestResult signout(const RequestInfo& ri);
 	RequestResult getRooms(const RequestInfo& ri);
@@ -27,5 +28,4 @@ private:
 	RequestResult getHighScore(const RequestInfo& ri);
 	RequestResult joinRoom(const RequestInfo& ri);
 	RequestResult createRoom(const RequestInfo& ri);
-	
 };

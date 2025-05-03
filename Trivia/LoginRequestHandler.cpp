@@ -2,6 +2,11 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
+
+/*-------------------------------------------------------------------------------------------------------------------------------
+Note: every version check the new handler of evry Request result, maybe a new handler was created that would be better to use
+-------------------------------------------------------------------------------------------------------------------------------*/
+
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
 	if (request.id != LOGIN_CODE && request.id != SIGNUP_CODE)
@@ -42,7 +47,7 @@ RequestResult LoginRequestHandler::login(RequestInfo ri)
 		logResp.status = 100;
 
 		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-		result.newHandler = this; //probably need to change in v2
+		result.newHandler = this->m_handlerFactory.createMenuRequestHandler(Lr.username); //Last changed: V2
 
 		return result;
 
@@ -50,7 +55,7 @@ RequestResult LoginRequestHandler::login(RequestInfo ri)
 	ErrorResponse errResp;
 	errResp.message = "Error in login request.";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; //probably need to change in v2
+	result.newHandler = this; // Last changed V2
 	return result;
 }
 
@@ -65,12 +70,12 @@ RequestResult LoginRequestHandler::signup(RequestInfo ri)
 		SignupResponse response;
 		response.status = 100;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-		result.newHandler = this; //probably need to change in v2
+		result.newHandler = this->m_handlerFactory.createMenuRequestHandler(sr.username); // Last changed: V2
 		return result;
 	}
 	ErrorResponse errResp;
 	errResp.message = "Error in signup request.";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; //probably need to change in v2
+	result.newHandler = this; // Last changed: V2
 	return result;
 }

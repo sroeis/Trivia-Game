@@ -199,7 +199,7 @@ float SqliteDatabase::getPlayerAverageAnswerTime(const string& username) const
 {
     float avgTime = 0.0f;
     int userId = getUserIdByUsername(username);
-    if (userId == -1) return 0.0f;
+   
     struct FloatHolder { float value = 0.0f; } holder;
     auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
         if (argc > 0 && argv[0])
@@ -317,8 +317,9 @@ int SqliteDatabase::getUserIdByUsername(const std::string& username) const
     char* errMsg = nullptr;
     int res = sqlite3_exec(_db, sql.c_str(), userIdCallback, &userId, &errMsg);
     if (res != SQLITE_OK) {
-        std::cerr << "Error getting user ID: " << (errMsg ? errMsg : "") << std::endl;
+       // std::cerr << "Error getting user ID: " << (errMsg ? errMsg : "") << std::endl;
         if (errMsg) sqlite3_free(errMsg);
+		throw std::out_of_range("Error getting userID");
     }
     return userId;
 }
