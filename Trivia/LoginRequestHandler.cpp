@@ -36,18 +36,18 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 {
 	RequestResult result;
-	LoginRequest Lr;
+	LoginRequest lr;
 	
 	
-	Lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
+	lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
 
-	if(m_handlerFactory.getLoginManager().login(Lr.username, Lr.password))
+	if(m_handlerFactory.getLoginManager().login(lr.username, lr.password))
 	{
 		LoginResponse logResp;
 		logResp.status = 100;
 
 		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(Lr.username); //Last changed: V2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(lr.username)); //Last changed: V2
 
 		return result;
 
@@ -70,7 +70,7 @@ RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 		SignupResponse response;
 		response.status = 100;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(sr.username); // Last changed: V2
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(sr.username)); // Last changed: V2
 		return result;
 	}
 	ErrorResponse errResp;
