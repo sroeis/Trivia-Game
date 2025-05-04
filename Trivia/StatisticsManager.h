@@ -10,8 +10,8 @@ class StatisticsManager
 {
 public:
 	StatisticsManager(IDataBase* dataBase) : m_dataBase(dataBase) {}
-	vector<string> getHighScore() const;
-	vector<string> getUserStatistics(const string& username) const;
+	const vector<string>& getHighScore() const;
+	const vector<string>& getUserStatistics(const string& username) const;
 private:
 	IDataBase* m_dataBase;
 };

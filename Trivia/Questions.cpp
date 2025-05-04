@@ -28,7 +28,7 @@ std::unordered_map<std::string, int> Questions::categoryMap = {
 {"EntertainmentCartoonAndAnimations", 32}
 };
 
-void Questions::getQuestions(int numOfQuestions, std::string category, std::string difficulty, SqliteDatabase db)
+void Questions::getQuestions(int numOfQuestions, const std::string& category, const std::string& difficulty, SqliteDatabase & db)
 {
 	std::string URl = buildUrl(numOfQuestions, category, difficulty);
     std::cout << URl << std::endl;
@@ -64,7 +64,7 @@ void Questions::getQuestions(int numOfQuestions, std::string category, std::stri
     }
 }
 
-std::string Questions::buildUrl(int numOfQuestions, std::string category, std::string difficulty)
+const std::string& Questions::buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty)
 {
     std::string url = URL_1 + std::to_string(numOfQuestions);
     
@@ -88,7 +88,7 @@ std::string Questions::buildUrl(int numOfQuestions, std::string category, std::s
 #include <sstream>
 #include <stdexcept>
 
-std::string Questions::getResponse(std::string url)
+const std::string& Questions::getResponse(const std::string& url)
 {
     CURL* curl = curl_easy_init();
     if (!curl) {

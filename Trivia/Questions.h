@@ -16,10 +16,10 @@
 class Questions 
 {
 public:
-    static void getQuestions(int numOfQuestions, std::string category,std::string difficulty, SqliteDatabase db);
+    static void getQuestions(int numOfQuestions, const std::string& category, const std::string& difficulty, SqliteDatabase & db);
 
 private:
-    static std::string buildUrl(int numOfQuestions, std::string category, std::string difficulty);
+    static const std::string& buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty);
     static std::unordered_map<std::string, int> categoryMap;
-    static std::string getResponse(std::string url);
+    static const std::string& getResponse(const std::string& url);
 };

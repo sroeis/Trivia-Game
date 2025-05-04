@@ -25,7 +25,7 @@ unsigned int RoomManager::getRoomState(const int& ID) const
 	return m_rooms.at(ID).getRoomData().status;//i think idk what they want or what status is really supposed to be.
 }
 
-std::vector<Room> RoomManager::getRooms() const
+const std::vector<Room>& RoomManager::getRooms() const
 {
 	std::vector<Room> allRooms;
 

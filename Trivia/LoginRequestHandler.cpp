@@ -17,7 +17,7 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 	return true;
 }
 
-RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
+const RequestResult& LoginRequestHandler::handleRequest(const RequestInfo& request)
 {
 	RequestResult result;
 
@@ -33,7 +33,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 	return result;
 }
 
-RequestResult LoginRequestHandler::login(const RequestInfo& ri)
+const RequestResult& LoginRequestHandler::login(const RequestInfo& ri)
 {
 	RequestResult result;
 	LoginRequest lr;
@@ -59,7 +59,7 @@ RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 	return result;
 }
 
-RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
+const RequestResult& LoginRequestHandler::signup(const RequestInfo& ri)
 {
 	RequestResult result;
 	
