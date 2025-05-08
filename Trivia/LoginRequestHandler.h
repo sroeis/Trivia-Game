@@ -11,10 +11,10 @@ class LoginRequestHandler : public IRequestHandler
 public:
     LoginRequestHandler(RequestHandlerFactory& factory) : m_handlerFactory(factory) {}
 	bool isRequestRelevant(const RequestInfo& request) override;
-	RequestResult handleRequest(const RequestInfo& request) override;
+	const RequestResult& handleRequest(const RequestInfo& request) override;
 private:
 	//LoginManager& m_loginManager;
 	RequestHandlerFactory& m_handlerFactory;
-	RequestResult login(const RequestInfo& ri);
-	RequestResult signup(const RequestInfo& ri);
+	const RequestResult& login(const RequestInfo& ri);
+	const RequestResult& signup(const RequestInfo& ri);
 };

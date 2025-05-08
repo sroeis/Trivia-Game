@@ -11,9 +11,9 @@ public:
 	Room(const RoomData& metadata,const LoggedUser& user);
 	void addUser(const LoggedUser& user);
 	void removeUser(const LoggedUser& user);
-	std::vector<std::string> getAllUsers() const;
+	const std::vector<std::string>& getAllUsers() const;
 
-	RoomData getRoomData() const;
+	const RoomData& getRoomData() const;
 
 
 private:
