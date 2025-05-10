@@ -20,7 +20,7 @@ int main()
 		}
 
 		
-		Questions::getQuestions(10, "EntertainmentFilm", "medium", db);
+		//Questions::getQuestions(10, "EntertainmentFilm", "medium", db);
 		// Create server with database
 		Server myServer(&db);
 		myServer.run();

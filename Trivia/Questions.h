@@ -3,7 +3,6 @@
 #include <vector>
 #include <sstream>
 #include <random>
-#include "curl/curl.h"
 #include "json.hpp"
 #include "SqliteDatabase.h"
 
