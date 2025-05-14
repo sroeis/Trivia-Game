@@ -32,6 +32,15 @@ namespace TriviaClient
 
         void SignInClick(object sender, RoutedEventArgs e)
         {
+            string username = UsernameTextBox.Text;
+            string password = PasswordTextBox.Text;
+
+            TriviaClient.Requests.LoginRequest loginRequest = new TriviaClient.Requests.LoginRequest
+            {
+                Username = username,
+                Password = password
+            };
+            App.m_communicator.Send(loginRequest);
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
 
         }

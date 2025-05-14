@@ -12,7 +12,7 @@ namespace TriviaClient
     /// </summary>
     public partial class App : Application
     {
-
+        public static Communicator m_communicator = new Communicator();
     }
 
     public class DarkerColorConverter : IValueConverter
