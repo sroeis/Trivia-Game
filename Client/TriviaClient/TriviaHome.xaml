@@ -5,14 +5,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient"
       mc:Ignorable="d" 
-      d:DesignHeight="1417" d:DesignWidth="1890"
       Title="TriviaHome">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="images/background.png"/>
         </Grid.Background>
 
-        <Image Height="1300" Width="1300" Source="pack://application:,,,/images/main.png" Margin="295,-2,295,119"/>
+        <Image Name ="img" Source="pack://application:,,,/images/main.png"/>
        
 
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="954" Width="1160" Margin="0,300,0,0" >

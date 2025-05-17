@@ -23,6 +23,8 @@ namespace TriviaClient
         public TriviaHome()
         {
             InitializeComponent();
+            img.Height = (System.Windows.SystemParameters.PrimaryScreenHeight *0.9);
+            img.Width = (System.Windows.SystemParameters.PrimaryScreenWidth*0.9);
         }
 
         void SignInClick(object sender, RoutedEventArgs e)
