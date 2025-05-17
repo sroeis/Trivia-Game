@@ -13,54 +13,63 @@
             <ImageBrush ImageSource="../images/background.png"/>
         </Grid.Background>
 
-        <Image Height="1300" Width="1300" Source="pack://application:,,,/images/main.png" Margin="295,-2,295,119"/>
+        <Viewbox>
+            <Canvas>
+                <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
+                    Width="250"
+                    Background="#2e393a" Content="BACK"
+                    Click="BackClick" ClickMode="Press" 
+                    Panel.ZIndex="1" Canvas.Left="10" Canvas.Top="10"/>
+
+                <StackPanel Canvas.Left="695" Canvas.Top="517" >
+                    <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+                    <TextBox Name="UsernameTextBox"
+                         Style="{StaticResource TextBoxStyle}"
+                         FontSize="25"
+                         Background ="#3baa6a"
+                         BorderBrush ="#3baa6a"
+                         Foreground="{StaticResource ffe7b3Color}"
+                         Padding="20,20,20,20"
+                         GotFocus="UsernameTextBox_GotFocus"
+                         Text="Username:"
+                    />
+
+                    <TextBox Name="PasswordTextBox"
+                        Style="{StaticResource TextBoxStyle}"
+                        FontSize="25"
+                        Background ="#3baa6a"
+                        BorderBrush ="#3baa6a"
+                        Foreground="{StaticResource ffe7b3Color}"
+                        Padding="20,20,20,20"
+                        Margin="0,15"
+                        GotFocus="PasswordTextBox_GotFocus"
+                        Text="Password:"
+                    />
+                    <TextBox Name="EmailTextBox"
+                         Style="{StaticResource TextBoxStyle}"
+                         FontSize="25"
+                         Background ="#3baa6a"
+                         BorderBrush ="#3baa6a"
+                         Foreground="{StaticResource ffe7b3Color}"
+                         Padding="20,20,20,20"
+                         Margin="0,15"
+                         GotFocus="EmailTextBox_GotFocus"
+                         Text="Email:"
+                    />
+
+                    <Button Name="SignUp"
+                        Style="{StaticResource MenuButtonStyle}" 
+                        Background="#3baa6a" Content="SIGN UP"
+                        Click="SignUpClick" ClickMode="Press"
+                    />
+
+                </StackPanel>
+            </Canvas>
+        </Viewbox>
 
 
-        <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
-                Width="250"
-                Background="#2e393a" Content="BACK"
-                Click="BackClick" ClickMode="Press" 
-                Panel.ZIndex="1" Margin="-1520,-830,0,0"
-            />
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="954" Width="1160" Margin="0,400,0,0" >
 
-            <TextBox Name="UsernameTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                     Background ="#3baa6a"
-                     BorderBrush ="#3baa6a"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     GotFocus="UsernameTextBox_GotFocus"
-                     Text="Username:"
-                     />
-
-            <TextBox Name="PasswordTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                    Background ="#3baa6a"
-                     BorderBrush ="#3baa6a"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     Margin="0,15"
-                     GotFocus="PasswordTextBox_GotFocus"
-                     Text="Password:"
-                     />
-            <TextBox Name="EmailTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                     Background ="#3baa6a"
-                     BorderBrush ="#3baa6a"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     Margin="0,15"
-                     GotFocus="EmailTextBox_GotFocus"
-                     Text="Email:"
-                     />
-
-            <Button Name="SignUp" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#3baa6a" Content="SIGN UP"
-                    Click="SignUpClick" ClickMode="Press"/>
-        </StackPanel>
+        
     </Grid>
 </Page>
