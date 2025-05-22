@@ -5,37 +5,40 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient"
       mc:Ignorable="d" 
-      d:DesignHeight="1417" d:DesignWidth="1890"
       Title="TriviaHome">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="images/background.png"/>
         </Grid.Background>
 
-        <Image Height="1300" Width="1300" Source="pack://application:,,,/images/main.png" Margin="295,-2,295,119"/>
-       
 
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="954" Width="1160" Margin="0,300,0,0" >
+        <Viewbox>
+            
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,0" >
 
-            <!-- Buttons -->
-            <Button Name="SignIn" Style="{StaticResource MenuButtonStyle}" 
+                <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+                <!-- Buttons -->
+                <Button Name="SignIn" Style="{StaticResource MenuButtonStyle}" 
                     Background="#3baaa3" Content="SIGN IN"
                     Click="SignInClick" ClickMode="Press"/>
-            <Button Name="SignUp" Style="{StaticResource MenuButtonStyle}"
+                <Button Name="SignUp" Style="{StaticResource MenuButtonStyle}"
                     Background="#3baa6a" Content="SIGN UP"
                     Click="SignUpClick" ClickMode="Press"/>
-            <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
+                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
                     Background="#f29443" Content="JOIN ROOM"
                     Click="JoinRoomClick" ClickMode="Press"/>
-            <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
+                <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
                     Background="#e8644b" Content="CREATE ROOM"
                     Click="CreateRoomClick" ClickMode="Press"/>
-            <Button Name="MyStatus" Style="{StaticResource MenuButtonStyle}" 
+                <Button Name="MyStatus" Style="{StaticResource MenuButtonStyle}" 
                     Background="#2b818d" Content="MY STATUS"
                     Click="MyStatusClick" ClickMode="Press"/>
-            <Button Name="HighScores" Style="{StaticResource MenuButtonStyle}" 
+                <Button Name="HighScores" Style="{StaticResource MenuButtonStyle}" 
                     Background="#1c4d9a" Content="HIGH SCORES"
                     Click="HighScoresClick" ClickMode="Press"/>
-        </StackPanel>
+            </StackPanel>
+        </Viewbox>
+        
     </Grid>
 </Page>

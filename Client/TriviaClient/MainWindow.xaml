@@ -1,7 +1,8 @@
 ﻿<Window x:Class="TriviaClient.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Trivia Game" Height="1417" Width="1890">
+    WindowState="Maximized"
+    Title="Trivia Game">
     <DockPanel>
         <Frame x:Name="_NavigationFrame" NavigationUIVisibility="Hidden"/>
     </DockPanel>
