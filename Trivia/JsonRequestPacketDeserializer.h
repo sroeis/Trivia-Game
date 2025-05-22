@@ -2,7 +2,7 @@
 #include "LoginRequestHandler.h"
 #include "Responses.h"
 
-class JsonResponsePacketDeserializer : public LoginRequestHandler
+class JsonResponsePacketDeserializer 
 {
 public:
 	static const LoginRequest& deserializeLoginRequest(const Buffer& buffer);
