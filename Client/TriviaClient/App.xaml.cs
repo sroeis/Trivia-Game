@@ -2,8 +2,10 @@
 using System.Data;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace TriviaClient
 {
@@ -12,7 +14,22 @@ namespace TriviaClient
     /// </summary>
     public partial class App : Application
     {
-        public static Communicator m_communicator = new Communicator();
+        public static Communicator m_communicator { get; } = new Communicator();
+
+        public static void ButtonErrorEvent(object sender, RoutedEventArgs e)
+        {
+            ((Button)sender).Background = new SolidColorBrush(Colors.Red);
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.5);
+            timer.Tick += (s, args) =>
+            {
+
+                ((Button)sender).Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3baaa3"));
+                timer.Stop();
+            };
+            timer.Start();
+        }
+
     }
 
     public class DarkerColorConverter : IValueConverter
@@ -36,4 +53,5 @@ namespace TriviaClient
         }
     }
 
+    
 }

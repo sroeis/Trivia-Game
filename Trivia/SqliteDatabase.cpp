@@ -319,7 +319,8 @@ int SqliteDatabase::getUserIdByUsername(const std::string& username) const
     if (res != SQLITE_OK) {
        // std::cerr << "Error getting user ID: " << (errMsg ? errMsg : "") << std::endl;
         if (errMsg) sqlite3_free(errMsg);
-		throw std::out_of_range("Error getting userID");
+		//throw std::out_of_range("Error getting userID");
+        return -1;
     }
     return userId;
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TriviaClient
 {
@@ -20,6 +21,9 @@ namespace TriviaClient
     /// </summary>
     public partial class TriviaSignin : Page
     {
+        private bool hasInputUsername = false;
+        private bool hasInputPassword = false;
+
         public TriviaSignin()
         {
             InitializeComponent();
@@ -34,13 +38,14 @@ namespace TriviaClient
         {
             string username = UsernameTextBox.Text;
             string password = PasswordTextBox.Text;
-
-            TriviaClient.Requests.LoginRequest loginRequest = new TriviaClient.Requests.LoginRequest
+            
+            
+            if(!hasInputUsername || !hasInputPassword || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                Username = username,
-                Password = password
-            };
-            App.m_communicator.Send(loginRequest);
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
+            App.m_communicator.Send(Serializer.Signin(username, password));
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
 
         }
@@ -49,6 +54,7 @@ namespace TriviaClient
         {
             if (UsernameTextBox.Text == "Username:")
             {
+                hasInputUsername = true;
                 UsernameTextBox.Text = "";
                 UsernameTextBox.VerticalContentAlignment = VerticalAlignment.Center;
                 UsernameTextBox.Padding = new Thickness(20, 0, 20, 0); // Center padding
@@ -60,6 +66,7 @@ namespace TriviaClient
         {
             if (PasswordTextBox.Text == "Password:")
             {
+                hasInputPassword = true;
                 PasswordTextBox.Text = ""; 
                 PasswordTextBox.VerticalContentAlignment = VerticalAlignment.Center; 
                 PasswordTextBox.Padding = new Thickness(20, 0, 20, 0); 
