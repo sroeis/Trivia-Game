@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="1417" d:DesignWidth="1890"
       Title="TriviaCreateRoom">
 
     <Grid>
@@ -13,65 +12,72 @@
             <ImageBrush ImageSource="../images/background.png"/>
         </Grid.Background>
 
-        <Image Height="1300" Width="1300" Source="pack://application:,,,/images/main.png" Margin="295,-2,295,119"/>
-
 
         <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
-                Width="250"
+                Width="140"
+                Height="60"
+                FontSize="22"
                 Background="#2e393a" Content="BACK"
                 Click="BackClick" ClickMode="Press" 
-                Panel.ZIndex="1" Margin="-1520,-830,0,0"
+                Panel.ZIndex="1" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
             />
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="954" Width="1160" Margin="0,350,0,0" >
 
-            <TextBox Name="RoomNameTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                     Background ="#e8644b"
-                     BorderBrush ="#e8644b"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     GotFocus="RoomNameTextBox_GotFocus"
-                     Text="Room Name:"
-                     />
+        <Viewbox>
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,100" >
+                <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
 
-            <TextBox Name="NumberOfPlayersTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                    Background ="#e8644b"
-                     BorderBrush ="#e8644b"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     Margin="0,15"
-                     GotFocus="NumberOfPlayersTextBox_GotFocus"
-                     Text="Number Of Players:"
-                     />
-            <TextBox Name="NumberOfQuestionsTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                     Background ="#e8644b"
-                     BorderBrush ="#e8644b"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     Margin="0,15"
-                     GotFocus="NumberOfQuestionsTextBox_GotFocus"
-                     Text="Number Of Questions:"
-                     />
-            <TextBox Name="TimePerQuestionTextBox"
-                     Style="{StaticResource TextBoxStyle}"
-                     FontSize="25"
-                     Background ="#e8644b"
-                     BorderBrush ="#e8644b"
-                     Foreground="{StaticResource ffe7b3Color}"
-                     Padding="20,20,20,20"
-                     Margin="0,15"
-                     GotFocus="TimePerQuestionTextBox_GotFocus"
-                     Text="Time Per Question:"
-                     />
 
-            <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#e8644b" Content="CREATE ROOM"
-                    Click="CreateRoomClick" ClickMode="Press"/>
-        </StackPanel>
+                <TextBox Name="RoomNameTextBox"
+             Style="{StaticResource TextBoxStyle}"
+             FontSize="25"
+             Background ="#e8644b"
+             BorderBrush ="#e8644b"
+             Foreground="{StaticResource ffe7b3Color}"
+             Padding="20,20,20,20"
+             GotFocus="RoomNameTextBox_GotFocus"
+             Text="Room Name:"
+             />
+
+                <TextBox Name="NumberOfPlayersTextBox"
+             Style="{StaticResource TextBoxStyle}"
+             FontSize="25"
+            Background ="#e8644b"
+             BorderBrush ="#e8644b"
+             Foreground="{StaticResource ffe7b3Color}"
+             Padding="20,20,20,20"
+             Margin="0,15"
+             GotFocus="NumberOfPlayersTextBox_GotFocus"
+             Text="Number Of Players:"
+             />
+                <TextBox Name="NumberOfQuestionsTextBox"
+             Style="{StaticResource TextBoxStyle}"
+             FontSize="25"
+             Background ="#e8644b"
+             BorderBrush ="#e8644b"
+             Foreground="{StaticResource ffe7b3Color}"
+             Padding="20,20,20,20"
+             Margin="0,15"
+             GotFocus="NumberOfQuestionsTextBox_GotFocus"
+             Text="Number Of Questions:"
+             />
+                <TextBox Name="TimePerQuestionTextBox"
+             Style="{StaticResource TextBoxStyle}"
+             FontSize="25"
+             Background ="#e8644b"
+             BorderBrush ="#e8644b"
+             Foreground="{StaticResource ffe7b3Color}"
+             Padding="20,20,20,20"
+             Margin="0,15"
+             GotFocus="TimePerQuestionTextBox_GotFocus"
+             Text="Time Per Question:"
+             />
+
+                <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
+            Background="#e8644b" Content="CREATE ROOM"
+            Click="CreateRoomClick" ClickMode="Press"/>
+            </StackPanel>
+        </Viewbox>
+        
     </Grid>
 </Page>

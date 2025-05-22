@@ -5,10 +5,75 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="TriviaJoinRoom">
 
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="../images/background.png"/>
+        </Grid.Background>
+
+
+
+        <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
+                Width="140"
+                Height="50"
+                FontSize="22"
+                Background="#2e393a" Content="BACK"
+                Click="BackClick" ClickMode="Press" 
+                Panel.ZIndex="1" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+            />
+
+        <Viewbox>
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,120" >
+                <Image Name ="img" Height="265" Margin="0,-330,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+                <Border CornerRadius="10" Background="#f29443" Margin="10,0,10,0">
+
+                    <Border.Effect>
+                        <DropShadowEffect 
+                            Color="{Binding Background.Color, RelativeSource={RelativeSource AncestorType={x:Type Border}}, Converter={StaticResource DarkerColorConverter}}"
+                            ShadowDepth="8" Direction="-90" BlurRadius="0"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock Text="Rooms List:" 
+                        Style="{StaticResource TextStyle}" Height="50" Width="566"/>
+
+                        <ListBox x:Name="RoomsListBox"
+                             Width="500" Height="60"
+                             Background="#f29443"
+                             Margin="0,0,0,30"
+                             FontSize="20" FontWeight="Bold"
+                             SelectionChanged="RoomsListBox_SelectionChanged"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center">
+                        </ListBox>
+
+                        <StackPanel x:Name="PlayersPanel" Visibility="Collapsed">
+                            <TextBlock Text="Selected room players:"
+                               Style="{StaticResource TextStyle}" Height="50"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"
+                            />
+                            <ListBox x:Name="PlayersListBox"
+                                 Width="500" Height="60"
+                                 Background="#f29443"
+                                 Margin="0,0,0,40"
+                                 FontSize="20" FontWeight="Bold"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            </ListBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Button Name="RefreshRoom" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#f29443" Content="REFRESH"
+                    Click="RefreshClick" ClickMode="Press"/>
+                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#f29443" Content="JOIN ROOM"
+                    Click="JoinRoomClick" ClickMode="Press"/>
+            </StackPanel>
+        </Viewbox>
     </Grid>
 </Page>

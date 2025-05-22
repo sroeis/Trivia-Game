@@ -27,7 +27,7 @@ namespace TriviaClient.Pages
 
         void BackClick(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("TriviaHome.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
         }
 
         void CreateRoomClick(object sender, RoutedEventArgs e)

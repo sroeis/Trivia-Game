@@ -33,22 +33,5 @@ namespace TriviaClient
         {
             this.NavigationService.Navigate(new Uri("Pages/TriviaSignup.xaml", UriKind.Relative));
         }
-        void JoinRoomClick(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
-        }
-        void CreateRoomClick(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaCreateRoom.xaml", UriKind.Relative));
-        }
-        void MyStatusClick(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaMyStatus.xaml", UriKind.Relative));
-        }
-
-        void HighScoresClick(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaHighScores.xaml", UriKind.Relative));
-        }
     }
 }

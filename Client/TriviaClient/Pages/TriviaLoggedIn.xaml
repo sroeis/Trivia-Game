@@ -5,10 +5,37 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="TriviaLoggedIn">
-
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="../images/background.png"/>
+        </Grid.Background>
+
+
+        <Viewbox>
+
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,70" >
+
+                <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+                <!-- Buttons -->
+                <Button Name="SignOut" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#0f866b" Content="SIGN OUT"
+                    Click="SignOutClick" ClickMode="Press"/>
+                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#f29443" Content="JOIN ROOM"
+                    Click="JoinRoomClick" ClickMode="Press"/>
+                <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#e8644b" Content="CREATE ROOM"
+                    Click="CreateRoomClick" ClickMode="Press"/>
+                <Button Name="MyStatus" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#2b818d" Content="MY STATUS"
+                    Click="MyStatusClick" ClickMode="Press"/>
+                <Button Name="HighScores" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#1c4d9a" Content="HIGH SCORES"
+                    Click="HighScoresClick" ClickMode="Press"/>
+            </StackPanel>
+        </Viewbox>
+
     </Grid>
 </Page>
