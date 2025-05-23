@@ -61,42 +61,45 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	char headerBuff[HEADER_SIZE] = { 0 }; //size + code
-	unsigned int msgSize = 0;
-	RequestInfo ri;
-	
-	RequestResult reqResult;
+	while(true)
+	{ 
+		char headerBuff[HEADER_SIZE] = { 0 }; //size + code
+		unsigned int msgSize = 0;
+		RequestInfo ri;
+		
+		RequestResult reqResult;
+		
+		int bytesReceived = recv(clientSocket, headerBuff, HEADER_SIZE, 0); //recive size and code
+		ri.receivalTime = time(nullptr);
+		
+		// Code = 1 byte
+		int reqCode = headerBuff[CODE_POS];
+		// Size = 4 bytes
+		std::memcpy(&msgSize, &headerBuff[1], SIZE_LENGTH);
+		
+		// Make buffer with the correct size
+		Buffer buffer(msgSize);
+		
+		// Receive the payload
+		bytesReceived = recv(clientSocket, reinterpret_cast<char*>(buffer.data()), msgSize, MSG_WAITALL);
+		
+		// Complete RequestInfo
+		ri.buffer = buffer;
+		ri.id = reqCode;
 
-	int bytesReceived = recv(clientSocket, headerBuff, HEADER_SIZE, 0); //recive size and code
-	ri.receivalTime = time(nullptr);
+		if (m_clients[clientSocket]->isRequestRelevant(ri))
+		{
+			reqResult = m_clients[clientSocket]->handleRequest(ri);
+		}
+		else
+		{
+			ErrorResponse err;
+			err.message = "Error in request code.";
+			throw err;
+		}
 
-	// Code = 1 byte
-	int reqCode = headerBuff[CODE_POS];
-	// Size = 4 bytes
-	std::memcpy(&msgSize, &headerBuff[1], SIZE_LENGTH);
-
-	// Make buffer with the correct size
-	Buffer buffer(msgSize);
-
-	// Receive the payload
-	bytesReceived = recv(clientSocket, reinterpret_cast<char*>(buffer.data()), msgSize, MSG_WAITALL);
-
-	// Complete RequestInfo
-	ri.buffer = buffer;
-	ri.id = reqCode;
-
-	if (m_clients[clientSocket]->isRequestRelevant(ri))
-	{
-		reqResult = m_clients[clientSocket]->handleRequest(ri);
+		sendMsg(reqResult.response, clientSocket);
 	}
-	else
-	{
-		ErrorResponse err;
-		err.message = "Error in request code.";
-		throw err;
-	}
-
-	sendMsg(reqResult.response, clientSocket);
 }
 
 void Communicator::sendMsg(const Buffer& msg, SOCKET clientSocket)

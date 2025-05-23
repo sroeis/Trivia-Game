@@ -38,8 +38,8 @@ namespace TriviaClient
             stream.Read(size, 0, 1);
             int bytesRead = stream.Read(size, 0, 4);
             byte[] buffer = new byte[BitConverter.ToInt32(size)];
-
-            string jsonString = Encoding.ASCII.GetString(buffer, 0, BitConverter.ToInt32(size));
+            stream.Read(buffer, 0, buffer.Length);
+            string jsonString = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
             return jsonString;
         }
     }

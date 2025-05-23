@@ -51,6 +51,10 @@
                 <Button Name="SignIn" Style="{StaticResource MenuButtonStyle}" 
             Background="#3baaa3" Content="SIGN IN"
             Click="SignInClick" ClickMode="Press"/>
+
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}">    
+                   
+                </TextBlock>
             </StackPanel>
         </Viewbox>
         

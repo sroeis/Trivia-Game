@@ -48,10 +48,9 @@ namespace TriviaClient
             }
             App.m_communicator.Send(Serializer.Signin(username, password));
 
-            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(App.m_communicator.Receive());
-            if (response.ContainsKey("message"))
+            if(App.ShowError(ErrorBox))
             {
-                ErrorBox.Text = response["message"];
+                App.ButtonErrorEvent(sender, e);
                 return;
             }
 

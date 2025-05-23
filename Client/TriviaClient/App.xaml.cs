@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 
@@ -29,6 +30,18 @@ namespace TriviaClient
                 timer.Stop();
             };
             timer.Start();
+        }
+
+        public static bool ShowError(TextBlock ErrorBox)
+        {
+            string a = m_communicator.Receive();
+            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(a);
+            if (response.ContainsKey("message"))
+            {
+                ErrorBox.Text = response["message"];
+                return true;
+            }
+            return false;
         }
 
     }

@@ -68,7 +68,7 @@ const RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 	if(m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email))
 	{
 		SignupResponse response;
-		response.status = 100;
+		response.status = STATUS_OK;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(sr.username)); // Last changed: V2
 		return result;

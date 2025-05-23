@@ -27,6 +27,13 @@ namespace TriviaClient.Pages
 
         void SignOutClick(object sender, RoutedEventArgs e)
         {
+            App.m_communicator.Send(Serializer.Logout());
+
+            if (App.ShowError(ErrorBox))
+            {
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
             this.NavigationService.Navigate(new Uri("../TriviaHome.xaml", UriKind.Relative));
         }
         void JoinRoomClick(object sender, RoutedEventArgs e)
