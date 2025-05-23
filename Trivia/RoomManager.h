@@ -10,7 +10,7 @@ public:
 	void CreateRoom(const LoggedUser& user, const RoomData& roomData);
 	void deleteRoom(const int& ID);
 	unsigned int getRoomState(const int& ID) const;
-	const std::vector<Room>& getRooms() const;
+	const std::vector<Room> getRooms() const;
 	Room& getRoom(const int& ID);
 
 private:

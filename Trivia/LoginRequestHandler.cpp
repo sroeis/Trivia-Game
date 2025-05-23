@@ -17,7 +17,7 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& request)
 	return true;
 }
 
-const RequestResult& LoginRequestHandler::handleRequest(const RequestInfo& request)
+const RequestResult LoginRequestHandler::handleRequest(const RequestInfo& request)
 {
 	RequestResult result;
 
@@ -33,7 +33,7 @@ const RequestResult& LoginRequestHandler::handleRequest(const RequestInfo& reque
 	return result;
 }
 
-const RequestResult& LoginRequestHandler::login(const RequestInfo& ri)
+const RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 {
 	RequestResult result;
 	LoginRequest lr;
@@ -53,13 +53,13 @@ const RequestResult& LoginRequestHandler::login(const RequestInfo& ri)
 
 	}
 	ErrorResponse errResp;
-	errResp.message = "Error in login request.";
+	errResp.message = "Username or Password are invalid, Please try again.";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
 	result.newHandler = this; // Last changed V2
 	return result;
 }
 
-const RequestResult& LoginRequestHandler::signup(const RequestInfo& ri)
+const RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 {
 	RequestResult result;
 	
@@ -74,7 +74,7 @@ const RequestResult& LoginRequestHandler::signup(const RequestInfo& ri)
 		return result;
 	}
 	ErrorResponse errResp;
-	errResp.message = "Error in signup request.";
+	errResp.message = "There is an Error in one or more of the given arguments";
 	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
 	result.newHandler = this; // Last changed: V2
 	return result;

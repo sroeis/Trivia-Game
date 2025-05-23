@@ -35,7 +35,7 @@ namespace TriviaClient
         public string Receive()
         {
             byte[] size = new byte[4];
-            stream.Read(null, 0, 1);
+            stream.Read(size, 0, 1);
             int bytesRead = stream.Read(size, 0, 4);
             byte[] buffer = new byte[BitConverter.ToInt32(size)];
 

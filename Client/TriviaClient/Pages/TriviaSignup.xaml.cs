@@ -42,12 +42,20 @@ namespace TriviaClient.Pages
             string email = EmailTextBox.Text;
 
             Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    
             if (!hasInputUsername || !hasInputPassword || !hasInputEmail || !emailRegex.IsMatch(email) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 App.ButtonErrorEvent(sender, e);
                 return;
             }
             App.m_communicator.Send(Serializer.Signup(username, password, email));
+
+            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(App.m_communicator.Receive());
+            if (response.ContainsKey("message"))
+            {
+                //ErrorBox.Text = response["message"];
+                return;
+            }
 
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,14 @@ namespace TriviaClient
                 return;
             }
             App.m_communicator.Send(Serializer.Signin(username, password));
+
+            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(App.m_communicator.Receive());
+            if (response.ContainsKey("message"))
+            {
+                ErrorBox.Text = response["message"];
+                return;
+            }
+
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
 
         }
