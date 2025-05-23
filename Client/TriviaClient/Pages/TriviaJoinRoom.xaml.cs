@@ -101,7 +101,7 @@ namespace TriviaClient.Pages
 
     public class RoomsResponse
     {
-        public string status { get; set; }
+        public int status { get; set; }
         public ObservableCollection<RoomData> rooms { get; set; }
     }
     public class RoomData

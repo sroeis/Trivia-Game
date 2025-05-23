@@ -38,8 +38,17 @@
                             ShadowDepth="8" Direction="-90" BlurRadius="0"/>
                     </Border.Effect>
 
-                    <TextBlock Text="My Performances:" 
-                       Style="{StaticResource TextStyle}" Height="432" Width="566"/>
+                    <StackPanel>
+                        <TextBlock TextAlignment="Center" FontSize="32" 
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource TextStyle}">
+                            My Performances:
+                        </TextBlock>
+                        <TextBlock Name="Performances" 
+                        Style="{StaticResource TextStyle}" Height="432" Width="566" FontSize="25" TextAlignment="Left"/>
+                    </StackPanel>
+
+
                 </Border>
 
 
