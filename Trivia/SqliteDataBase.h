@@ -22,13 +22,13 @@ public:
 	void CreateQuestionTable() override;
 	void insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, const int& correctAnswer) override;
 	
-	const list<Question>& getQuestions(const int count) const override;
+	const list<Question> getQuestions(const int count) const override;
 	float getPlayerAverageAnswerTime(const string& username) const override;
 	int getNumOfCorrectAnswers(const string& username) const override;
 	int getNumOfTotalAnswers(const string& username) const override;
 	int getNumOfPlayerGames(const string& username) const override;
 	int getPlayerScore(const string& username) const override;
-	const vector<string>& getHighScores() const override;
+	const vector<string> getHighScores() const override;
 	
 private:
 	sqlite3* _db;

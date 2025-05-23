@@ -16,20 +16,20 @@ using json = nlohmann::json;
 class JsonResponsePacketSerializer  
 {
 public:
-	static const Buffer& serializeResponse(const ErrorResponse& er); 
-	static const Buffer& serializeResponse(const LoginResponse& lr);
-	static const Buffer& serializeResponse(const SignupResponse& sr);
-	static const Buffer& serializeResponse(const LogoutResponse& lr);
-	static const Buffer& serializeResponse(const GetRoomsResponse& r);
-	static const Buffer& serializeResponse(const GetPlayersInRoomResponse& pr);
-	static const Buffer& serializeResponse(const JoinRoomResponse& jr);
-	static const Buffer& serializeResponse(const CreateRoomResponse& cr);
-	static const Buffer& serializeResponse(const GetHighScoreResponse& gr);
-	static const Buffer& serializeResponse(const GetPersonalStatsResponse& gr);
+	static const Buffer serializeResponse(const ErrorResponse& er); 
+	static const Buffer serializeResponse(const LoginResponse& lr);
+	static const Buffer serializeResponse(const SignupResponse& sr);
+	static const Buffer serializeResponse(const LogoutResponse& lr);
+	static const Buffer serializeResponse(const GetRoomsResponse& r);
+	static const Buffer serializeResponse(const GetPlayersInRoomResponse& pr);
+	static const Buffer serializeResponse(const JoinRoomResponse& jr);
+	static const Buffer serializeResponse(const CreateRoomResponse& cr);
+	static const Buffer serializeResponse(const GetHighScoreResponse& gr);
+	static const Buffer serializeResponse(const GetPersonalStatsResponse& gr);
 
 private:
 	//get the data into the protocol format : Code - Size - Data
-	static const Buffer& PackIntoBuffer(int Code, const Buffer& payload);
+	static const Buffer PackIntoBuffer(int Code, const Buffer& payload);
 
 
 };

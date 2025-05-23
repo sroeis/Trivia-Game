@@ -10,7 +10,7 @@ using json = nlohmann::json;
 #define SIZE_END 5
 #define MSG_START 5
 
-const LoginRequest& JsonResponsePacketDeserializer::deserializeLoginRequest(const Buffer& buffer)
+const LoginRequest JsonResponsePacketDeserializer::deserializeLoginRequest(const Buffer& buffer)
 {
 	LoginRequest lr;
 
@@ -25,7 +25,7 @@ const LoginRequest& JsonResponsePacketDeserializer::deserializeLoginRequest(cons
 	return lr;
 }
 
-const SignupRequest& JsonResponsePacketDeserializer::deserializeSignupRequest(const Buffer& buffer)
+const SignupRequest JsonResponsePacketDeserializer::deserializeSignupRequest(const Buffer& buffer)
 {
 	SignupRequest sr;
 
@@ -41,7 +41,7 @@ const SignupRequest& JsonResponsePacketDeserializer::deserializeSignupRequest(co
 	return sr;
 }
 
-const GetPlayersInRoomRequest& JsonResponsePacketDeserializer::deserializeGetPlayersInRoomRequest(const Buffer& buffer)
+const GetPlayersInRoomRequest JsonResponsePacketDeserializer::deserializeGetPlayersInRoomRequest(const Buffer& buffer)
 {
 	GetPlayersInRoomRequest req;
 
@@ -55,7 +55,7 @@ const GetPlayersInRoomRequest& JsonResponsePacketDeserializer::deserializeGetPla
 	return req;
 }
 
-const JoinRoomRequest& JsonResponsePacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer)
+const JoinRoomRequest JsonResponsePacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer)
 {
 	JoinRoomRequest req;
 
@@ -69,7 +69,7 @@ const JoinRoomRequest& JsonResponsePacketDeserializer::deserializeJoinRoomReques
 	return req;
 }
 
-const CreateRoomRequest& JsonResponsePacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer)
+const CreateRoomRequest JsonResponsePacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer)
 {
 	CreateRoomRequest req;
 

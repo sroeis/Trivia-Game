@@ -161,7 +161,7 @@ void SqliteDatabase::insertQuestion(const std::string& question, const std::stri
     }
 }
 
-const list<Question>& SqliteDatabase::getQuestions(const int count) const
+const list<Question> SqliteDatabase::getQuestions(const int count) const
 {
     std::list<Question> questions;
     struct QuestionsHolder { std::list<Question>* list; } holder{&questions};
@@ -283,7 +283,7 @@ int SqliteDatabase::getPlayerScore(const string& username) const
     return score;
 }
 
-const vector<string>& SqliteDatabase::getHighScores() const
+const vector<string> SqliteDatabase::getHighScores() const
 {
     std::vector<std::string> topUsers;
     struct UserScoreHolder { std::vector<std::string>* vec; } holder{&topUsers};
@@ -319,7 +319,8 @@ int SqliteDatabase::getUserIdByUsername(const std::string& username) const
     if (res != SQLITE_OK) {
        // std::cerr << "Error getting user ID: " << (errMsg ? errMsg : "") << std::endl;
         if (errMsg) sqlite3_free(errMsg);
-		throw std::out_of_range("Error getting userID");
+		//throw std::out_of_range("Error getting userID");
+        return -1;
     }
     return userId;
 }

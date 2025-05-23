@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +22,10 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaSignup : Page
     {
+        private bool hasInputUsername = false;
+        private bool hasInputPassword = false;
+        private bool hasInputEmail = false;
+
         public TriviaSignup()
         {
             InitializeComponent();
@@ -31,6 +37,26 @@ namespace TriviaClient.Pages
 
         void SignUpClick(object sender, RoutedEventArgs e)
         {
+            string username = UsernameTextBox.Text;
+            string password = PasswordTextBox.Text;
+            string email = EmailTextBox.Text;
+
+            Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    
+            if (!hasInputUsername || !hasInputPassword || !hasInputEmail || !emailRegex.IsMatch(email) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
+            App.m_communicator.Send(Serializer.Signup(username, password, email));
+
+            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(App.m_communicator.Receive());
+            if (response.ContainsKey("message"))
+            {
+                //ErrorBox.Text = response["message"];
+                return;
+            }
+
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
 
         }
@@ -40,6 +66,7 @@ namespace TriviaClient.Pages
         {
             if (UsernameTextBox.Text == "Username:")
             {
+                hasInputUsername = true;
                 UsernameTextBox.Text = "";
                 UsernameTextBox.VerticalContentAlignment = VerticalAlignment.Center;
                 UsernameTextBox.Padding = new Thickness(20, 0, 20, 0); // Center padding
@@ -51,6 +78,7 @@ namespace TriviaClient.Pages
         {
             if (PasswordTextBox.Text == "Password:")
             {
+                hasInputPassword = true;
                 PasswordTextBox.Text = "";
                 PasswordTextBox.VerticalContentAlignment = VerticalAlignment.Center;
                 PasswordTextBox.Padding = new Thickness(20, 0, 20, 0);
@@ -61,6 +89,7 @@ namespace TriviaClient.Pages
         {
             if (EmailTextBox.Text == "Email:")
             {
+                hasInputEmail = true;
                 EmailTextBox.Text = "";
                 EmailTextBox.VerticalContentAlignment = VerticalAlignment.Center;
                 EmailTextBox.Padding = new Thickness(20, 0, 20, 0);

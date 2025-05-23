@@ -2,7 +2,7 @@
 
 
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& er)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& er)
 {
 	//using the macro to turn
 	json j = er;
@@ -16,7 +16,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const ErrorRespons
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const LoginResponse& lr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse& lr)
 {
 	//using the macro to turn
 	json j = lr;
@@ -30,7 +30,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const LoginRespons
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const SignupResponse& sr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& sr)
 {
 	//using the macro to turn
 	json j = sr;
@@ -44,7 +44,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const SignupRespon
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const LogoutResponse& lr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const LogoutResponse& lr)
 {
 	json j = lr; // lr must contain the status 1. check if its like that from the source that the req is sent from
 
@@ -57,7 +57,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const LogoutRespon
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& r)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& r)
 {
 	json j = r;
 
@@ -70,7 +70,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetRoomsResp
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse& pr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse& pr)
 {
 	json j = pr;
 
@@ -83,7 +83,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetPlayersIn
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse& jr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse& jr)
 {
 	json j = jr;
 
@@ -96,7 +96,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const JoinRoomResp
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse& cr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse& cr)
 {
 	json j = cr;
 
@@ -109,7 +109,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const CreateRoomRe
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetHighScoreResponse& gr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreResponse& gr)
 {
 	json j = gr;
 
@@ -122,7 +122,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetHighScore
 	return buffer;
 }
 
-const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& gr)
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& gr)
 {
 	json j = gr;
 
@@ -138,7 +138,7 @@ const Buffer& JsonResponsePacketSerializer::serializeResponse(const GetPersonalS
 
 
 // Modified PackIntoBuffer to take Buffer (raw bytes) directly
-const Buffer& JsonResponsePacketSerializer::PackIntoBuffer(int Code, const Buffer& payload)
+const Buffer JsonResponsePacketSerializer::PackIntoBuffer(int Code, const Buffer& payload)
 {
 	Buffer buffer;
 

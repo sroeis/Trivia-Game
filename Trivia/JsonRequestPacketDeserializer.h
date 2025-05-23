@@ -2,12 +2,12 @@
 #include "LoginRequestHandler.h"
 #include "Responses.h"
 
-class JsonResponsePacketDeserializer : public LoginRequestHandler
+class JsonResponsePacketDeserializer 
 {
 public:
-	static const LoginRequest& deserializeLoginRequest(const Buffer& buffer);
-	static const SignupRequest& deserializeSignupRequest(const Buffer& buffer);
-	static const GetPlayersInRoomRequest& deserializeGetPlayersInRoomRequest(const Buffer& buffer);
-	static const JoinRoomRequest& deserializeJoinRoomRequest(const Buffer& buffer);
-	static const CreateRoomRequest& deserializeCreateRoomRequest(const Buffer& buffer);
+	static const LoginRequest deserializeLoginRequest(const Buffer& buffer);
+	static const SignupRequest deserializeSignupRequest(const Buffer& buffer);
+	static const GetPlayersInRoomRequest deserializeGetPlayersInRoomRequest(const Buffer& buffer);
+	static const JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
+	static const CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
 };
