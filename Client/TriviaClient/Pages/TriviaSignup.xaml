@@ -4,8 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TriviaClient.Pages"
-      mc:Ignorable="d" 
-      d:DesignHeight="1417" d:DesignWidth="1890"
+      mc:Ignorable="d"
       Title="TriviaSignup">
 
     <Grid>
@@ -13,16 +12,20 @@
             <ImageBrush ImageSource="../images/background.png"/>
         </Grid.Background>
 
+        <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
+                Width="140"
+                Height="50"
+                FontSize="22"
+                Background="#2e393a" Content="BACK"
+                Click="BackClick" ClickMode="Press" 
+                Panel.ZIndex="1" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+            />
+        
         <Viewbox>
-            <Canvas>
-                <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
-                    Width="250"
-                    Background="#2e393a" Content="BACK"
-                    Click="BackClick" ClickMode="Press" 
-                    Panel.ZIndex="1" Canvas.Left="10" Canvas.Top="10"/>
-
-                <StackPanel Canvas.Left="695" Canvas.Top="517" >
-                    <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
+            <Grid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="0,300,0,200">
+                    <Image Name ="img" Height="295" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
 
                     <TextBox Name="UsernameTextBox"
                          Style="{StaticResource TextBoxStyle}"
@@ -65,7 +68,7 @@
                     />
 
                 </StackPanel>
-            </Canvas>
+            </Grid>
         </Viewbox>
 
 

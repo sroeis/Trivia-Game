@@ -24,5 +24,12 @@ namespace TriviaClient.Pages
         {
             InitializeComponent();
         }
+        void BackClick(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
+        }
+
     }
+
+
 }

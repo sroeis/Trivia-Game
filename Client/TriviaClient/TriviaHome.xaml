@@ -14,7 +14,7 @@
 
         <Viewbox>
             
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,0" >
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,400" >
 
                 <Image Name ="img" Height="300" Margin="0,-300,0,0" Source="pack://application:,,,/images/main1.png"/>
 
@@ -25,18 +25,6 @@
                 <Button Name="SignUp" Style="{StaticResource MenuButtonStyle}"
                     Background="#3baa6a" Content="SIGN UP"
                     Click="SignUpClick" ClickMode="Press"/>
-                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#f29443" Content="JOIN ROOM"
-                    Click="JoinRoomClick" ClickMode="Press"/>
-                <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#e8644b" Content="CREATE ROOM"
-                    Click="CreateRoomClick" ClickMode="Press"/>
-                <Button Name="MyStatus" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#2b818d" Content="MY STATUS"
-                    Click="MyStatusClick" ClickMode="Press"/>
-                <Button Name="HighScores" Style="{StaticResource MenuButtonStyle}" 
-                    Background="#1c4d9a" Content="HIGH SCORES"
-                    Click="HighScoresClick" ClickMode="Press"/>
             </StackPanel>
         </Viewbox>
         
