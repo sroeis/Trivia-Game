@@ -90,12 +90,13 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 		if (m_clients[clientSocket]->isRequestRelevant(ri))
 		{
 			reqResult = m_clients[clientSocket]->handleRequest(ri);
+			m_clients[clientSocket] = reqResult.newHandler;
 		}
 		else
 		{
 			ErrorResponse err;
 			err.message = "Error in request code.";
-			throw err;
+			reqResult.response = JsonResponsePacketSerializer::serializeResponse(err);
 		}
 
 		sendMsg(reqResult.response, clientSocket);

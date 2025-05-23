@@ -52,9 +52,7 @@
             Background="#3baaa3" Content="SIGN IN"
             Click="SignInClick" ClickMode="Press"/>
 
-                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}">    
-                   
-                </TextBlock>
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}"></TextBlock>
             </StackPanel>
         </Viewbox>
         

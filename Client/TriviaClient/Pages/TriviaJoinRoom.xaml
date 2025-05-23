@@ -47,7 +47,9 @@
                              FontSize="20" FontWeight="Bold"
                              SelectionChanged="RoomsListBox_SelectionChanged"
                              HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center">
+                             VerticalContentAlignment="Center"
+                             DisplayMemberPath="name">
+                            
                         </ListBox>
 
                         <StackPanel x:Name="PlayersPanel" Visibility="Collapsed">
@@ -73,6 +75,7 @@
                 <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
                     Background="#f29443" Content="JOIN ROOM"
                     Click="JoinRoomClick" ClickMode="Press"/>
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}"></TextBlock>
             </StackPanel>
         </Viewbox>
     </Grid>

@@ -52,7 +52,6 @@ namespace TriviaClient.Pages
 
             if (App.ShowError(ErrorBox))
             {
-                App.ButtonErrorEvent(sender, e);
                 return;
             }
 

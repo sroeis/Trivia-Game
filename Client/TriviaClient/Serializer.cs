@@ -59,9 +59,9 @@ namespace TriviaClient
             return Serialize((byte)CODES.LOGOUT_CODE);
         }
 
-        public static Buffer JoinRoom(string roomId)
+        public static Buffer JoinRoom(int roomId)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>()
+            Dictionary<string, int> data = new Dictionary<string, int>()
             {
                 { "roomId", roomId}
             };

@@ -50,7 +50,6 @@ namespace TriviaClient
 
             if(App.ShowError(ErrorBox))
             {
-                App.ButtonErrorEvent(sender, e);
                 return;
             }
 
