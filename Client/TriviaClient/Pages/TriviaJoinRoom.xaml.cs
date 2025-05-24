@@ -30,10 +30,9 @@ namespace TriviaClient.Pages
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
-            string status = response.status;
-            if (!int.TryParse(status, out _))
+            if (string.IsNullOrEmpty(response.message))
             {
-                ErrorBox.Text = status + "\nPlease press the refresh button to try again.";
+                ErrorBox.Text = response.message + "\nPlease press the refresh button to try again.";
                 return;
             }
             m_rooms = response.rooms;
@@ -46,8 +45,17 @@ namespace TriviaClient.Pages
             {
                 PlayersPanel.Visibility = Visibility.Visible;
                 PlayersListBox.Items.Clear();
-                //add like a way to get the players
-                //its like this: PlayersListBox.Items.Add(new ListBoxItem { Content = "user1234 whatever" });
+                
+                App.m_communicator.Send(Serializer.GetPlayersInRoom(((RoomData)RoomsListBox.SelectedItem).id));
+                string jsonString = App.m_communicator.Receive();
+                PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
+                if (string.IsNullOrEmpty(response.message))
+                {
+                    ErrorBox.Text = response.message;
+                    return;
+                }
+
+                PlayersListBox.ItemsSource = response.players;
             }
             else
             {
@@ -65,12 +73,7 @@ namespace TriviaClient.Pages
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
-            string status = response.status;
-            if (!int.TryParse(status, out _))
-            {
-                ErrorBox.Text = status + "\nPlease press the refresh button to try again.";
-                return;
-            }
+            
             m_rooms = response.rooms;
         }
         void JoinRoomClick(object sender, RoutedEventArgs e)
@@ -99,9 +102,14 @@ namespace TriviaClient.Pages
 
     }
 
-    public class RoomsResponse
+    public class PlayersResponse
     {
-        public int status { get; set; }
+        public string message { get; set; } //for Error response
+        public List<string> players { get; set; }
+    }
+        public class RoomsResponse
+    {
+        public string message { get; set; } //for Error response
         public ObservableCollection<RoomData> rooms { get; set; }
     }
     public class RoomData

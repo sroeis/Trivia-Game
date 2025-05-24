@@ -79,9 +79,9 @@ namespace TriviaClient
             return Serialize((byte)CODES.GET_HIGH_SCORE_CODE);
         }
 
-        public static Buffer GetPlayersInRoom(string roomId)
+        public static Buffer GetPlayersInRoom(int roomId)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>()
+            Dictionary<string, int> data = new Dictionary<string, int>()
             {
                 { "roomId", roomId}
             };
