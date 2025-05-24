@@ -38,7 +38,6 @@ namespace TriviaClient
             Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(a);
             if (response.ContainsKey("message"))
             {
-                ButtonErrorEvent(ErrorBox, null);
                 ErrorBox.Text = response["message"];
                 return true;
             }

@@ -18,7 +18,7 @@ LoginStatus LoginManager::login(const string username, const string password)
 {
 	for (auto it = m_loggedUsers.begin(); it != m_loggedUsers.end(); ++it) {
 		if (it->getUsername() == username) {
-			return false; // User is already logged in
+			throw("User already logged in");
 		}
 	}	
 

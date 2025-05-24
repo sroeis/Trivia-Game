@@ -1,7 +1,7 @@
 #include "SqliteDatabase.h"
 #include <io.h>
 #include <algorithm>
-
+using std::exception;
 
 SqliteDatabase::SqliteDatabase()
 	: _db(nullptr)
@@ -71,9 +71,9 @@ bool SqliteDatabase::DoesUserExist(const std::string& username)
     char* errMsg = nullptr;
     int res = sqlite3_exec(_db, sqlStatement.c_str(), callback, &count, &errMsg);
     
-    if (res != SQLITE_OK)
+    if (res != SQLITE_OK || count == 0)
     {
-        std::cerr << "Error executing query: " << errMsg << std::endl;
+        throw exception("User wasn't found");
         sqlite3_free(errMsg);
         return false;
     }
@@ -89,11 +89,10 @@ bool SqliteDatabase::doesPasswordMatch(const std::string& username, const std::s
     char* errMsg = nullptr;
     int res = sqlite3_exec(_db, sqlStatement.c_str(), callback, &count, &errMsg);
     
-    if (res != SQLITE_OK)
+    if (res != SQLITE_OK || count == 0)
     {
-        std::cerr << "Error executing query: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-        return false;
+		throw exception("Error checking password match");
     }
 
     return count > 0;
@@ -104,7 +103,7 @@ bool SqliteDatabase::addNewUser(const std::string& username, const std::string& 
     // First check if user already exists
     if (DoesUserExist(username))
     {
-        std::cerr << "User already exists" << std::endl;
+        throw exception("User already exists");
         return false;
     }
 
@@ -116,9 +115,8 @@ bool SqliteDatabase::addNewUser(const std::string& username, const std::string& 
     
     if (res != SQLITE_OK)
     {
-        std::cerr << "Error adding new user: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-        return false;
+        throw exception("Error adding new user");
     }
 
     return true;

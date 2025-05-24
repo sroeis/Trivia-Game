@@ -2,7 +2,7 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
-
+using std::exception;
 /*-------------------------------------------------------------------------------------------------------------------------------
 Note: every version check the new handler of evry Request result, maybe a new handler was created that would be better to use
 -------------------------------------------------------------------------------------------------------------------------------*/
@@ -40,22 +40,24 @@ const RequestResult LoginRequestHandler::login(const RequestInfo& ri)
 	
 	
 	lr = JsonResponsePacketDeserializer::deserializeLoginRequest(ri.buffer);
-
-	if(m_handlerFactory.getLoginManager().login(lr.username, lr.password))
+	try
 	{
-		LoginResponse logResp;
-		logResp.status = 100;
+		if (m_handlerFactory.getLoginManager().login(lr.username, lr.password))
+		{
+			LoginResponse logResp;
+			logResp.status = STATUS_OK;
 
-		result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(lr.username)); //Last changed: V2
-
-		return result;
-
+			result.response = JsonResponsePacketSerializer::serializeResponse(logResp);
+			result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(lr.username)); //Last changed: V2
+		}
 	}
-	ErrorResponse errResp;
-	errResp.message = "Username or Password are invalid, Please try again.";
-	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; // Last changed V2
+	catch (const exception e)
+	{
+		ErrorResponse errResp;
+		errResp.message = e.what();
+		result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
+		result.newHandler = this; // Last changed V2
+	}
 	return result;
 }
 
@@ -65,17 +67,24 @@ const RequestResult LoginRequestHandler::signup(const RequestInfo& ri)
 	
 	SignupRequest sr;
 	sr = JsonResponsePacketDeserializer::deserializeSignupRequest(ri.buffer);
-	if(m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email))
+	try
 	{
-		SignupResponse response;
-		response.status = STATUS_OK;
-		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(sr.username)); // Last changed: V2
+		if (m_handlerFactory.getLoginManager().signup(sr.username, sr.password, sr.email))
+		{
+			SignupResponse response;
+			response.status = STATUS_OK;
+			result.response = JsonResponsePacketSerializer::serializeResponse(response);
+			result.newHandler = m_handlerFactory.createMenuRequestHandler(LoggedUser(sr.username)); // Last changed: V2
+			return result;
+		}
+	}
+	catch (const exception& e)
+	{
+		ErrorResponse errResp;
+		errResp.message = e.what();
+		result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
+		result.newHandler = this; // Last changed: V2
 		return result;
 	}
-	ErrorResponse errResp;
-	errResp.message = "There is an Error in one or more of the given arguments";
-	result.response = JsonResponsePacketSerializer::serializeResponse(errResp);
-	result.newHandler = this; // Last changed: V2
-	return result;
+	
 }
