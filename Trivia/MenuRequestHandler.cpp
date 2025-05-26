@@ -167,7 +167,7 @@ const RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;
 	roomData.timePerQuestion = createRoomReq.answerTimeOut;
 	roomData.status = STATUS_OK;
-	m_handlerFactory.getRoomManager().CreateRoom(createRoomReq.roomName, roomData);
+	m_handlerFactory.getRoomManager().CreateRoom(m_user, roomData);
 
 	RequestResult result;
 	CreateRoomResponse createRoomResp;

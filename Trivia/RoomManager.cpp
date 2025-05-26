@@ -4,6 +4,7 @@ void RoomManager::CreateRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room(roomData, user);
 	m_rooms.insert(std::make_pair(roomData.id, room));
+	
 }
 
 void RoomManager::deleteRoom(const int& ID)

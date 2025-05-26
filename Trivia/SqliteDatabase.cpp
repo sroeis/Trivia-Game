@@ -77,7 +77,7 @@ bool SqliteDatabase::DoesUserExist(const std::string& username)
     if (res != SQLITE_OK || count == 0)
     {
         sqlite3_free(errMsg);
-        return false;
+        throw exception("User doesn't exist.");
     }
 
     return count > 0;
@@ -104,24 +104,26 @@ bool SqliteDatabase::addNewUser(const std::string& username, const std::string& 
 {
 	std::cout << "Adding new user: " << username << std::endl;
     // First check if user already exists
-    if (DoesUserExist(username))
+    try
     {
+        DoesUserExist(username);
         throw exception("User already exists");
         return false;
     }
-
-    string sqlStatement = "INSERT INTO Users (Username, Password, Email) VALUES ('" + 
-                         username + "', '" + password + "', '" + email + "');";
-    
-    char* errMsg = nullptr;
-    int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
-    
-    if (res != SQLITE_OK)
+    catch(const exception e)
     {
-        sqlite3_free(errMsg);
-        throw exception("Error adding new user");
-    }
+        string sqlStatement = "INSERT INTO Users (Username, Password, Email) VALUES ('" +
+            username + "', '" + password + "', '" + email + "');";
 
+        char* errMsg = nullptr;
+        int res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMsg);
+
+        if (res != SQLITE_OK)
+        {
+            sqlite3_free(errMsg);
+            throw exception("Error adding new user");
+        }
+    }
     return true;
 }
 

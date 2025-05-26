@@ -76,6 +76,7 @@
                 <Button Name="CreateRoom" Style="{StaticResource MenuButtonStyle}" 
             Background="#e8644b" Content="CREATE ROOM"
             Click="CreateRoomClick" ClickMode="Press"/>
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}"></TextBlock>
             </StackPanel>
         </Viewbox>
         

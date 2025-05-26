@@ -20,6 +20,11 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaCreateRoom : Page
     {
+        private bool hasInputRoomName = false;
+        private bool hasInputMaxPlayers = false;
+        private bool hasInputQuestionCount = false;
+        private bool hasInputAnswerTimeout = false;
+
         public TriviaCreateRoom()
         {
             InitializeComponent();
@@ -31,26 +36,35 @@ namespace TriviaClient.Pages
         }
 
         void CreateRoomClick(object sender, RoutedEventArgs e)
-        {
+        {   
             string roomName = RoomNameTextBox.Text;
             string maxPlayers = NumberOfPlayersTextBox.Text;
             string questionCount = NumberOfQuestionsTextBox.Text;
             string answerTimeout = TimePerQuestionTextBox.Text;
-            if (string.IsNullOrEmpty(roomName) || roomName == "Room Name:" ||
-                string.IsNullOrEmpty(maxPlayers) || maxPlayers == "Number Of Players:" ||
-                string.IsNullOrEmpty(questionCount) || questionCount == "Number Of Questions:" ||
-                string.IsNullOrEmpty(answerTimeout) || answerTimeout == "Time Per Question:")
+            if (string.IsNullOrEmpty(roomName) || !hasInputRoomName ||
+                string.IsNullOrEmpty(maxPlayers) || !hasInputMaxPlayers ||
+                string.IsNullOrEmpty(questionCount) || !hasInputQuestionCount ||
+                string.IsNullOrEmpty(answerTimeout) || !hasInputAnswerTimeout)
+            {
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
+            App.m_communicator.Send(Serializer.CreateRoom(roomName, maxPlayers, questionCount, answerTimeout));
+            if(App.ShowError(ErrorBox))
             {
                 App.ButtonErrorEvent(sender, e);
                 return;
             }
 
-            App.m_communicator.Send(Serializer.CreateRoom(roomName,maxPlayers,questionCount,answerTimeout));
-            this.NavigationService.Navigate(new Uri("Pages/TriviaInRoom.xaml", UriKind.Relative));
+
+            TriviaInRoom roomPage = new TriviaInRoom(roomName);
+            this.NavigationService.Navigate(roomPage);
+
         }
 
         private void RoomNameTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            hasInputRoomName = true;
             if (RoomNameTextBox.Text == "Room Name:")
             {
                 RoomNameTextBox.Text = "";
@@ -62,6 +76,7 @@ namespace TriviaClient.Pages
 
         private void NumberOfPlayersTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            hasInputMaxPlayers = true;
             if (NumberOfPlayersTextBox.Text == "Number Of Players:")
             {
                 NumberOfPlayersTextBox.Text = "";
@@ -73,6 +88,7 @@ namespace TriviaClient.Pages
 
         private void NumberOfQuestionsTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            hasInputQuestionCount = true;
             if (NumberOfQuestionsTextBox.Text == "Number Of Questions:")
             {
                 NumberOfQuestionsTextBox.Text = "";
@@ -84,6 +100,7 @@ namespace TriviaClient.Pages
 
         private void TimePerQuestionTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            hasInputAnswerTimeout = true;
             if (TimePerQuestionTextBox.Text == "Time Per Question:")
             {
                 TimePerQuestionTextBox.Text = "";

@@ -23,14 +23,14 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaJoinRoom : Page
     {
-        private ObservableCollection<RoomData> m_rooms;
+        private List<RoomData> m_rooms;
         public TriviaJoinRoom()
         {
             InitializeComponent();
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
-            if (string.IsNullOrEmpty(response.message))
+            if (!string.IsNullOrEmpty(response.message))
             {
                 ErrorBox.Text = response.message + "\nPlease press the refresh button to try again.";
                 return;
@@ -49,13 +49,13 @@ namespace TriviaClient.Pages
                 App.m_communicator.Send(Serializer.GetPlayersInRoom(((RoomData)RoomsListBox.SelectedItem).id));
                 string jsonString = App.m_communicator.Receive();
                 PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
-                if (string.IsNullOrEmpty(response.message))
+                if (!string.IsNullOrEmpty(response.message))
                 {
                     ErrorBox.Text = response.message;
                     return;
                 }
 
-                PlayersListBox.ItemsSource = response.players;
+                PlayersListBox.ItemsSource = response.PlayersInRoom;
             }
             else
             {
@@ -105,21 +105,24 @@ namespace TriviaClient.Pages
     public class PlayersResponse
     {
         public string message { get; set; } //for Error response
-        public List<string> players { get; set; }
+        public List<string> PlayersInRoom { get; set; }
     }
         public class RoomsResponse
     {
         public string message { get; set; } //for Error response
-        public ObservableCollection<RoomData> rooms { get; set; }
+        public List<RoomData> rooms { get; set; }
+
+
     }
     public class RoomData
     {
-        public int id;
-        public string name;
-        public int maxPlayers;
-        public int numOfquestionsInGame;
-        public int timePerQuestion;
-        public int status;
+        public int id { get; set; }
+        public string name { get; set; }
+        public int maxPlayers { get; set; }
+        public int numOfquestionsInGame { get; set; }
+        public int timePerQuestion { get; set; }
+        public int status { get; set; }
+
 
     }
 

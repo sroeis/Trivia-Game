@@ -38,9 +38,23 @@
                             ShadowDepth="8" Direction="-90" BlurRadius="0"/>
                     </Border.Effect>
 
-                    <TextBlock Text="Top Scores:" 
-                       Style="{StaticResource TextStyle}" Height="432" Width="566"/>
+                    <StackPanel >
+                        <TextBlock Text="Top Scores:" 
+                           Style="{StaticResource TextStyle}"  Width="566"/>
+
+                        <ListBox x:Name="HighScoresListBox"
+                          Width="500" Height="432"
+                          
+                          Background="#1c4d9a"
+                          FontSize="20" FontWeight="Bold"
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          DisplayMemberPath="name">
+
+                        </ListBox>
+                    </StackPanel>
                 </Border>
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}"></TextBlock>
 
 
             </StackPanel>

@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Formats.Asn1.AsnWriter;
+using System.Xml.Linq;
+using Newtonsoft.Json;
+
 
 namespace TriviaClient.Pages
 {
@@ -23,11 +27,28 @@ namespace TriviaClient.Pages
         public TriviaHighScores()
         {
             InitializeComponent();
+
+            App.m_communicator.Send(Serializer.GetHighScore());
+            string jsonString = App.m_communicator.Receive();
+            Players response = JsonConvert.DeserializeObject<Players>(jsonString);
+            if (string.IsNullOrEmpty(response.message))
+            {
+                ErrorBox.Text = response.message;
+                return;
+            }
+            HighScoresListBox.ItemsSource = response.statistics;
+
         }
         void BackClick(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
         }
 
+    }
+
+    public class Players
+    {
+        public string message { get; set; }
+        public List<string> statistics { get; set; }
     }
 }
