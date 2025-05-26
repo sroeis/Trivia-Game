@@ -109,7 +109,9 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << "Exception in handleNewClient: " << e.what() << std::endl;
+		RequestInfo ri;
+		ri.id = LOGOUT_CODE;
+		m_clients[clientSocket]->handleRequest(ri);
 		flag = false;
 	}
 	
