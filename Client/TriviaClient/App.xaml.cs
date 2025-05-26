@@ -20,13 +20,14 @@ namespace TriviaClient
 
         public static void ButtonErrorEvent(object sender, RoutedEventArgs e)
         {
+            string backgroundColor = ((Button)sender).Background.ToString();
             ((Button)sender).Background = new SolidColorBrush(Colors.Red);
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += (s, args) =>
             {
 
-                ((Button)sender).Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3baaa3"));
+                ((Button)sender).Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(backgroundColor));
                 timer.Stop();
             };
             timer.Start();
@@ -36,6 +37,7 @@ namespace TriviaClient
         {
             string a = m_communicator.Receive();
             Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(a);
+            System.Diagnostics.Debug.WriteLine($"Response: {a}");
             if (response.ContainsKey("message"))
             {
                 ErrorBox.Text = response["message"];

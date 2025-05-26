@@ -90,7 +90,7 @@ namespace TriviaClient
             return Serialize((byte)CODES.GET_PLAYERS_IN_ROOM_CODE, jsonString);
         }
 
-        public static Buffer Serialize(byte code, string jsonString = "")
+        public static Buffer Serialize(byte code, string jsonString = " ")
         {
             Buffer msg = new Buffer();
             msg.Add(code);

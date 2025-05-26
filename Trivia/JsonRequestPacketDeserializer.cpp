@@ -71,17 +71,24 @@ const JoinRoomRequest JsonResponsePacketDeserializer::deserializeJoinRoomRequest
 
 const CreateRoomRequest JsonResponsePacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer)
 {
-	CreateRoomRequest req;
+	try {
 
-	std::string jsonStr(buffer.begin(), buffer.end());
+		CreateRoomRequest req;
 
-	json parsed = json::parse(jsonStr);
+		std::string jsonStr(buffer.begin(), buffer.end());
 
-	// Extract data
-	req.roomName = parsed["roomName"];
-	req.answerTimeOut = parsed["answerTimeOut"];
-	req.maxUsers = parsed["maxUsers"];
-	req.questionCount = parsed["questionCount"];
+		json parsed = json::parse(jsonStr);
 
-	return req;
+		// Extract data
+		req.roomName = parsed["roomName"];
+		req.answerTimeOut = std::stoi(parsed["answerTimeout"].get<std::string>());
+		req.maxUsers = std::stoi(parsed["maxPlayers"].get<std::string>());
+		req.questionCount = std::stoi(parsed["questionCount"].get<std::string>());
+
+		return req;
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error deserializing CreateRoomRequest: " << e.what() << std::endl;
+		throw; // Re-throw the exception for further handling
+	}
 }

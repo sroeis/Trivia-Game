@@ -32,7 +32,21 @@ namespace TriviaClient.Pages
 
         void CreateRoomClick(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
+            string roomName = RoomNameTextBox.Text;
+            string maxPlayers = NumberOfPlayersTextBox.Text;
+            string questionCount = NumberOfQuestionsTextBox.Text;
+            string answerTimeout = TimePerQuestionTextBox.Text;
+            if (string.IsNullOrEmpty(roomName) || roomName == "Room Name:" ||
+                string.IsNullOrEmpty(maxPlayers) || maxPlayers == "Number Of Players:" ||
+                string.IsNullOrEmpty(questionCount) || questionCount == "Number Of Questions:" ||
+                string.IsNullOrEmpty(answerTimeout) || answerTimeout == "Time Per Question:")
+            {
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
+
+            App.m_communicator.Send(Serializer.CreateRoom(roomName,maxPlayers,questionCount,answerTimeout));
+            this.NavigationService.Navigate(new Uri("Pages/TriviaInRoom.xaml", UriKind.Relative));
         }
 
         private void RoomNameTextBox_GotFocus(object sender, RoutedEventArgs e)

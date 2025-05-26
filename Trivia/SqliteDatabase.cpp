@@ -65,15 +65,17 @@ bool SqliteDatabase::close()
 
 bool SqliteDatabase::DoesUserExist(const std::string& username)
 {
+	std::cout << "Checking if user exists: " << username << std::endl;
     string sqlStatement = "SELECT COUNT(*) FROM Users WHERE Username = '" + username + "';";
     int count = 0;
     
     char* errMsg = nullptr;
     int res = sqlite3_exec(_db, sqlStatement.c_str(), callback, &count, &errMsg);
+	std::cout << "SQL Result: " << res << ", Count: " << count << std::endl;
+    
     
     if (res != SQLITE_OK || count == 0)
     {
-        throw exception("User wasn't found");
         sqlite3_free(errMsg);
         return false;
     }
@@ -100,6 +102,7 @@ bool SqliteDatabase::doesPasswordMatch(const std::string& username, const std::s
 
 bool SqliteDatabase::addNewUser(const std::string& username, const std::string& password, const std::string& email)
 {
+	std::cout << "Adding new user: " << username << std::endl;
     // First check if user already exists
     if (DoesUserExist(username))
     {

@@ -42,12 +42,15 @@ namespace TriviaClient.Pages
             string email = EmailTextBox.Text;
 
             Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-    
+
+
             if (!hasInputUsername || !hasInputPassword || !hasInputEmail || !emailRegex.IsMatch(email) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 App.ButtonErrorEvent(sender, e);
+                System.Diagnostics.Debug.WriteLine("error with the input");
                 return;
             }
+
             App.m_communicator.Send(Serializer.Signup(username, password, email));
 
             if (App.ShowError(ErrorBox))

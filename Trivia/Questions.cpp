@@ -1,4 +1,9 @@
 #include "Questions.h"
+#include <curl/curl.h>
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
+
 
 std::unordered_map<std::string, int> Questions::categoryMap = {
 {"Any", 0},
@@ -78,16 +83,6 @@ const std::string& Questions::buildUrl(int numOfQuestions, const std::string& ca
 }
 
 
-#include <curl/curl.h>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-
-#include <curl/curl.h>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-
 const std::string& Questions::getResponse(const std::string& url)
 {
     CURL* curl = curl_easy_init();
@@ -133,42 +128,3 @@ const std::string& Questions::getResponse(const std::string& url)
 
     return response;
 }
-
-
-
-
-
-
-
-//std::string Questions::getResponse(std::string url)
-//{
-//    // Initialize the curl library
-//    curl_global_init(CURL_GLOBAL_DEFAULT);
-//    // Create a curl handle
-//    CURL* handle = curl_easy_init();
-//    // Set the URL to request
-//    curl_easy_setopt(handle, CURLOPT_URL, url);
-//    // Set the callback function to handle the response
-//    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, [](char* data, size_t size, size_t nmemb, void* userp) {
-//        // Cast the user pointer to an ostream and write the data to it
-//        *static_cast<std::ostream*>(userp) << data;
-//        // Return the number of bytes processed
-//        return size * nmemb;
-//        });
-//    // Set the user pointer to be an ostream to which the response will be written
-//    std::ostringstream response;
-//    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &response);
-//    // Perform the request
-//    CURLcode result = curl_easy_perform(handle);
-//    // Check the result
-//    if (result != CURLE_OK) {
-//        // If the request failed, print an error message
-//        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(result) << std::endl;
-//    }
-//    
-//    // Clean up
-//    curl_easy_cleanup(handle);
-//    curl_global_cleanup();
-//	std::cout << "Response: " << response.str() << std::endl;
-//	return response.str();
-//}
