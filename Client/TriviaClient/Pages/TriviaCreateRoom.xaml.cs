@@ -57,7 +57,7 @@ namespace TriviaClient.Pages
             }
 
 
-            TriviaInRoom roomPage = new TriviaInRoom(roomName);
+            TriviaInRoom roomPage = new TriviaInRoom(roomName, int.Parse(maxPlayers),int.Parse(questionCount), int.Parse(answerTimeout),true);
             this.NavigationService.Navigate(roomPage);
 
         }

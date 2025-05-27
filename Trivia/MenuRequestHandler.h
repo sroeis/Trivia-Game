@@ -28,4 +28,6 @@ private:
 	const RequestResult getHighScore(const RequestInfo& ri);
 	const RequestResult joinRoom(const RequestInfo& ri);
 	const RequestResult createRoom(const RequestInfo& ri);
+	const RequestResult deleteRoom(const RequestInfo& ri)
+
 };

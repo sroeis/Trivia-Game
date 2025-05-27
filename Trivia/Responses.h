@@ -13,6 +13,7 @@
 #define GET_PLAYERS_IN_ROOM_CODE 8
 #define GET_HIGH_SCORE_CODE 9
 #define GET_PERSONAL_STATS_CODE 10
+#define DELETE_ROOM 11
 
 #define STATUS_OK 200
 
@@ -27,6 +28,10 @@ struct LogoutResponse {
 };
 
 struct JoinRoomResponse {
+    unsigned int status;
+};
+
+struct DeleteRoomResponse {
     unsigned int status;
 };
 
@@ -83,6 +88,10 @@ typedef struct GetPlayersInRoomRequest {
 typedef struct JoinRoomRequest {
     unsigned int roomId;
 } JoinRoomRequest;
+
+typedef struct DeleteRoomRequest {
+    unsigned int roomId;
+} DeleteRoomRequest;
 
 typedef struct CreateRoomRequest {
 	std::string roomName;

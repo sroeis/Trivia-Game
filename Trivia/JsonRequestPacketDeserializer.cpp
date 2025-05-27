@@ -91,4 +91,20 @@ const CreateRoomRequest JsonResponsePacketDeserializer::deserializeCreateRoomReq
 		std::cerr << "Error deserializing CreateRoomRequest: " << e.what() << std::endl;
 		throw; // Re-throw the exception for further handling
 	}
+
+
+}
+
+const DeleteRoomRequest JsonResponsePacketDeserializer::deserializeDeleteRoomRequest(const Buffer& buffer)
+{
+	DeleteRoomRequest req;
+
+	std::string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.roomId = parsed["roomId"];
+
+	return req;
 }

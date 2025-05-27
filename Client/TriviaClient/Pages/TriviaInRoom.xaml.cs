@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,19 +22,25 @@ namespace TriviaClient.Pages
     public partial class TriviaInRoom : Page
     {
         private string _roomName;
+        private int _maxPlayers;
+        private int _numOfQuestions;
+        private int _timePerQuestion;
+        private bool _isAdmin;
 
-        public TriviaInRoom(string roomName)
+        public TriviaInRoom(string roomName,int max,int num,int time,bool isAdmin)
         {
             InitializeComponent();
 
             _roomName = roomName;
+            _maxPlayers = max;
+            _numOfQuestions = num;
+            _timePerQuestion = time;
+            _isAdmin = isAdmin;
+            Connected.Text = $"You are connected to room {_roomName}";
+
             SetupRoom();
         }
 
-        void BackClick(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
-        }
 
         void CloseRoomClick(object sender, RoutedEventArgs e)
         {
@@ -52,27 +59,24 @@ namespace TriviaClient.Pages
         }
         private void SetupRoom()
         {
-            //use _roomName to get the data of the room
-            //bool isAdmin;
-            //string roomName;
-            //int maxPlayers;
-            //int numQuestions;
-            //int timePerQuestion;
 
-            Connected.Text = $"You are connected to room {_roomName}";
+            App.m_communicator.Send(Serializer.GetRooms());
+            string jsonString = App.m_communicator.Receive();
+            RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
 
-            //Settings.Text = $"Max players: {maxPlayers}  Number of questions: {numQuestions}  Time per question: {timePerQuestion}";
+
+            Settings.Text = $"Max players: {_maxPlayers}  Number of questions: {_numOfQuestions}  Time per question: {_timePerQuestion}";
 
             // If admin, show the control buttons
-            //if (isAdmin)
-            //{
-            //    CloseRoom.Visibility = Visibility.Visible;
-            //    StartGame.Visibility = Visibility.Visible;
-            //}
-            //else
-            //{
-            //    LeaveRoom.Visibility = Visibility.Visible;
-            //}
+            if (_isAdmin)
+            {
+                CloseRoom.Visibility = Visibility.Visible;
+                StartGame.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LeaveRoom.Visibility = Visibility.Visible;
+            }
         }
 
         // Call this to add users to the list

@@ -21,7 +21,7 @@ LoginStatus LoginManager::login(const string username, const string password)
 		if (it->getUsername() == username) {
 			throw("User already logged in");
 		}
-	}	
+	}
 
 	if ((m_dataBase->DoesUserExist(username)) && m_dataBase->doesPasswordMatch(username, password))
 	{
@@ -38,7 +38,7 @@ void LoginManager::logout(const string username)
 	// Find the user in the loggedUsers vector and remove them
 	auto it = std::remove_if
 	(m_loggedUsers.begin(), m_loggedUsers.end(),
-		[&username](const LoggedUser& user) 
+		[&username](const LoggedUser& user)
 		{
 			return user.getUsername() == username;
 		}

@@ -34,6 +34,8 @@ const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request
 		return signout(request);
 	case JOIN_ROOM_CODE:
 		return joinRoom(request);
+	case DELETE_ROOM:
+		return deleteRoom(request);
     }
 }
 
@@ -176,4 +178,20 @@ const RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 
 	return result;
 }
+
+
+const RequestResult MenuRequestHandler::deleteRoom(const RequestInfo& ri)
+{
+	DeleteRoomRequest deleteRoomReq = JsonResponsePacketDeserializer::deserializeDeleteRoomRequest(ri.buffer);
+
+	m_handlerFactory.getRoomManager().deleteRoom(deleteRoomReq.roomId);
+
+	RequestResult result;
+	DeleteRoomResponse DeleteRoomResp;
+	DeleteRoomResp.status = STATUS_OK;
+	result.response = JsonResponsePacketSerializer::serializeResponse(DeleteRoomResp);
+
+	return result;
+}
+
 

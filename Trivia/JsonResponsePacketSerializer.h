@@ -26,6 +26,7 @@ public:
 	static const Buffer serializeResponse(const CreateRoomResponse& cr);
 	static const Buffer serializeResponse(const GetHighScoreResponse& gr);
 	static const Buffer serializeResponse(const GetPersonalStatsResponse& gr);
+	static const Buffer serializeResponse(const DeleteRoomResponse& dr);
 
 private:
 	//get the data into the protocol format : Code - Size - Data
@@ -43,6 +44,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(JoinRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CreateRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetHighScoreResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetPersonalStatsResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(DeleteRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, status)
 
 

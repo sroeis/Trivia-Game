@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Security.RightsManagement;
 
 namespace TriviaClient.Pages
 {
@@ -82,12 +83,17 @@ namespace TriviaClient.Pages
             if (RoomsListBox.SelectedItem is RoomData selectedRoom)
             {
                 string roomName = selectedRoom.name;
+                int max = selectedRoom.maxPlayers;
+                int num = selectedRoom.numOfquestionsInGame;
+                int time = selectedRoom.timePerQuestion;
                 App.m_communicator.Send(Serializer.JoinRoom(selectedRoom.id));
+                string jsonString = App.m_communicator.Receive();
+
                 if (App.ShowError(ErrorBox))
                     return;
                 //add user to the room here
 
-                var inRoomPage = new TriviaInRoom(roomName);
+                var inRoomPage = new TriviaInRoom(roomName,max,num,time,false);
                 this.NavigationService.Navigate(inRoomPage);
             }
             else
@@ -107,12 +113,10 @@ namespace TriviaClient.Pages
         public string message { get; set; } //for Error response
         public List<string> PlayersInRoom { get; set; }
     }
-        public class RoomsResponse
+    public class RoomsResponse
     {
         public string message { get; set; } //for Error response
         public List<RoomData> rooms { get; set; }
-
-
     }
     public class RoomData
     {

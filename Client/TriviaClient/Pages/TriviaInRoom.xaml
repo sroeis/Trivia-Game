@@ -13,17 +13,6 @@
         </Grid.Background>
 
 
-
-        <Button x:Name="Back" Style="{StaticResource MenuButtonStyle}" 
-        Width="140"
-        Height="50"
-        FontSize="22"
-        Background="#2e393a" Content="BACK"
-        Click="BackClick" ClickMode="Press" 
-        Panel.ZIndex="1" VerticalAlignment="Top"
-        HorizontalAlignment="Left"
-        />
-
         <Viewbox>
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,120" >
                 <Image Name ="img" Height="265" Margin="0,-330,0,0" Source="pack://application:,,,/images/main1.png"/>
