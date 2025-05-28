@@ -43,7 +43,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LogoutResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(JoinRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CreateRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetHighScoreResponse, status)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetPersonalStatsResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetPersonalStatsResponse, status, statistics)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(DeleteRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, status)
 

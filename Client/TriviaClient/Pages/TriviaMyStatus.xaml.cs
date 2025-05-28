@@ -29,7 +29,7 @@ namespace TriviaClient.Pages
 
             PersonalStatsResp response = JsonConvert.DeserializeObject<PersonalStatsResp>(jsonString);
 
-            foreach (string stat in response.stats)
+            foreach (string stat in response.statistics)
             {
                 Performances.Text += stat + "\n";
             }
@@ -44,7 +44,7 @@ namespace TriviaClient.Pages
     public class PersonalStatsResp
     {
         public int status { get; set; }
-        public List<string> stats { get; set; } // <format explanation of stat>: <stat>
+        public List<string> statistics { get; set; } // <format explanation of stat>: <stat>
 
 
 

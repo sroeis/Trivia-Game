@@ -24,7 +24,6 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaJoinRoom : Page
     {
-        private List<RoomData> m_rooms;
         public TriviaJoinRoom()
         {
             InitializeComponent();
@@ -36,8 +35,7 @@ namespace TriviaClient.Pages
                 ErrorBox.Text = response.message + "\nPlease press the refresh button to try again.";
                 return;
             }
-            m_rooms = response.rooms;
-            RoomsListBox.ItemsSource = m_rooms;
+            RoomsListBox.ItemsSource = response.rooms;
         }
 
         private void RoomsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -74,8 +72,9 @@ namespace TriviaClient.Pages
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
+
+            RoomsListBox.ItemsSource = response.rooms;
             
-            m_rooms = response.rooms;
         }
         void JoinRoomClick(object sender, RoutedEventArgs e)
         {
@@ -87,7 +86,7 @@ namespace TriviaClient.Pages
                 int num = selectedRoom.numOfquestionsInGame;
                 int time = selectedRoom.timePerQuestion;
                 App.m_communicator.Send(Serializer.JoinRoom(selectedRoom.id));
-                string jsonString = App.m_communicator.Receive();
+                //string jsonString = App.m_communicator.Receive();
 
                 if (App.ShowError(ErrorBox))
                     return;

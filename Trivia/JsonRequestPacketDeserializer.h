@@ -10,6 +10,6 @@ public:
 	static const GetPlayersInRoomRequest deserializeGetPlayersInRoomRequest(const Buffer& buffer);
 	static const JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
 	static const CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
-	static const DeleteRoomRequest deserializeDeleteRoomRequest(const Buffer& buffer)
+	static const DeleteRoomRequest deserializeDeleteRoomRequest(const Buffer& buffer);
 
 };

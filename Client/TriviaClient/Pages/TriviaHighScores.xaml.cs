@@ -31,7 +31,7 @@ namespace TriviaClient.Pages
             App.m_communicator.Send(Serializer.GetHighScore());
             string jsonString = App.m_communicator.Receive();
             Players response = JsonConvert.DeserializeObject<Players>(jsonString);
-            if (string.IsNullOrEmpty(response.message))
+            if (!string.IsNullOrEmpty(response.message))
             {
                 ErrorBox.Text = response.message;
                 return;

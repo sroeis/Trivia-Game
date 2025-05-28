@@ -10,12 +10,13 @@ unsigned int MenuRequestHandler::m_newRoomId = 1;
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
-    return request.id == GET_ROOMS_CODE ||
-        request.id == GET_PLAYERS_IN_ROOM_CODE ||
-        request.id == CREATE_ROOM_CODE ||
-        request.id == LOGOUT_CODE ||
-        request.id == JOIN_ROOM_CODE ||
-        request.id == GET_PERSONAL_STATS_CODE;
+	return request.id == GET_ROOMS_CODE ||
+		request.id == GET_PLAYERS_IN_ROOM_CODE ||
+		request.id == CREATE_ROOM_CODE ||
+		request.id == LOGOUT_CODE ||
+		request.id == JOIN_ROOM_CODE ||
+		request.id == GET_PERSONAL_STATS_CODE ||
+		request.id == GET_HIGH_SCORE_CODE;
 }
 
 const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request)
@@ -36,6 +37,8 @@ const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request
 		return joinRoom(request);
 	case DELETE_ROOM:
 		return deleteRoom(request);
+	case GET_HIGH_SCORE_CODE:
+		return getHighScore(request);
     }
 }
 
