@@ -49,6 +49,14 @@ namespace TriviaClient.Pages
                 App.ButtonErrorEvent(sender, e);
                 return;
             }
+            else if(int.TryParse(int.Parse(maxPlayers).ToString(), out _) == false ||
+                    int.TryParse(int.Parse(questionCount).ToString(), out _) == false ||
+                    int.TryParse(int.Parse(answerTimeout).ToString(), out _) == false)
+            {
+                ErrorBox.Text = "Please enter valid numbers for max players, question count, and answer timeout.";
+                App.ButtonErrorEvent(sender, e);
+                return;
+            }
             App.m_communicator.Send(Serializer.CreateRoom(roomName, maxPlayers, questionCount, answerTimeout));
             if(App.ShowError(ErrorBox))
             {
