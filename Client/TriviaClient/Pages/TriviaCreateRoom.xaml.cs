@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace TriviaClient.Pages
 {
@@ -65,9 +66,23 @@ namespace TriviaClient.Pages
             }
 
 
-            TriviaInRoom roomPage = new TriviaInRoom(roomName, int.Parse(maxPlayers),int.Parse(questionCount), int.Parse(answerTimeout),true);
+            TriviaInRoom roomPage = new TriviaInRoom(GetRoomData(roomName), true);
             this.NavigationService.Navigate(roomPage);
 
+        }
+
+        public static RoomData GetRoomData(string roomName)
+        {
+            App.m_communicator.Send(Serializer.GetRooms());
+            string jsonString = App.m_communicator.Receive();
+            RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
+
+            foreach(RoomData room in response.rooms)
+            {
+                if(room.name == roomName) return room;
+            }
+
+            return null;
         }
 
         private void RoomNameTextBox_GotFocus(object sender, RoutedEventArgs e)
