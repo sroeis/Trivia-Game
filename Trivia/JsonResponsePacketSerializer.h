@@ -30,6 +30,7 @@ public:
 	static const Buffer serializeResponse(const StartGameResponse& resp);
 	static const Buffer serializeResponse(const GetRoomStateResponse& resp);
 	static const Buffer serializeResponse(const LeaveRoomResponse& resp);
+	static const Buffer serializeResponse(const DeleteRoomResponse& resp);
 
 
 private:

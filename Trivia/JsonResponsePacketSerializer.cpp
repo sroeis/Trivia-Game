@@ -157,7 +157,7 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const StartGameResp
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(START_GAME_ROOM_CODE, jsonBuff);
+	Buffer buffer = PackIntoBuffer(START_GAME_CODE, jsonBuff);
 
 	return buffer;
 }
@@ -187,6 +187,19 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveRoomResp
 
 	return buffer;
 }
+
+const Buffer JsonResponsePacketSerializer::serializeResponse(const DeleteRoomResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(CLOSE_ROOM_CODE, jsonBuff);
+
+	return buffer;
+}
+
 
 
 

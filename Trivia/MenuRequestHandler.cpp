@@ -16,7 +16,9 @@ bool MenuRequestHandler::isRequestRelevant(const RequestInfo& request)
 		request.id == LOGOUT_CODE ||
 		request.id == JOIN_ROOM_CODE ||
 		request.id == GET_PERSONAL_STATS_CODE ||
-		request.id == GET_HIGH_SCORE_CODE;
+		request.id == CLOSE_ROOM_CODE ||
+		request.id == GET_HIGH_SCORE_CODE||
+		request.id == LEAVE_ROOM_CODE;
 }
 
 const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request)
@@ -39,6 +41,8 @@ const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request
 		return deleteRoom(request);
 	case GET_HIGH_SCORE_CODE:
 		return getHighScore(request);
+	case LEAVE_ROOM_CODE:
+		return leaveRoom(request);
     }
 }
 
@@ -183,4 +187,52 @@ const RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 	return result;
 }
 
+const RequestResult MenuRequestHandler::deleteRoom(const RequestInfo& ri)
+{
+	RequestResult result;	
+	DeleteRoomResponse deleteRoomResp;
+	DeleteRoomRequest deleteRoomReq = JsonResponsePacketDeserializer::deserializeDeleteRoomRequest(ri.buffer);
+	try
+	{
+		m_handlerFactory.getRoomManager().deleteRoom(deleteRoomReq.roomId);
+		deleteRoomResp.status = STATUS_OK;
+		result.response = JsonResponsePacketSerializer::serializeResponse(deleteRoomResp);
+		result.newHandler = this;
 
+	}
+	catch (const std::exception& e )
+	{
+		ErrorResponse errorResp;
+		errorResp.message = "Error, Room not found";
+		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
+		result.newHandler = this;
+	}
+
+	
+	return result;
+}
+
+const RequestResult MenuRequestHandler::leaveRoom(const RequestInfo& ri)
+{
+	RequestResult result;
+	LeaveRoomResponse LeaveRoomResp;
+	LeaveRoomRequest LeaveRoomReq = JsonResponsePacketDeserializer::deserializeLeaveRoomRequest(ri.buffer);
+	try
+	{
+		m_handlerFactory.getRoomManager().RemoveUserFromRoom(m_user,LeaveRoomReq.roomId);
+		LeaveRoomResp.status = STATUS_OK;
+		result.response = JsonResponsePacketSerializer::serializeResponse(LeaveRoomResp);
+		result.newHandler = this;
+
+	}
+	catch (const std::exception& e)
+	{
+		ErrorResponse errorResp;
+		errorResp.message = "Error, Room not found";
+		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
+		result.newHandler = this;
+	}
+
+
+	return result;
+}

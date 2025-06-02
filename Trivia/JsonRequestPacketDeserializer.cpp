@@ -108,3 +108,17 @@ const DeleteRoomRequest JsonResponsePacketDeserializer::deserializeDeleteRoomReq
 
 	return req;
 }
+
+const LeaveRoomRequest JsonResponsePacketDeserializer::deserializeLeaveRoomRequest(const Buffer& buffer)
+{
+	LeaveRoomRequest req;
+
+	std::string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.roomId = parsed["roomId"];
+
+	return req;
+}
