@@ -35,8 +35,6 @@ const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request
 		return signout(request);
 	case JOIN_ROOM_CODE:
 		return joinRoom(request);
-	case CLOSE_ROOM_CODE:
-		return deleteRoom(request);
 	case GET_HIGH_SCORE_CODE:
 		return getHighScore(request);
     }
