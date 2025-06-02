@@ -1,5 +1,5 @@
 #include "Room.h"
-
+using std::exception;
 
 Room::Room(const RoomData& metadata, const LoggedUser& user)
 	: m_metadata(metadata)
@@ -19,9 +19,11 @@ void Room::removeUser(const LoggedUser& user)
 		if (it->getUsername() == user.getUsername())
 		{
 			m_users.erase(it);
-			break;
+			return;
 		}
 	}
+
+	throw exception("User not found in the room.");
 
 }
 
@@ -40,4 +42,9 @@ const std::vector<std::string> Room::getAllUsers() const
 const RoomData& Room::getRoomData() const
 {
 	return m_metadata;
+}
+
+void Room::switchRoomState()
+{
+	m_metadata.status = (m_metadata.status == GAME_STARTED) ? GAME_NOT_STARTED : GAME_STARTED;
 }

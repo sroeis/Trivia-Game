@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 
+#define GAME_STARTED 1
+#define GAME_NOT_STARTED 0
+
 typedef struct RoomData
 {
     unsigned int id;
