@@ -28,7 +28,26 @@ const RequestResult RoomAdminRequestHandler::closeRoom(const RequestInfo& ri)
 
 const RequestResult RoomAdminRequestHandler::startGame(const RequestInfo& ri)
 {
-    return RequestResult();
+	RequestResult result;
+
+	try
+	{
+		m_roomManager.getRoom(m_room.getRoomData().id).switchRoomState();
+		StartGameResponse response;
+		response.status = STATUS_OK;
+		result.response = JsonResponsePacketSerializer::serializeResponse(response);
+		//change when you have
+		//result.newHandler = <game handler>
+		result.newHandler = this;
+
+	}
+	catch (const exception& e)
+	{
+		ErrorResponse response;
+		response.message = e.what();
+		result.response = JsonResponsePacketSerializer::serializeResponse(response);
+		result.newHandler = this;
+	}
 }
 
 bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& request)

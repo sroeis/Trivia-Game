@@ -14,7 +14,7 @@ public:
 	const std::vector<std::string> getAllUsers() const;
 
 	const RoomData& getRoomData() const;
-
+	void switchRoomState();
 
 private:
 	RoomData m_metadata;

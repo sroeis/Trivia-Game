@@ -43,3 +43,8 @@ const RoomData& Room::getRoomData() const
 {
 	return m_metadata;
 }
+
+void Room::switchRoomState()
+{
+	m_metadata.status = (m_metadata.status == GAME_STARTED) ? GAME_NOT_STARTED : GAME_STARTED;
+}
