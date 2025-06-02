@@ -40,7 +40,7 @@
 
                     <StackPanel >
                         <TextBlock Text="Top Scores:" 
-                           Style="{StaticResource TextStyle}"  Width="566"/>
+                           Style="{StaticResource TextStyle}" FontSize="32"  Width="566"/>
 
                         <ListBox x:Name="HighScoresListBox"
                           Width="500" Height="432"

@@ -38,7 +38,7 @@
 
                     <StackPanel>
                         <TextBlock Text="Rooms List:" 
-                        Style="{StaticResource TextStyle}" Height="50" Width="566"/>
+                        Style="{StaticResource TextStyle}" FontSize="32" Height="50" Width="566"/>
 
                         <ListBox x:Name="RoomsListBox"
                              Width="500" Height="60"
@@ -55,7 +55,7 @@
 
                         <StackPanel x:Name="PlayersPanel" Visibility="Collapsed">
                             <TextBlock Text="Selected room players:"
-                               Style="{StaticResource TextStyle}" Height="50"
+                               Style="{StaticResource TextStyle}" FontSize="32" Height="50"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10"
                             />

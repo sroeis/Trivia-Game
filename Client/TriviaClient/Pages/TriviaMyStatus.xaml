@@ -45,7 +45,7 @@
                             My Performances:
                         </TextBlock>
                         <TextBlock Name="Performances" 
-                        Style="{StaticResource TextStyle}" Height="432" Width="566" FontSize="25" TextAlignment="Left"/>
+                        Style="{StaticResource TextStyle}" Height="432" Width="566" FontSize="25" TextAlignment="Center"/>
                     </StackPanel>
 
 
