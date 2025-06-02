@@ -1,5 +1,5 @@
 #include "RoomManager.h"
-
+using std::exception;
 void RoomManager::CreateRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room(roomData, user);
@@ -16,7 +16,7 @@ void RoomManager::deleteRoom(const int& ID)
 	}
 	else
 	{
-		//throw an error later?
+		throw exception("Room not found");
 	}
 
 }

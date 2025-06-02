@@ -1,5 +1,5 @@
 #include "Room.h"
-
+using std::exception;
 
 Room::Room(const RoomData& metadata, const LoggedUser& user)
 	: m_metadata(metadata)
@@ -19,9 +19,11 @@ void Room::removeUser(const LoggedUser& user)
 		if (it->getUsername() == user.getUsername())
 		{
 			m_users.erase(it);
-			break;
+			return;
 		}
 	}
+
+	throw exception("User not found in the room.");
 
 }
 

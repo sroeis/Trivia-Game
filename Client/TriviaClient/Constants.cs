@@ -9,15 +9,19 @@ namespace TriviaClient
 
     public enum CODES
     {
-        LOGIN_CODE = 1,
-        SIGNUP_CODE = 2,
-        ERROR_CODE = 3,
-        LOGOUT_CODE = 4,
-        GET_ROOMS_CODE = 5,
-        JOIN_ROOM_CODE = 6,
-        CREATE_ROOM_CODE = 7,
-        GET_PLAYERS_IN_ROOM_CODE = 8,
-        GET_HIGH_SCORE_CODE = 9,
-        GET_PERSONAL_STATS_CODE = 10
+        LOGIN_CODE = 1, 
+        SIGNUP_CODE,
+        ERROR_CODE,
+        LOGOUT_CODE,
+        GET_ROOMS_CODE,
+        JOIN_ROOM_CODE,
+        CREATE_ROOM_CODE,
+        GET_PLAYERS_IN_ROOM_CODE,
+        GET_HIGH_SCORE_CODE,
+        GET_PERSONAL_STATS_CODE,
+        CLOSE_ROOM_CODE,
+        START_GAME_CODE,
+        GET_ROOM_STATE_CODE,
+        LEAVE_ROOM_CODE
     };
 }

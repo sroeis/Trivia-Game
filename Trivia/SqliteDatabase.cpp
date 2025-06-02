@@ -94,7 +94,7 @@ bool SqliteDatabase::doesPasswordMatch(const std::string& username, const std::s
     if (res != SQLITE_OK || count == 0)
     {
         sqlite3_free(errMsg);
-		throw exception("Error checking password match");
+		throw exception("Password is incorrect");
     }
 
     return count > 0;
