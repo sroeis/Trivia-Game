@@ -13,10 +13,15 @@
 #define GET_PLAYERS_IN_ROOM_CODE 8
 #define GET_HIGH_SCORE_CODE 9
 #define GET_PERSONAL_STATS_CODE 10
-#define DELETE_ROOM 11
+#define CLOSE_ROOM_CODE 11
+#define START_GAME_ROOM_CODE 12
+#define GET_ROOM_STATE_CODE 13
+#define LEAVE_ROOM_CODE 14
 
 #define STATUS_OK 200
 
+using std::vector;
+using std::string;
 
 typedef std::vector<unsigned char> Buffer;
 
@@ -69,6 +74,30 @@ typedef struct SignupResponse {
 typedef struct ErrorResponse {
     std::string message;
 } ErrorResponse;
+
+struct CloseRoomResponse
+{
+    unsigned int status;
+};
+
+struct StartGameResponse
+{
+    unsigned int status;
+};
+
+struct GetRoomStateResponse
+{
+    unsigned int status;
+    bool hasGameBegun;
+    vector<string> players;
+    unsigned int questionCount;
+    time_t answerTimeout;
+};
+
+struct LeaveRoomResponse
+{
+    unsigned int status;
+};
 
 typedef struct LoginRequest {
     std::string username;

@@ -21,22 +21,15 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaInRoom : Page
     {
-        private string _roomName;
-        private int _maxPlayers;
-        private int _numOfQuestions;
-        private int _timePerQuestion;
-        private bool _isAdmin;
-
-        public TriviaInRoom(string roomName,int max,int num,int time,bool isAdmin)
+        private RoomData m_roomData;
+        private bool m_isAdmin;
+        public TriviaInRoom(RoomData room, bool isAdmin)
         {
             InitializeComponent();
 
-            _roomName = roomName;
-            _maxPlayers = max;
-            _numOfQuestions = num;
-            _timePerQuestion = time;
-            _isAdmin = isAdmin;
-            Connected.Text = $"You are connected to room {_roomName}";
+            m_roomData = room;
+            m_isAdmin = isAdmin;
+            Connected.Text = $"You are connected to room {room.name}";
 
             SetupRoom();
         }
@@ -60,15 +53,11 @@ namespace TriviaClient.Pages
         private void SetupRoom()
         {
 
-            App.m_communicator.Send(Serializer.GetRooms());
-            string jsonString = App.m_communicator.Receive();
-            RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
 
-
-            Settings.Text = $"Max players: {_maxPlayers}  Number of questions: {_numOfQuestions}  Time per question: {_timePerQuestion}";
+            Settings.Text = $"Max players: {m_roomData.maxPlayers}  Number of questions: {m_roomData.numOfquestionsInGame}  Time per question: {m_roomData.timePerQuestion}";
 
             // If admin, show the control buttons
-            if (_isAdmin)
+            if (m_isAdmin)
             {
                 CloseRoom.Visibility = Visibility.Visible;
                 StartGame.Visibility = Visibility.Visible;
