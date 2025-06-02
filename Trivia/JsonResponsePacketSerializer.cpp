@@ -143,7 +143,7 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const DeleteRoomRes
 
 	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
 
-	Buffer buffer = PackIntoBuffer(DELETE_ROOM, jsonBuff);
+	Buffer buffer = PackIntoBuffer(CLOSE_ROOM_CODE, jsonBuff);
 
 	return buffer;
 }

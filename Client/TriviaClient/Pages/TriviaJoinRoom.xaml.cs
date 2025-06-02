@@ -93,7 +93,7 @@ namespace TriviaClient.Pages
                 //add user to the room here
 
 
-                TriviaInRoom roomPage = new TriviaInRoom(TriviaCreateRoom.GetRoomData(roomName), true);
+                TriviaInRoom roomPage = new TriviaInRoom(TriviaCreateRoom.GetRoomData(roomName), false);
                 this.NavigationService.Navigate(roomPage);
             }
             else
