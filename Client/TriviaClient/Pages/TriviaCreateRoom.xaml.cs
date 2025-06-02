@@ -65,8 +65,26 @@ namespace TriviaClient.Pages
                 return;
             }
 
+            string jsonString = App.m_communicator.Receive();
+            Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+            
+            if (response.ContainsKey("message"))
+            {
+                ErrorBox.Text = response["message"];
+                return;
+            }
 
-            TriviaInRoom roomPage = new TriviaInRoom(GetRoomData(roomName), true);
+            RoomData data = new RoomData
+            {
+                name = roomName,
+                maxPlayers = int.Parse(maxPlayers),
+                numOfquestionsInGame = int.Parse(questionCount),
+                timePerQuestion = int.Parse(answerTimeout),
+                id = int.Parse(response["status"])
+            };
+
+
+            TriviaInRoom roomPage = new TriviaInRoom(data, true);
             this.NavigationService.Navigate(roomPage);
 
         }

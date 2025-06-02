@@ -35,8 +35,6 @@ const RequestResult MenuRequestHandler::handleRequest(const RequestInfo& request
 		return signout(request);
 	case JOIN_ROOM_CODE:
 		return joinRoom(request);
-	case DELETE_ROOM:
-		return deleteRoom(request);
 	case GET_HIGH_SCORE_CODE:
 		return getHighScore(request);
     }
@@ -145,7 +143,7 @@ const RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
 		ErrorResponse errorResp;
 		errorResp.message = "Error, Room is full";
 		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
-		result.newHandler = this; // Last changed: V2
+		result.newHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, room); // Last changed: V3
 		return result;
 	}
 	else
@@ -171,28 +169,14 @@ const RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 	roomData.name = createRoomReq.roomName;
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;
 	roomData.timePerQuestion = createRoomReq.answerTimeOut;
-	roomData.status = STATUS_OK;
+	roomData.status = GAME_NOT_STARTED;
 	m_handlerFactory.getRoomManager().CreateRoom(m_user, roomData);
 
 	RequestResult result;
 	CreateRoomResponse createRoomResp;
-	createRoomResp.status = STATUS_OK;
+	createRoomResp.status = roomData.id;
 	result.response = JsonResponsePacketSerializer::serializeResponse(createRoomResp);
-
-	return result;
-}
-
-
-const RequestResult MenuRequestHandler::deleteRoom(const RequestInfo& ri)
-{
-	DeleteRoomRequest deleteRoomReq = JsonResponsePacketDeserializer::deserializeDeleteRoomRequest(ri.buffer);
-
-	m_handlerFactory.getRoomManager().deleteRoom(deleteRoomReq.roomId);
-
-	RequestResult result;
-	DeleteRoomResponse DeleteRoomResp;
-	DeleteRoomResp.status = STATUS_OK;
-	result.response = JsonResponsePacketSerializer::serializeResponse(DeleteRoomResp);
+	result.newHandler = m_handlerFactory.createRoomAdminRequestHandler(m_user, m_handlerFactory.getRoomManager().getRoom(roomData.id)); // Last changed: V3
 
 	return result;
 }
