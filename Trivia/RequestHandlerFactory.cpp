@@ -1,5 +1,6 @@
 #include "RequestHandlerFactory.h"
-
+#include "RoomAdminRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
 RequestHandlerFactory::RequestHandlerFactory(IDataBase* db)
 	: m_dataBase(db), m_loginManager(db), m_statisticsManager(db)
 {

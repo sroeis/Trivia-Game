@@ -1,4 +1,6 @@
 #include "MemberAndAdminRoomHandler.h"
+#include "RequestHandlerFactory.h"
+
 
 const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& ri)
 {
@@ -16,6 +18,10 @@ const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& r
 	result.response = JsonResponsePacketSerializer::serializeResponse(getRoomStateResp);
 
 	return result;
+}
+
+MemberAndAdminRoomHandler::MemberAndAdminRoomHandler(RequestHandlerFactory& handlerFactory, const LoggedUser& user, const Room& room) : m_handlerFactory(handlerFactory), m_user(user), m_room(room), m_roomManager(handlerFactory.getRoomManager())
+{
 }
 
 

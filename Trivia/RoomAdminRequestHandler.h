@@ -8,7 +8,7 @@ private:
 	const RequestResult startGame(const RequestInfo& ri);
 
 public:
-	RoomAdminRequestHandler(RequestHandlerFactory& handlerFactory, LoggedUser& user, Room& room)
+	RoomAdminRequestHandler(RequestHandlerFactory& handlerFactory,const LoggedUser& user,const Room& room)
 		: MemberAndAdminRoomHandler(handlerFactory, user, room) {}
 	bool isRequestRelevant(const RequestInfo& request) override;
 	const RequestResult handleRequest(const RequestInfo& request) override;

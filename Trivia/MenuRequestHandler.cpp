@@ -143,7 +143,7 @@ const RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
 		ErrorResponse errorResp;
 		errorResp.message = "Error, Room is full";
 		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
-		result.newHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, room); // Last changed: V3
+		result.newHandler = (IRequestHandler*)m_handlerFactory.createRoomMemberRequestHandler(m_user, room); // Last changed: V3
 		return result;
 	}
 	else
@@ -176,7 +176,7 @@ const RequestResult MenuRequestHandler::createRoom(const RequestInfo& ri)
 	CreateRoomResponse createRoomResp;
 	createRoomResp.status = roomData.id;
 	result.response = JsonResponsePacketSerializer::serializeResponse(createRoomResp);
-	result.newHandler = m_handlerFactory.createRoomAdminRequestHandler(m_user, m_handlerFactory.getRoomManager().getRoom(roomData.id)); // Last changed: V3
+	result.newHandler = (IRequestHandler*)m_handlerFactory.createRoomAdminRequestHandler(m_user, m_handlerFactory.getRoomManager().getRoom(roomData.id)); // Last changed: V3
 
 	return result;
 }

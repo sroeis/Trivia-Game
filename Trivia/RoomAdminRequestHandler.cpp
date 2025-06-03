@@ -1,6 +1,6 @@
 #include "RoomAdminRequestHandler.h"
 #include "JsonResponsePacketSerializer.h"
-
+#include "RequestHandlerFactory.h"
 using std::exception;
 
 const RequestResult RoomAdminRequestHandler::closeRoom(const RequestInfo& ri)
@@ -48,6 +48,8 @@ const RequestResult RoomAdminRequestHandler::startGame(const RequestInfo& ri)
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 		result.newHandler = this;
 	}
+
+	return result;
 }
 
 bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& request)
