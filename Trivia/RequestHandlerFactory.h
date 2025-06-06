@@ -5,10 +5,8 @@ class LoginRequestHandler; // Forward declaration
 #include "LoginRequestHandler.h"
 class MenuRequestHandler; // Forward declaration
 #include "MenuRequestHandler.h"
-
 #include "RoomAdminRequestHandler.h" 
 #include "RoomMemberRequestHandler.h" 
-
 #include "IRequestHandler.h"
 #include "SqliteDatabase.h"
 #include "RoomManager.h"

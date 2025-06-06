@@ -99,7 +99,10 @@ namespace TriviaClient
             string jsonString = JsonConvert.SerializeObject(roomId);
             return Serialize((byte)CODES.LEAVE_ROOM_CODE, jsonString);
         }
-
+        internal static Buffer StartGame()
+        {
+            return Serialize((byte)CODES.START_GAME_CODE);
+        }
         public static Buffer Serialize(byte code, string jsonString = " ")
         {
             Buffer msg = new Buffer();
@@ -111,7 +114,6 @@ namespace TriviaClient
 
             return msg;
         }
-
 
     }
 

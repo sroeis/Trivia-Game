@@ -34,7 +34,7 @@ namespace TriviaClient.Pages
             m_isAdmin = isAdmin;
             Connected.Text = $"You are connected to room {room.name}";
 
-            timer.Interval = TimeSpan.FromSeconds(5); // check every 5 seconds
+            timer.Interval = TimeSpan.FromSeconds(3); // check every 5 seconds
             timer.Tick += Timer_Tick;
             timer.Start();
 
@@ -70,7 +70,8 @@ namespace TriviaClient.Pages
         }
         void StartGameClick(object sender, RoutedEventArgs e)
         {
-            //start the game
+            App.m_communicator.Send(Serializer.StartGame());
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLobby.xaml", UriKind.Relative));
         }
         void LeaveRoomClick(object sender, RoutedEventArgs e)
         {
