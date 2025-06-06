@@ -17,7 +17,7 @@ enum RequestCode {
     CLOSE_ROOM_CODE,          
     START_GAME_CODE,          
     GET_ROOM_STATE_CODE,      
-    LEAVE_ROOM_CODE           
+    LEAVE_ROOM_CODE        
 };
 
 

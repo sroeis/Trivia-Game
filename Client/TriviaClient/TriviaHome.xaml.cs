@@ -27,7 +27,7 @@ namespace TriviaClient
 
         void SignInClick(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("Pages/TriviaLobby.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("Pages/TriviaSignin.xaml", UriKind.Relative));
         }
         void SignUpClick(object sender, RoutedEventArgs e)
         {

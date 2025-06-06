@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Security.RightsManagement;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace TriviaClient.Pages
 {
@@ -35,6 +36,9 @@ namespace TriviaClient.Pages
             timer.Start();
 
             Timer_Tick(null, null);
+
+            this.Unloaded += TriviaJoinRoom_Unloaded;
+
         }
 
 
@@ -59,33 +63,54 @@ namespace TriviaClient.Pages
 
         private void UpdateRoomList(RoomsResponse response)
         {
+
+            var selectedRoom = RoomsListBox.SelectedItem as RoomData;
+            int? selectedRoomId = selectedRoom?.id;
+
             RoomsListBox.ItemsSource = response.rooms;
+
+            // Try to restore the selection
+            if (selectedRoomId.HasValue)
+            {
+                var matchingRoom = response.rooms.FirstOrDefault(r => r.id == selectedRoomId.Value);
+                if (matchingRoom != null)
+                {
+                    RoomsListBox.SelectedItem = matchingRoom;
+                }
+            }
         }
 
         private void RoomsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RoomsListBox.SelectedItem != null)
+            try
             {
-                PlayersPanel.Visibility = Visibility.Visible;
-                PlayersListBox.Items.Clear();
-                
-                App.m_communicator.Send(Serializer.GetPlayersInRoom(((RoomData)RoomsListBox.SelectedItem).id));
-                string jsonString = App.m_communicator.Receive();
-                PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
-                if (!string.IsNullOrEmpty(response.message))
+                if (RoomsListBox.SelectedItem != null)
                 {
-                    ErrorBox.Text = response.message;
-                    return;
+                    PlayersPanel.Visibility = Visibility.Visible;
+                    PlayersListBox.Items.Clear();
+
+                    App.m_communicator.Send(Serializer.GetPlayersInRoom(((RoomData)RoomsListBox.SelectedItem).id));
+                    string jsonString = App.m_communicator.Receive();
+                    PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
+                    if (!string.IsNullOrEmpty(response.message))
+                    {
+                        ErrorBox.Text = response.message;
+                        return;
+                    }
+
+                    PlayersListBox.ItemsSource = response.PlayersInRoom;
+                }
+                else
+                {
+                    PlayersPanel.Visibility = Visibility.Collapsed;
                 }
 
-                PlayersListBox.ItemsSource = response.PlayersInRoom;
             }
-            else
+            catch (InvalidOperationException err)
             {
-                PlayersPanel.Visibility = Visibility.Collapsed;
+
             }
         }
-
         void BackClick(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
@@ -98,7 +123,7 @@ namespace TriviaClient.Pages
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
 
             RoomsListBox.ItemsSource = response.rooms;
-            
+
         }
         void JoinRoomClick(object sender, RoutedEventArgs e)
         {
@@ -109,12 +134,16 @@ namespace TriviaClient.Pages
                 int max = selectedRoom.maxPlayers;
                 int num = selectedRoom.numOfquestionsInGame;
                 int time = selectedRoom.timePerQuestion;
-                App.m_communicator.Send(Serializer.JoinRoom(selectedRoom.id));
-                //string jsonString = App.m_communicator.Receive();
 
-                if (App.ShowError(ErrorBox))
+                App.m_communicator.Send(Serializer.JoinRoom(selectedRoom.id));
+                string jsonString = App.m_communicator.Receive();
+
+                JoinRoomResponse response = JsonConvert.DeserializeObject<JoinRoomResponse>(jsonString);
+                if (response.status != 200)
+                {
+                    ErrorBox.Text = "failed";
                     return;
-                //add user to the room here
+                }
 
 
                 TriviaInRoom roomPage = new TriviaInRoom(TriviaCreateRoom.GetRoomData(roomName), false);
@@ -130,16 +159,27 @@ namespace TriviaClient.Pages
             //this.NavigationService.Navigate(inRoomPage1);
         }
 
+        private void TriviaJoinRoom_Unloaded(object sender, RoutedEventArgs e)
+        {
+            timer?.Stop();
+            timer = null;
+        }
+
+
     }
 
     public class PlayersResponse
     {
-        public string message { get; set; } //for Error response
+        public string message { get; set; } 
         public List<string> PlayersInRoom { get; set; }
+    }
+    public class JoinRoomResponse
+    {
+        public uint status { get; set; } 
     }
     public class RoomsResponse
     {
-        public string message { get; set; } //for Error response
+        public string message { get; set; } 
         public List<RoomData> rooms { get; set; }
     }
     public class RoomData
@@ -153,6 +193,5 @@ namespace TriviaClient.Pages
 
 
     }
-
 }
 

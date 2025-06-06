@@ -1,6 +1,7 @@
 #include "RoomAdminRequestHandler.h"
 #include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
+#include "MenuRequestHandler.h"
 using std::exception;
 
 const RequestResult RoomAdminRequestHandler::closeRoom(const RequestInfo& ri)
@@ -67,5 +68,6 @@ const RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& re
 		return startGame(request);
 	case GET_ROOM_STATE_CODE:
 		return getRoomState(request);
+
 	}
 }

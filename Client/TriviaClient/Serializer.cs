@@ -101,6 +101,11 @@ namespace TriviaClient
         {
             return Serialize((byte)CODES.START_GAME_CODE);
         }
+
+        internal static Buffer GetRoomState()
+        {
+            return Serialize((byte)CODES.GET_ROOM_STATE_CODE);
+        }
         public static Buffer Serialize(byte code, string jsonString = " ")
         {
             Buffer msg = new Buffer();

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+
 namespace TriviaClient.Pages
 {
     /// <summary>
@@ -33,34 +34,52 @@ namespace TriviaClient.Pages
             m_roomData = room;
             m_isAdmin = isAdmin;
             Connected.Text = $"You are connected to room {room.name}";
+            Settings.Text = $"Max players: {m_roomData.maxPlayers}  Number of questions: {m_roomData.numOfquestionsInGame}  Time per question: {m_roomData.timePerQuestion}";
+            SetupRoom();
 
-            timer.Interval = TimeSpan.FromSeconds(3); // check every 5 seconds
+
+            timer.Interval = TimeSpan.FromSeconds(3); // check every 3 seconds
             timer.Tick += Timer_Tick;
             timer.Start();
 
             Timer_Tick(null, null);
 
-            SetupRoom();
+            this.Unloaded += TriviaInRoom_Unloaded;
+
         }
 
+        private void TriviaInRoom_Unloaded(object sender, RoutedEventArgs e)
+        {
+            timer?.Stop();
+            timer = null;
+        }
 
         private async void Timer_Tick(object sender, EventArgs e)
         {
-            PlayersResponse users = await GetConnectedUsersAsync();
-            UpdateUserList(users);
+            try
+            {
+                GetRoomStateResponse users = await GetConnectedUsersAsync();
+                UpdateUserList(users);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the update
+                MessageBox.Show($"An error occurred while updating the user list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private async Task<PlayersResponse> GetConnectedUsersAsync()
+        private async Task<GetRoomStateResponse> GetConnectedUsersAsync()
         {
-            App.m_communicator.Send(Serializer.GetPlayersInRoom(m_roomData.id));
+            App.m_communicator.Send(Serializer.GetRoomState());
             string jsonString = App.m_communicator.Receive();
-            PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
+            GetRoomStateResponse response = JsonConvert.DeserializeObject<GetRoomStateResponse>(jsonString);
             return response;
         }
 
-        private void UpdateUserList(PlayersResponse users)
+        private void UpdateUserList(GetRoomStateResponse users)
         {
-            UsersListBox.ItemsSource = users.PlayersInRoom; 
+            if (users?.players != null)
+                UsersListBox.ItemsSource = users.players;
         }
         void CloseRoomClick(object sender, RoutedEventArgs e)
         {
@@ -83,8 +102,6 @@ namespace TriviaClient.Pages
         }
         private void SetupRoom()
         {
-            Settings.Text = $"Max players: {m_roomData.maxPlayers}  Number of questions: {m_roomData.numOfquestionsInGame}  Time per question: {m_roomData.timePerQuestion}";
-
             // If admin, show the control buttons
             if (m_isAdmin)
             {
@@ -98,6 +115,15 @@ namespace TriviaClient.Pages
         }
 
 
-    
+
+    }
+
+    public class GetRoomStateResponse
+    {
+        public uint status { get; set; }
+        public bool hasGameBegun { get; set; }
+        public List<string> players { get; set; }
+        public uint questionCount { get; set; }
+        public long answerTimeout { get; set; }
     }
 }
