@@ -7,6 +7,7 @@
 class RoomManager 
 {
 public:
+	void RemoveUserFromRoom(const LoggedUser& user, int roomId);
 	void CreateRoom(const LoggedUser& user, const RoomData& roomData);
 	void deleteRoom(const int& ID);
 	unsigned int getRoomState(const int& ID) const;

@@ -1,0 +1,103 @@
+﻿<Page x:Class="TriviaClient.Pages.TriviaLobby"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TriviaClient.Pages"
+      mc:Ignorable="d" 
+      Title="TriviaLobby">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="../images/background.png"/>
+        </Grid.Background>
+
+
+
+        <Button x:Name="Exit" Style="{StaticResource MenuButtonStyle}" 
+                Width="140"
+                Height="50"
+                FontSize="22"
+                Background="#EF5E63" Content="EXIT"
+                Click="ExitClick" ClickMode="Press" 
+                Panel.ZIndex="1" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+            />
+
+        <Viewbox>
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,120" >
+                <Image Name ="img" Height="265" Margin="0,-330,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+
+                <TextBlock Name ="RoomName" Text="Room" 
+                    Style="{StaticResource TextStyle}" FontSize="27" Height="50" Width="566" Margin="0,-80,0,0"/>
+                
+                
+                <TextBlock Name ="QuestionCount" Text="Question: 4/5" 
+                    Style="{StaticResource TextStyle}" FontSize="30" Height="50" Width="566" Margin="0,-25,0,0"/>
+
+                <Border CornerRadius="10" Background="#F7E6C4" Margin="10,10,10,20"  Width="300">
+
+                    <Border.Effect>
+                        <DropShadowEffect 
+                            Color="{Binding Background.Color, RelativeSource={RelativeSource AncestorType={x:Type Border}}, Converter={StaticResource DarkerColorConverter}}"
+                            ShadowDepth="8" Direction="-90" BlurRadius="0"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+
+                        <Viewbox Stretch="Uniform" Height="50">
+                            <TextBlock Name ="Question" Text="Question Question" 
+                                Style="{StaticResource TextStyle}" Foreground ="#2C1E3F" FontSize="30" Height="50" Width="300" Margin="0,0,0,0">
+                            </TextBlock>
+                        </Viewbox>
+                        
+                        <StackPanel x:Name="PlayersPanel" Visibility="Collapsed">
+                            <TextBlock Text="Selected room players:"
+                               Style="{StaticResource TextStyle}" FontSize="32" Height="50"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"
+                            />
+                            <ListBox x:Name="PlayersListBox"
+                                 Width="500" Height="60"
+                                 Background="#f29443"
+                                 Margin="0,0,0,40"
+                                 FontSize="20" FontWeight="Bold"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            </ListBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Button Name="Option1" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#E8C1C5" Content="Option1"
+                    Foreground="#2C1E3F"
+                    Click="Option1Click" ClickMode="Press"/>
+                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#D7DCE3" Content="Option2"
+                    Foreground="#2C1E3F"
+                    Click="Option2Click" ClickMode="Press"/>
+                <Button Name="Option3" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#C5DAD1" Content="Option3"
+                    Foreground="#2C1E3F"
+                    Click="Option3Click" ClickMode="Press"/>
+                <Button Name="Option4" Style="{StaticResource MenuButtonStyle}" 
+                    Background="#B7CDE3" Content="Option4"
+                    Foreground="#2C1E3F"
+                    Click="Option4Click" ClickMode="Press"/>
+                <TextBlock x:Name="ErrorBox" Style="{StaticResource ErrorButtonStyle}"></TextBlock>
+
+                <TextBlock Name="Timer" 
+                    Text="1" 
+                    Style="{StaticResource TextStyle}"
+                    Foreground="Black" 
+                    FontSize="36" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" />
+
+                <TextBlock Name ="Score" Text="Score: 1/4" 
+                 Style="{StaticResource TextStyle}" FontSize="36" Height="50" Width="566" Margin="0,0,0,-100"/>
+
+            </StackPanel>
+        </Viewbox>
+    </Grid>
+</Page>

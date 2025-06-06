@@ -1,4 +1,6 @@
 #pragma once
+// Forward declaration
+class RequestHandlerFactory;
 #include "LoggedUser.h"
 #include "RoomManager.h"
 #include "IRequestHandler.h"

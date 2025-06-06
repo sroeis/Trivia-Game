@@ -97,10 +97,15 @@ struct GetRoomStateResponse
     time_t answerTimeout;
 };
 
-struct LeaveRoomResponse
+typedef struct LeaveRoomResponse
 {
     unsigned int status;
-};
+}LeaveRoomResponse;
+
+typedef struct LeaveRoomRequest
+{
+    unsigned int roomId;
+}LeaveRoomRequest;
 
 typedef struct LoginRequest {
     std::string username;

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Security.RightsManagement;
+using System.Windows.Threading;
 
 namespace TriviaClient.Pages
 {
@@ -24,17 +25,40 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaJoinRoom : Page
     {
+        DispatcherTimer timer = new DispatcherTimer();
         public TriviaJoinRoom()
         {
             InitializeComponent();
+
+            timer.Interval = TimeSpan.FromSeconds(3); // check every 5 seconds
+            timer.Tick += Timer_Tick;
+            timer.Start();
+
+            Timer_Tick(null, null);
+        }
+
+
+        private async void Timer_Tick(object sender, EventArgs e)
+        {
+            RoomsResponse rooms = await GetRoomsAsync();
+            UpdateRoomList(rooms);
+        }
+
+        private async Task<RoomsResponse> GetRoomsAsync()
+        {
+
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
             if (!string.IsNullOrEmpty(response.message))
             {
                 ErrorBox.Text = response.message + "\nPlease press the refresh button to try again.";
-                return;
             }
+            return response;
+        }
+
+        private void UpdateRoomList(RoomsResponse response)
+        {
             RoomsListBox.ItemsSource = response.rooms;
         }
 

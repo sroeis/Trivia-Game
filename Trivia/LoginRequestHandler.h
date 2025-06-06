@@ -1,9 +1,9 @@
 #pragma once
-
-#include "IRequestHandler.h"
-#include "Responses.h"
 class RequestHandlerFactory; //forward declaration
 #include "RequestHandlerFactory.h"
+#include "IRequestHandler.h"
+#include "Responses.h"
+
 
 
 class LoginRequestHandler : public IRequestHandler

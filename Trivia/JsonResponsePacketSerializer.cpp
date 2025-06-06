@@ -188,6 +188,19 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveRoomResp
 	return buffer;
 }
 
+const Buffer JsonResponsePacketSerializer::serializeResponse(const DeleteRoomResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(CLOSE_ROOM_CODE, jsonBuff);
+
+	return buffer;
+}
+
+
 
 
 // Modified PackIntoBuffer to take Buffer (raw bytes) directly

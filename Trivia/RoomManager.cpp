@@ -1,5 +1,19 @@
 #include "RoomManager.h"
 using std::exception;
+
+
+void RoomManager::RemoveUserFromRoom(const LoggedUser& user, int roomId)
+{
+	auto it = m_rooms.find(roomId);
+	if (it != m_rooms.end())
+	{
+		it->second.removeUser(user);
+	}
+	else
+	{
+		throw exception("Room not found");
+	}
+}
 void RoomManager::CreateRoom(const LoggedUser& user, const RoomData& roomData)
 {
 	Room room(roomData, user);

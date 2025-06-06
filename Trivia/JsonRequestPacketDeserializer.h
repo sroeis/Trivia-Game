@@ -11,5 +11,6 @@ public:
 	static const JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
 	static const CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
 	static const DeleteRoomRequest deserializeDeleteRoomRequest(const Buffer& buffer);
+	static const LeaveRoomRequest deserializeLeaveRoomRequest(const Buffer& buffer);
 
 };
