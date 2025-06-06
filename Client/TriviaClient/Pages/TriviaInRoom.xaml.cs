@@ -65,7 +65,8 @@ namespace TriviaClient.Pages
         void CloseRoomClick(object sender, RoutedEventArgs e)
         {
             // delete the room 
-            App.m_communicator.Send(Serializer.DeleteRoom(m_roomData.id));
+            App.m_communicator.Send(Serializer.CloseRoom());
+            App.m_communicator.Receive();
             this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
         }
         void StartGameClick(object sender, RoutedEventArgs e)
@@ -76,7 +77,7 @@ namespace TriviaClient.Pages
         void LeaveRoomClick(object sender, RoutedEventArgs e)
         {
             //remove from room 
-            App.m_communicator.Send(Serializer.LeaveRoom(m_roomData.id));
+            App.m_communicator.Send(Serializer.CloseRoom());
             this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
 
         }

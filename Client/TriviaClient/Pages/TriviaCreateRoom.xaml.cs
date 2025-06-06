@@ -59,11 +59,6 @@ namespace TriviaClient.Pages
                 return;
             }
             App.m_communicator.Send(Serializer.CreateRoom(roomName, maxPlayers, questionCount, answerTimeout));
-            if(App.ShowError(ErrorBox))
-            {
-                App.ButtonErrorEvent(sender, e);
-                return;
-            }
 
             string jsonString = App.m_communicator.Receive();
             Dictionary<string, string> response = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);

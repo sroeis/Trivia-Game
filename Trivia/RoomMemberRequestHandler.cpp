@@ -1,5 +1,5 @@
 #include "RoomMemberRequestHandler.h"
-
+#include "RequestHandlerFactory.h"
 const RequestResult RoomMemberRequestHandler::leaveRoom(const RequestInfo& ri)
 {
 	RequestResult result;

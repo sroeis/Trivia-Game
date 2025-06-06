@@ -89,15 +89,13 @@ namespace TriviaClient
             string jsonString = JsonConvert.SerializeObject(data);
             return Serialize((byte)CODES.GET_PLAYERS_IN_ROOM_CODE, jsonString);
         }
-        public static Buffer DeleteRoom(int roomId)
+        public static Buffer CloseRoom()
         {
-            string jsonString = JsonConvert.SerializeObject(roomId);
-            return Serialize((byte)CODES.CLOSE_ROOM_CODE, jsonString);
+            return Serialize((byte)CODES.CLOSE_ROOM_CODE);
         }
-        internal static Buffer LeaveRoom(int roomId)
+        internal static Buffer LeaveRoom()
         {
-            string jsonString = JsonConvert.SerializeObject(roomId);
-            return Serialize((byte)CODES.LEAVE_ROOM_CODE, jsonString);
+            return Serialize((byte)CODES.LEAVE_ROOM_CODE);
         }
         internal static Buffer StartGame()
         {

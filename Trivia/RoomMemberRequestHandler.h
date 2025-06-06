@@ -6,7 +6,7 @@ private:
 	const RequestResult leaveRoom(const RequestInfo& ri);
 
 public:
-	RoomMemberRequestHandler(RequestHandlerFactory& handlerFactory, LoggedUser& user, Room& room)
+	RoomMemberRequestHandler(RequestHandlerFactory& handlerFactory, const LoggedUser& user, const Room& room)
 		: MemberAndAdminRoomHandler(handlerFactory, user, room) {}
 	bool isRequestRelevant(const RequestInfo& request) override;
 	const RequestResult handleRequest(const RequestInfo& request) override;
