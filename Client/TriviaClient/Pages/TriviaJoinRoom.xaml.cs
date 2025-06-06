@@ -144,10 +144,11 @@ namespace TriviaClient.Pages
                     ErrorBox.Text = "failed";
                     return;
                 }
-
-
-                TriviaInRoom roomPage = new TriviaInRoom(TriviaCreateRoom.GetRoomData(roomName), false);
-                this.NavigationService.Navigate(roomPage);
+                else
+                {
+                    TriviaInRoom roomPage = new TriviaInRoom(selectedRoom, false);
+                    this.NavigationService.Navigate(roomPage);
+                }
             }
             else
             {
@@ -175,6 +176,7 @@ namespace TriviaClient.Pages
     }
     public class JoinRoomResponse
     {
+        public string message { get; set; }
         public uint status { get; set; } 
     }
     public class RoomsResponse

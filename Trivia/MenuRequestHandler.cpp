@@ -147,7 +147,7 @@ const RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
 		ErrorResponse errorResp;
 		errorResp.message = "Error, Room is full";
 		result.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
-		result.newHandler = (IRequestHandler*)m_handlerFactory.createRoomMemberRequestHandler(m_user, room); // Last changed: V3
+		result.newHandler = this; // Last changed: V2
 		return result;
 	}
 	else
@@ -156,9 +156,9 @@ const RequestResult MenuRequestHandler::joinRoom(const RequestInfo& ri)
 		room.addUser(m_user.getUsername());
 		joinRoomResp.status = STATUS_OK;
 		result.response = JsonResponsePacketSerializer::serializeResponse(joinRoomResp);
-		result.newHandler = this; // Last changed: V2
+		result.newHandler = (IRequestHandler*)m_handlerFactory.createRoomMemberRequestHandler(m_user, room); // Last changed: V3 
 	}
-
+	
 	return result;
 }
 
