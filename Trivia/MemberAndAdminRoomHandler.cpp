@@ -6,11 +6,12 @@ const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& r
 {
 	RequestResult result;
 	GetRoomStateResponse getRoomStateResp;
-	RoomData roomData = m_room.getRoomData();
+	int id = m_room.getRoomData().id;
+	RoomData roomData = m_roomManager.getRoom(id).getRoomData();
 
 	getRoomStateResp.status = STATUS_OK;
 	getRoomStateResp.hasGameBegun = roomData.status;
-	getRoomStateResp.players = m_room.getAllUsers();
+	getRoomStateResp.players = m_roomManager.getRoom(id).getAllUsers();
 	getRoomStateResp.questionCount = roomData.numOfQuestionsInGame;
 	getRoomStateResp.answerTimeout = roomData.timePerQuestion;
 
