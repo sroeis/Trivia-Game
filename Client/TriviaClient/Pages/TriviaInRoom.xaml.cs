@@ -78,6 +78,10 @@ namespace TriviaClient.Pages
 
         private void UpdateUserList(GetRoomStateResponse users)
         {
+            if(users.status != 200)
+            {
+                this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
+            }
             if (users?.players != null)
                 UsersListBox.ItemsSource = users.players;
         }
@@ -96,7 +100,7 @@ namespace TriviaClient.Pages
         void LeaveRoomClick(object sender, RoutedEventArgs e)
         {
             //remove from room 
-            App.m_communicator.Send(Serializer.CloseRoom());
+            App.m_communicator.Send(Serializer.LeaveRoom());
             this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
 
         }

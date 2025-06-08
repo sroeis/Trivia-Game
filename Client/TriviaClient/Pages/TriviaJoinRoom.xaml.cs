@@ -27,6 +27,8 @@ namespace TriviaClient.Pages
     public partial class TriviaJoinRoom : Page
     {
         DispatcherTimer timer = new DispatcherTimer();
+        private bool isUpdatingRoomsList = false;
+
         public TriviaJoinRoom()
         {
             InitializeComponent();
@@ -45,6 +47,11 @@ namespace TriviaClient.Pages
         private async void Timer_Tick(object sender, EventArgs e)
         {
             RoomsResponse rooms = await GetRoomsAsync();
+            if(rooms == null)
+            {
+                App.ShowError(ErrorBox);
+                return;
+            }
             UpdateRoomList(rooms);
         }
 
@@ -53,24 +60,31 @@ namespace TriviaClient.Pages
 
             App.m_communicator.Send(Serializer.GetRooms());
             string jsonString = App.m_communicator.Receive();
+
+            if (!jsonString.Contains("Rooms")) // crude check
+            {
+                return null;
+            }
+
             RoomsResponse response = JsonConvert.DeserializeObject<RoomsResponse>(jsonString);
             if (!string.IsNullOrEmpty(response.message))
             {
-                ErrorBox.Text = response.message + "\nPlease press the refresh button to try again.";
+                App.ShowError(ErrorBox);
             }
             return response;
         }
 
         private void UpdateRoomList(RoomsResponse response)
         {
+            isUpdatingRoomsList = true;
 
             var selectedRoom = RoomsListBox.SelectedItem as RoomData;
             int? selectedRoomId = selectedRoom?.id;
 
             RoomsListBox.ItemsSource = response.rooms;
 
-            // Try to restore the selection
-            if (selectedRoomId.HasValue)
+            // Try to restore the selection  
+            if (selectedRoomId.HasValue && response.rooms != null)
             {
                 var matchingRoom = response.rooms.FirstOrDefault(r => r.id == selectedRoomId.Value);
                 if (matchingRoom != null)
@@ -78,10 +92,14 @@ namespace TriviaClient.Pages
                     RoomsListBox.SelectedItem = matchingRoom;
                 }
             }
+
+            isUpdatingRoomsList = false;
         }
+
 
         private void RoomsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (isUpdatingRoomsList) return;
             try
             {
                 if (RoomsListBox.SelectedItem != null)
@@ -91,6 +109,10 @@ namespace TriviaClient.Pages
 
                     App.m_communicator.Send(Serializer.GetPlayersInRoom(((RoomData)RoomsListBox.SelectedItem).id));
                     string jsonString = App.m_communicator.Receive();
+                    while (!jsonString.Contains("PlayersInRoom"))
+                    {
+                        jsonString = App.m_communicator.Receive();
+                    }
                     PlayersResponse response = JsonConvert.DeserializeObject<PlayersResponse>(jsonString);
                     if (!string.IsNullOrEmpty(response.message))
                     {
