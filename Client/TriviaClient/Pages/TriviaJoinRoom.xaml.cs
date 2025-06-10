@@ -49,7 +49,6 @@ namespace TriviaClient.Pages
             RoomsResponse rooms = await GetRoomsAsync();
             if(rooms == null)
             {
-                App.ShowError(ErrorBox);
                 return;
             }
             UpdateRoomList(rooms);
