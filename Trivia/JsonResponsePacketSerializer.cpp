@@ -200,6 +200,54 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const DeleteRoomRes
 	return buffer;
 }
 
+const Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(LEAVE_GAME_CODE, jsonBuff);
+
+	return buffer;
+}
+
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_QUESTION_CODE, jsonBuff);
+
+	return buffer;
+}
+
+const Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(SUBMIT_ANSWER_CODE, jsonBuff);
+
+	return buffer;
+}
+
+const Buffer JsonResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& resp)
+{
+	json j = resp;
+	std::string jsonStr = j.dump();
+
+	Buffer jsonBuff(jsonStr.begin(), jsonStr.end());
+
+	Buffer buffer = PackIntoBuffer(GET_GAME_RESULTS_CODE, jsonBuff);
+
+	return buffer;
+}
+
 
 
 

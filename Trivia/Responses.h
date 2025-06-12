@@ -17,7 +17,12 @@ enum RequestCode {
     CLOSE_ROOM_CODE,          
     START_GAME_CODE,          
     GET_ROOM_STATE_CODE,      
-    LEAVE_ROOM_CODE        
+    LEAVE_ROOM_CODE,
+	LEAVE_GAME_CODE,
+    GET_QUESTION_CODE,
+	SUBMIT_ANSWER_CODE,
+	GET_GAME_RESULTS_CODE,
+    
 };
 
 
@@ -164,5 +169,10 @@ struct PlayerResults {
 struct GetGameResultsResponse {
     unsigned int status;
     vector<PlayerResults> results;
+};
+
+struct SubmitAnswerRequest
+{
+    unsigned int answerId;
 };
 

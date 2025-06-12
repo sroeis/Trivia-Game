@@ -122,3 +122,17 @@ const LeaveRoomRequest JsonResponsePacketDeserializer::deserializeLeaveRoomReque
 
 	return req;
 }
+
+const SubmitAnswerRequest JsonResponsePacketDeserializer::deserializeSubmitAnswerRequest(const Buffer& buffer)
+{
+	SubmitAnswerRequest req;
+
+	string jsonStr(buffer.begin(), buffer.end());
+
+	json parsed = json::parse(jsonStr);
+
+	// Extract data
+	req.answerId = parsed["answerId"];
+
+	return req;
+}

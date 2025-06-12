@@ -9,10 +9,6 @@
 //just to make typing it easier
 using json = nlohmann::json;
 
-
-
-
-
 class JsonResponsePacketSerializer  
 {
 public:
@@ -31,6 +27,10 @@ public:
 	static const Buffer serializeResponse(const GetRoomStateResponse& resp);
 	static const Buffer serializeResponse(const LeaveRoomResponse& resp);
 	static const Buffer serializeResponse(const DeleteRoomResponse& resp);
+	static const Buffer serializeResponse(const LeaveGameResponse& resp);
+	static const Buffer serializeResponse(const GetQuestionResponse& resp);
+	static const Buffer serializeResponse(const SubmitAnswerResponse& resp);
+	static const Buffer serializeResponse(const GetGameResultsResponse& resp);
 
 
 private:
@@ -55,6 +55,14 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CloseRoomResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(StartGameResponse, status)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetRoomStateResponse, status, hasGameBegun, players, questionCount, answerTimeout)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LeaveRoomResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(LeaveGameResponse, status)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetQuestionResponse, status, question, answers)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SubmitAnswerResponse, status, correctAnswerId)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PlayerResults, username, correctAnswerCount, wrongAnswerCount, averageAnswerTime)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetGameResultsResponse, status, results)
+
+
+
 
 
 // Custom JSON serialization for GetPlayersInRoomResponse (change "players" to "PlayersInRoom")
