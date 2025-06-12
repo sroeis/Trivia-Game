@@ -70,9 +70,19 @@ namespace TriviaClient.Pages
 
         private async Task<GetRoomStateResponse> GetConnectedUsersAsync()
         {
+            
             App.m_communicator.Send(Serializer.GetRoomState());
             string jsonString = App.m_communicator.Receive();
-            GetRoomStateResponse response = JsonConvert.DeserializeObject<GetRoomStateResponse>(jsonString);
+            GetRoomStateResponse response;
+            try
+            {
+                response = JsonConvert.DeserializeObject<GetRoomStateResponse>(jsonString);
+            }
+            catch(JsonException ex)
+            {
+                LeaveRoomClick(null, null);
+                return null;
+            }
             return response;
         }
 

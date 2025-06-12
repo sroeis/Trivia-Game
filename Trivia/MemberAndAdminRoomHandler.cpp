@@ -4,10 +4,23 @@
 
 const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& ri)
 {
+
 	RequestResult result;
 	GetRoomStateResponse getRoomStateResp;
+	RoomData roomData;
 	int id = m_room.getRoomData().id;
-	RoomData roomData = m_roomManager.getRoom(id).getRoomData();
+	try 
+	{
+		roomData = m_roomManager.getRoom(id).getRoomData();//oops
+
+	}
+	catch(...){
+		LeaveRoomResponse leaveRoomResp;
+		leaveRoomResp.status = STATUS_OK;
+		result.response = JsonResponsePacketSerializer::serializeResponse(leaveRoomResp);
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
+		return result;
+	}
 
 	getRoomStateResp.status = STATUS_OK;
 	getRoomStateResp.hasGameBegun = roomData.status;
