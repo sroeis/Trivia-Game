@@ -25,8 +25,9 @@ enum RequestCode {
 
 using std::vector;
 using std::string;
+using std::map;
 
-typedef std::vector<unsigned char> Buffer;
+typedef vector<unsigned char> Buffer;
 
 //structs
 
@@ -45,7 +46,7 @@ struct DeleteRoomResponse {
 
 struct GetRoomsResponse {
     unsigned int status;
-   std::vector<RoomData> rooms;
+   vector<RoomData> rooms;
 };
 
 struct CreateRoomResponse {
@@ -53,17 +54,17 @@ struct CreateRoomResponse {
 };
 
 struct GetPlayersInRoomResponse {
-    std::vector<std::string> players;
+   vector<string> players;
 };
 
 struct GetHighScoreResponse {
     unsigned int status;
-    std::vector<std::string> statistics;
+    vector<string> statistics;
 };
 
 struct GetPersonalStatsResponse {
     unsigned int status;
-    std::vector<std::string> statistics;
+    vector<string> statistics;
 };
 
 typedef struct LoginResponse {
@@ -75,7 +76,7 @@ typedef struct SignupResponse {
 } SignupResponse;
 
 typedef struct ErrorResponse {
-    std::string message;
+    string message;
 } ErrorResponse;
 
 struct CloseRoomResponse
@@ -108,14 +109,14 @@ typedef struct LeaveRoomRequest
 }LeaveRoomRequest;
 
 typedef struct LoginRequest {
-    std::string username;
-    std::string password;
+    string username;
+    string password;
 } LoginRequest;
 
 typedef struct SignupRequest {
-    std::string username;
-    std::string password;
-    std::string email;
+    string username;
+    string password;
+    string email;
 } SignupRequest;
 
 typedef struct GetPlayersInRoomRequest {
@@ -131,8 +132,37 @@ typedef struct DeleteRoomRequest {
 } DeleteRoomRequest;
 
 typedef struct CreateRoomRequest {
-	std::string roomName;
+	string roomName;
 	unsigned int maxUsers;
 	unsigned int questionCount;
 	unsigned int answerTimeOut;
 } CreateRoomRequest;
+
+struct LeaveGameResponse
+{
+    unsigned int status;
+};
+
+struct GetQuestionResponse {
+    unsigned int status;
+    string question;
+    map<unsigned int, string> answers;
+};
+
+struct SubmitAnswerResponse {
+    unsigned int status;
+    unsigned int correctAnswerId;
+};
+
+struct PlayerResults {
+    string username;
+    unsigned int correctAnswerCount;
+    unsigned int wrongAnswerCount;
+    unsigned int averageAnswerTime;
+};
+
+struct GetGameResultsResponse {
+    unsigned int status;
+    vector<PlayerResults> results;
+};
+
