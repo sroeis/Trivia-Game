@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include "RoomData.h"
+#include <map>
 enum RequestCode {
     LOGIN_CODE = 1,
     SIGNUP_CODE,              
@@ -30,6 +31,7 @@ enum RequestCode {
 using std::vector;
 using std::string;
 typedef vector<unsigned char> Buffer;
+using std::map;
 
 //structs
 

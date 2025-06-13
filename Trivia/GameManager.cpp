@@ -18,6 +18,6 @@ void GameManager::deleteGame(unsigned int gameId)
 			}),
 		m_games.end()
 	);
-
+}
 	//m_games[gameId].removeAllPlayers();
 	

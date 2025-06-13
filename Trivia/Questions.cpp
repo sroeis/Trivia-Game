@@ -35,9 +35,9 @@ std::unordered_map<std::string, int> Questions::categoryMap = {
 
 void Questions::getQuestions(int numOfQuestions, const std::string& category, const std::string& difficulty, SqliteDatabase & db)
 {
-	std::string URl = buildUrl(numOfQuestions, category, difficulty);
+    std::string URl = buildUrl(numOfQuestions, category, difficulty);
     std::cout << URl << std::endl;
-	std::string response = getResponse(URl);
+    std::string response = getResponse(URl);
 
 	nlohmann::json jsonResponse = nlohmann::json::parse(response);
      
@@ -69,7 +69,7 @@ void Questions::getQuestions(int numOfQuestions, const std::string& category, co
     }
 }
 
-const std::string& Questions::buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty)
+const std::string Questions::buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty)
 {
     std::string url = URL_1 + std::to_string(numOfQuestions);
     
@@ -83,7 +83,7 @@ const std::string& Questions::buildUrl(int numOfQuestions, const std::string& ca
 }
 
 
-const std::string& Questions::getResponse(const std::string& url)
+const std::string Questions::getResponse(const std::string& url)
 {
     CURL* curl = curl_easy_init();
     if (!curl) {
