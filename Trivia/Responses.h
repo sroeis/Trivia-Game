@@ -25,7 +25,6 @@ enum RequestCode {
     
 };
 
-
 #define STATUS_OK 200
 
 using std::vector;

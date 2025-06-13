@@ -4,6 +4,8 @@
 #include "LoggedUser.h"
 #include "RoomData.h"
 
+using std::vector;
+using std::string;
 class Room 
 {
 public:
@@ -11,12 +13,12 @@ public:
 	Room(const RoomData& metadata,const LoggedUser& user);
 	void addUser(const LoggedUser& user);
 	void removeUser(const LoggedUser& user);
-	const std::vector<std::string> getAllUsers() const;
-
+	const vector<string> getAllUsers() const;
+	const vector<LoggedUser>& getUsers() const { return m_users; };
 	const RoomData& getRoomData() const;
 	void switchRoomState();
 
 private:
 	RoomData m_metadata;
-	std::vector<LoggedUser> m_users;
+	vector<LoggedUser> m_users;
 };

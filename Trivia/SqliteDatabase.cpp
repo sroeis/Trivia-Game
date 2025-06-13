@@ -164,10 +164,10 @@ void SqliteDatabase::insertQuestion(const std::string& question, const std::stri
     }
 }
 
-const list<Question> SqliteDatabase::getQuestions(const int count) const
+const vector<Question> SqliteDatabase::getQuestions(const int count) const
 {
-    std::list<Question> questions;
-    struct QuestionsHolder { std::list<Question>* list; } holder{&questions};
+    std::vector<Question> questions;
+    struct QuestionsHolder { std::vector<Question>* vec; } holder{&questions};
 
     auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
         if (argc >= 7) {
@@ -185,7 +185,7 @@ const list<Question> SqliteDatabase::getQuestions(const int count) const
                     correctIndex = dbIndex - 1;
             }
             Question q(questionText, possibleAnswers, correctIndex);
-            static_cast<QuestionsHolder*>(data)->list->push_back(q);
+            static_cast<QuestionsHolder*>(data)->vec->push_back(q);
         }
         return 0;
     };
