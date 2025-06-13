@@ -11,6 +11,13 @@ Game GameManager::createGame(const vector<LoggedUser>& playersInRoom)
 
 void GameManager::deleteGame(unsigned int gameId)
 {
-	m_games[gameId].removeAllPlayers();
-	m_games.erase(m_games.begin() + gameId);
-}
+	m_games.erase(
+		std::remove_if(m_games.begin(), m_games.end(),
+			[gameId](const Game& game) {
+				return game.getGameId() == gameId;
+			}),
+		m_games.end()
+	);
+
+	//m_games[gameId].removeAllPlayers();
+	

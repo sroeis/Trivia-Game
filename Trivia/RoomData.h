@@ -3,6 +3,7 @@
 
 #define GAME_STARTED 1
 #define GAME_NOT_STARTED 0
+#define GAME_FINISHED 2
 
 typedef struct RoomData
 {

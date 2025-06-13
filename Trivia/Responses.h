@@ -29,8 +29,6 @@ enum RequestCode {
 
 using std::vector;
 using std::string;
-using std::map;
-
 typedef vector<unsigned char> Buffer;
 
 //structs

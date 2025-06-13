@@ -19,7 +19,9 @@ class Game
 
 public:
 	Game(unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players);
-	bool submitAnswer(const unsigned int answerId, const LoggedUser& user);
+	const int submitAnswer(const unsigned int answerId, const LoggedUser& user);
+	const unsigned int getGameId() const { return m_gameId; }
+	const Question& getQuestionForUser(const LoggedUser& user) const;
 	void removePlayer(const LoggedUser& player);
 	void removeAllPlayers();
 };

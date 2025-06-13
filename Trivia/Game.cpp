@@ -1,5 +1,7 @@
 #include "Game.h"
 //need to add Timer!!!!
+using std::exception;
+
 void Game::submitGameStatsToDB(const GameData& gameData)
 {
 }
@@ -14,12 +16,12 @@ Game::Game(const unsigned int gameId, const vector<Question> questions, const ve
 	}
 }
 
-bool Game::submitAnswer(const unsigned int answerId, const LoggedUser& user)
+const int Game::submitAnswer(const unsigned int answerId, const LoggedUser& user)
 {
 	GameData& gameData = m_players[user];
-	bool isCorrect = gameData.currentQuestion.getCorrectAnswerId() == answerId;
+	int correctAnswerId = gameData.currentQuestion.getCorrectAnswerId();
 
-	if (isCorrect)
+	if (correctAnswerId == answerId)
 		gameData.correctAnswerCount++;		
 	else
 		gameData.wrongAnswerCount++;
@@ -31,20 +33,31 @@ bool Game::submitAnswer(const unsigned int answerId, const LoggedUser& user)
 	}
 	else
 	{
-		submitGameStatsToDB(gameData);
-		removePlayer(user);
-		return true; // Game finished
+		gameData.currentQuestion = Question();
+		//submitGameStatsToDB(gameData);
+		//removePlayer(user);
+		//return true; // Game finished
 	}
-	return isCorrect;
+	return correctAnswerId;
+}
+
+const Question& Game::getQuestionForUser(const LoggedUser& user) const
+{
+	return m_players.at(user).currentQuestion;
 }
 
 void Game::removePlayer(const LoggedUser& player)
 {
+	submitGameStatsToDB(m_players[player]);
 	m_players.erase(player);
 }
 
 void Game::removeAllPlayers()
 {
+	for(const auto& player : m_players)
+	{
+		submitGameStatsToDB(player.second);
+	}
 	m_players.clear();
 }
 
