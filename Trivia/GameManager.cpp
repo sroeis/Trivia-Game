@@ -1,8 +1,5 @@
 #include "GameManager.h"
-#define NUMBER_OF_QUESTIONS 10
 
-
-unsigned int GameManager::gameIdCounter = 0;
 
 Game& GameManager::getGame(const LoggedUser& user)
 {
@@ -13,9 +10,9 @@ Game& GameManager::getGame(const LoggedUser& user)
 	}
 }
 
-Game GameManager::createGame(const vector<LoggedUser>& playersInRoom)
+Game GameManager::createGame(Room& room)
 {
-	return Game(gameIdCounter++, m_database->getQuestions(NUMBER_OF_QUESTIONS), playersInRoom);
+	return Game(room.getRoomData().id, m_database->getQuestions(room.getRoomData().numOfQuestionsInGame <= 30 ? room.getRoomData().numOfQuestionsInGame : 30), room.getLoggedUsers());
 }
 
 void GameManager::deleteGame(unsigned int gameId)
