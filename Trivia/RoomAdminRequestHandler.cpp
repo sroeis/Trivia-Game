@@ -38,7 +38,7 @@ const RequestResult RoomAdminRequestHandler::startGame(const RequestInfo& ri)
 		response.status = STATUS_OK;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 		result.newHandler = m_handlerFactory.createGameRequestHandler(m_user);
-		m_handlerFactory.getGameManager().createGame(m_roomManager.getRoom(m_room.getRoomData().id).getLoggedUsers());
+		m_handlerFactory.getGameManager().createGame(m_roomManager.getRoom(m_room.getRoomData().id));
 
 	}
 	catch (const exception& e)
