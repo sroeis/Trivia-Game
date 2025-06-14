@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include "RoomData.h"
+#include "PlayerResults.h"
 #include <map>
 enum RequestCode {
     LOGIN_CODE = 1,
@@ -158,12 +159,7 @@ struct SubmitAnswerResponse {
     unsigned int correctAnswerId;
 };
 
-struct PlayerResults {
-    string username;
-    unsigned int correctAnswerCount;
-    unsigned int wrongAnswerCount;
-    unsigned int averageAnswerTime;
-};
+
 
 struct GetGameResultsResponse {
     unsigned int status;

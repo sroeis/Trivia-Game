@@ -1,9 +1,10 @@
 #pragma once
-#include "GameManager.h"
-#include "Responses.h"
+
 #include "IRequestHandler.h"
 class RequestHandlerFactory; // Forward declaration
 #include "RequestHandlerFactory.h"
+#include "GameManager.h"
+#include "Responses.h"
 
 class GameRequestHandler : public IRequestHandler
 {
@@ -18,6 +19,7 @@ private:
     const RequestResult leaveGame(const RequestInfo& request);
 
 public:
+    GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory factory);
     bool isRequestRelevant(const RequestInfo& request) override;
     const RequestResult handleRequest(const RequestInfo& request) override;
     

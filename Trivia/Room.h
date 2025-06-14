@@ -14,7 +14,7 @@ public:
 	void addUser(const LoggedUser& user);
 	void removeUser(const LoggedUser& user);
 	const vector<string> getAllUsers() const;
-	const vector<LoggedUser>& getUsers() const { return m_users; };
+	const vector<LoggedUser>& getLoggedUsers() const { return m_users; };
 	const RoomData& getRoomData() const;
 	void switchRoomState();
 

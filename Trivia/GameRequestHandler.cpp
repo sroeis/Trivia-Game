@@ -2,6 +2,11 @@
 
 using std::exception;
 
+GameRequestHandler::GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory factory) :
+	m_user(user), m_game(game), m_gameManager(gameManager), m_handlerFactroy(factory)
+{
+}
+
 bool GameRequestHandler::isRequestRelevant(const RequestInfo& request)
 {
     return request.id == LEAVE_GAME_CODE ||
@@ -70,7 +75,16 @@ const RequestResult GameRequestHandler::submitAnswer(const RequestInfo& request)
 
 const RequestResult GameRequestHandler::getGameResults(const RequestInfo& request)
 {
-    return RequestResult();
+	GetGameResultsResponse response;
+    response.results = m_game.getPlayersResults();
+	response.status = STATUS_OK;
+
+	RequestResult result;
+	result.response = JsonResponsePacketSerializer::serializeResponse(response);
+	result.newHandler = m_handlerFactroy.createMenuRequestHandler(m_user);
+
+    m_gameManager.deleteGame(m_game.getGameId());
+    return result;
 }
 
 const RequestResult GameRequestHandler::leaveGame(const RequestInfo& request)

@@ -4,6 +4,15 @@
 
 unsigned int GameManager::gameIdCounter = 0;
 
+Game& GameManager::getGame(const LoggedUser& user)
+{
+	for(auto& game : m_games ) {
+		if (game.isPlayerInGame(user)) {
+			return game;
+		}
+	}
+}
+
 Game GameManager::createGame(const vector<LoggedUser>& playersInRoom)
 {
 	return Game(gameIdCounter++, m_database->getQuestions(NUMBER_OF_QUESTIONS), playersInRoom);
