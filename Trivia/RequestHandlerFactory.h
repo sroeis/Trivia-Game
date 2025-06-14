@@ -7,7 +7,8 @@ class MenuRequestHandler; // Forward declaration
 #include "MenuRequestHandler.h"
 class RoomAdminRequestHandler;
 class RoomMemberRequestHandler;
-
+class GameRequestHandler;
+#include "GameRequestHandler.h"
 #include "IRequestHandler.h"
 #include "SqliteDatabase.h"
 #include "RoomManager.h"
@@ -28,13 +29,13 @@ public:
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(LoggedUser& user,Room& room);
 	RoomMemberRequestHandler* createRoomMemberRequestHandler(LoggedUser& user,Room& room);
 
-	//GameRequestHandler* createGameRequestHandler(LoggedUser user)
-	//GameManager& getGameManager()
+	GameRequestHandler* createGameRequestHandler(const LoggedUser& user);
+	GameManager& getGameManager();
 
 private:
 	LoginManager m_loginManager;
 	IDataBase* m_dataBase;
 	RoomManager m_roomManager;
 	StatisticsManager m_statisticsManager;
-	//GameManager m_gameManager;
+	GameManager m_gameManager;
 };

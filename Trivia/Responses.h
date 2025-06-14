@@ -3,6 +3,8 @@
 #include <vector>
 #include <time.h>
 #include "RoomData.h"
+#include "PlayerResults.h"
+#include <map>
 enum RequestCode {
     LOGIN_CODE = 1,
     SIGNUP_CODE,              
@@ -25,14 +27,12 @@ enum RequestCode {
     
 };
 
-
 #define STATUS_OK 200
 
 using std::vector;
 using std::string;
-using std::map;
-
 typedef vector<unsigned char> Buffer;
+using std::map;
 
 //structs
 
@@ -159,12 +159,7 @@ struct SubmitAnswerResponse {
     unsigned int correctAnswerId;
 };
 
-struct PlayerResults {
-    string username;
-    unsigned int correctAnswerCount;
-    unsigned int wrongAnswerCount;
-    unsigned int averageAnswerTime;
-};
+
 
 struct GetGameResultsResponse {
     unsigned int status;

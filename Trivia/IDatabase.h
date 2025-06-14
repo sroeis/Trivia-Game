@@ -4,6 +4,7 @@
 #include <list>
 #include "Question.h"
 #include <vector>
+#include "GameData.h"
 
 using std::list;
 using std::string;
@@ -19,8 +20,9 @@ public:
 	virtual bool addNewUser(const std::string& username, const std::string& password, const std::string& email) = 0;
 	virtual void CreateQuestionTable() = 0;
 	virtual void insertQuestion(const std::string& question, const std::string& answer1, const std::string& answer2, const std::string& answer3, const std::string& answer4, const int& correctAnswer) = 0;
+	virtual int submitGameStatistics(const string& username, const GameData& data) = 0;
 
-	virtual const list<Question> getQuestions(const int count) const = 0;
+	virtual const vector<Question> getQuestions(const int count) const = 0;
 	virtual float getPlayerAverageAnswerTime(const string& username) const = 0;
 	virtual int getNumOfCorrectAnswers(const string& username) const = 0;
 	virtual int getNumOfTotalAnswers(const string& username) const = 0;

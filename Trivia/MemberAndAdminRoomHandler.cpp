@@ -28,7 +28,11 @@ const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& r
 	getRoomStateResp.questionCount = roomData.numOfQuestionsInGame;
 	getRoomStateResp.answerTimeout = roomData.timePerQuestion;
 
-	result.newHandler = this; // Last changed: V3
+	if (roomData.status == GAME_STARTED)
+		result.newHandler = m_handlerFactory.createGameRequestHandler(m_user);
+	else
+		result.newHandler = this; // Last changed: V3
+
 	result.response = JsonResponsePacketSerializer::serializeResponse(getRoomStateResp);
 
 	return result;

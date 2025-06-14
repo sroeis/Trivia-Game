@@ -18,7 +18,7 @@ public:
     static void getQuestions(int numOfQuestions, const std::string& category, const std::string& difficulty, SqliteDatabase & db);
 
 private:
-    static const std::string& buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty);
+    static const std::string buildUrl(int numOfQuestions, const std::string& category, const std::string& difficulty);
     static std::unordered_map<std::string, int> categoryMap;
-    static const std::string& getResponse(const std::string& url);
+    static const std::string getResponse(const std::string& url);
 };
