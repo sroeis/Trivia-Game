@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TriviaClient.Pages
 {
@@ -20,32 +22,122 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaLobby : Page
     {
-        public TriviaLobby()
+        private List<string> _currentAnswers = new List<string>();
+        private int _questionIndex = 0;
+        private int _score = 0;
+        private int _totalQuestions = 0;
+        private DispatcherTimer _timer;
+        private int _timeRemaining = 0;
+        private int MAX_TIME_PER_QUESTION = 0;
+
+        public TriviaLobby(RoomData roomdata)
         {
             InitializeComponent();
+            _totalQuestions = roomdata.numOfquestionsInGame;
+            MAX_TIME_PER_QUESTION = roomdata.timePerQuestion;
+            FetchAndDisplayQuestion();
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            _timeRemaining--;
+            Timer.Text = $"Time left: {_timeRemaining}s";
+
+            if (_timeRemaining <= 0)
+            {
+                _timer.Stop();
+                SubmitAnswer(-1); // No answer selected
+            }
+        }
+
+        private async void FetchAndDisplayQuestion()
+        {
+            App.m_communicator.Send(Serializer.getQuestion());
+            string responseStr = App.m_communicator.Receive();
+
+            try
+            {
+                var response = JsonConvert.DeserializeObject<GetQuestionResponse>(responseStr);
+
+                if (string.IsNullOrWhiteSpace(response.question))
+                {
+                    NavigateToResults();
+                    return;
+                }
+
+                Question.Text = response.question;
+                _currentAnswers = response.answers.Values.ToList();
+
+                // Update buttons
+                Option1.Content = _currentAnswers[0];
+                Option2.Content = _currentAnswers[1];
+                Option3.Content = _currentAnswers[2];
+                Option4.Content = _currentAnswers[3];
+
+                _questionIndex++;
+                QuestionCount.Text = $"Question: {_questionIndex}/{_totalQuestions}";
+
+                // Timer start
+                _timeRemaining = MAX_TIME_PER_QUESTION;
+                _timer.Start();
+            }
+            catch
+            {
+                ErrorBox.Text = "Error getting question.";
+                NavigateToResults();
+            }
+        }
+
+        private async void SubmitAnswer(int answerIndex)
+        {
+            _timer.Stop();
+
+            App.m_communicator.Send(Serializer.submitAnswer((uint)answerIndex));
+
+            string responseStr = App.m_communicator.Receive();
+            var response = JsonConvert.DeserializeObject<SubmitAnswerResponse>(responseStr);
+
+            if (answerIndex == response.correctAnswerId)
+                _score++;
+
+            Score.Text = $"Score: {_score}/{_questionIndex}";
+
+            await Task.Delay(800); // delay before next
+            FetchAndDisplayQuestion();
+        }
+
+        private void NavigateToResults()
+        {
+            App.m_communicator.Send(Serializer.getGameResults());
+            string responseStr = App.m_communicator.Receive();
+
+            this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
         }
 
         void ExitClick(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("TriviaHome.xaml", UriKind.Relative));
+            App.m_communicator.Send(Serializer.LeaveGame());
+            string responseStr = App.m_communicator.Receive();
+            this.NavigationService.Navigate(new Uri("TriviaLoggedIn.xaml", UriKind.Relative));
         }
-        void Option1Click(object sender, RoutedEventArgs e)
-        {
+        void Option1Click(object sender, RoutedEventArgs e) => SubmitAnswer(0);
+        void Option2Click(object sender, RoutedEventArgs e) => SubmitAnswer(1);
+        void Option3Click(object sender, RoutedEventArgs e) => SubmitAnswer(2);
+        void Option4Click(object sender, RoutedEventArgs e) => SubmitAnswer(3);
+    }
+    public class GetQuestionResponse
+    {
+        public string question { get; set; }
+        public Dictionary<int, string> answers { get; set; }
+    }
 
-        }
-        void Option2Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        void Option3Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        void Option4Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+    public class SubmitAnswerResponse
+    {
+        public int correctAnswerId { get; set; }
     }
 
 }

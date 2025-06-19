@@ -9,7 +9,7 @@ namespace TriviaClient
 
     public enum CODES
     {
-        LOGIN_CODE = 1, 
+        LOGIN_CODE = 1,
         SIGNUP_CODE,
         ERROR_CODE,
         LOGOUT_CODE,
@@ -22,6 +22,10 @@ namespace TriviaClient
         CLOSE_ROOM_CODE,
         START_GAME_CODE,
         GET_ROOM_STATE_CODE,
-        LEAVE_ROOM_CODE
+        LEAVE_ROOM_CODE,
+        LEAVE_GAME_CODE,
+        GET_QUESTION_CODE,
+        SUBMIT_ANSWER_CODE,
+        GET_GAME_RESULTS_CODE
     };
 }

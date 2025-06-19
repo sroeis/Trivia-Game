@@ -72,6 +72,8 @@ const bool Game::isPlayerInGame(const LoggedUser& player) const
 
 const Question& Game::getQuestionForUser(const LoggedUser& user) const
 {
+	if (m_players.find(user) == m_players.end())
+		throw std::exception("Player was not found\n");
 	return m_players.at(user).currentQuestion;
 }
 

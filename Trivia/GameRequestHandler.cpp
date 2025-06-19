@@ -37,7 +37,7 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
     try
     {
 		GetQuestionResponse response;
-        const Question& question = m_game.getQuestionForUser(m_user);
+		const Question& question = m_gameManager.getGame(m_user).getQuestionForUser(m_user);
 		response.question = question.getQuestion();
 
         if (response.question.empty()) throw exception();
@@ -48,9 +48,13 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
         {
             response.answers[i] = possibleAnswers[i];
         }
-        
+		response.status = STATUS_OK;
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
         result.newHandler = this;
+    }
+    catch (std::runtime_error er)
+    {
+        std::cout << er.what() << std::endl;
     }
     catch (const exception& e)
     {

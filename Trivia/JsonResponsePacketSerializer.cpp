@@ -162,6 +162,7 @@ const Buffer JsonResponsePacketSerializer::serializeResponse(const StartGameResp
 	return buffer;
 }
 
+
 const Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& resp)
 {
 	json j = resp;

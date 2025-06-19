@@ -8,11 +8,14 @@ Game& GameManager::getGame(const LoggedUser& user)
 			return game;
 		}
 	}
+	throw std::exception("Game not found\n");
 }
 
-Game GameManager::createGame(Room& room)
+Game& GameManager::createGame(Room& room)
 {
-	return Game(room.getRoomData().id, m_database->getQuestions(room.getRoomData().numOfQuestionsInGame <= 30 ? room.getRoomData().numOfQuestionsInGame : 30), room.getLoggedUsers());
+	Game newGame(room.getRoomData().id, m_database->getQuestions(room.getRoomData().numOfQuestionsInGame <= 30 ? room.getRoomData().numOfQuestionsInGame : 30), room.getLoggedUsers());
+	m_games.push_back(newGame);
+	return newGame;
 }
 
 void GameManager::deleteGame(unsigned int gameId)

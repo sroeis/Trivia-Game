@@ -34,6 +34,6 @@ const RequestResult RoomMemberRequestHandler::handleRequest(const RequestInfo& r
 		return leaveRoom(request);
 	case GET_ROOM_STATE_CODE:
 		return getRoomState(request);
-	
+
 	}
 }

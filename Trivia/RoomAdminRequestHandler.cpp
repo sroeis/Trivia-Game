@@ -34,11 +34,14 @@ const RequestResult RoomAdminRequestHandler::startGame(const RequestInfo& ri)
 	try
 	{
 		m_roomManager.getRoom(m_room.getRoomData().id).switchRoomState();
+
 		StartGameResponse response;
 		response.status = STATUS_OK;
+
+		m_handlerFactory.getGameManager().createGame(m_roomManager.getRoom(m_room.getRoomData().id));
+
 		result.response = JsonResponsePacketSerializer::serializeResponse(response);
 		result.newHandler = m_handlerFactory.createGameRequestHandler(m_user);
-		m_handlerFactory.getGameManager().createGame(m_roomManager.getRoom(m_room.getRoomData().id));
 
 	}
 	catch (const exception& e)

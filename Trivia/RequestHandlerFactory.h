@@ -9,6 +9,7 @@ class RoomAdminRequestHandler;
 class RoomMemberRequestHandler;
 class GameRequestHandler;
 #include "GameRequestHandler.h"
+#include "GameManager.h"
 #include "IRequestHandler.h"
 #include "SqliteDatabase.h"
 #include "RoomManager.h"

@@ -43,7 +43,14 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
 
 GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(const LoggedUser& user)
 {
-	return new GameRequestHandler(user, m_gameManager.getGame(user), m_gameManager, *this);
+	try {
+		return new GameRequestHandler(user, m_gameManager.getGame(user), m_gameManager, *this);
+	}
+	catch (std::exception er) 
+	{
+		std::cout << "Error creating GameRequestHandler: " << er.what() << std::endl;
+		return nullptr;
+	}
 }
 
 GameManager& RequestHandlerFactory::getGameManager()

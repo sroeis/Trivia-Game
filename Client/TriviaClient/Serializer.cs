@@ -101,11 +101,34 @@ namespace TriviaClient
         {
             return Serialize((byte)CODES.START_GAME_CODE);
         }
-
         internal static Buffer GetRoomState()
         {
             return Serialize((byte)CODES.GET_ROOM_STATE_CODE);
         }
+        internal static Buffer LeaveGame()
+        {
+            return Serialize((byte)CODES.LEAVE_GAME_CODE);
+        }
+        internal static Buffer getGameResults()
+        {
+            return Serialize((byte)CODES.GET_GAME_RESULTS_CODE);
+        }
+        internal static Buffer submitAnswer(uint answerID)
+        {
+            Dictionary<string, uint> data = new Dictionary<string, uint>()
+            {
+                { "answerId", answerID}
+            };
+
+            string jsonString = JsonConvert.SerializeObject(data);
+            return Serialize((byte)CODES.SUBMIT_ANSWER_CODE, jsonString);
+        }
+        internal static Buffer getQuestion()
+        {
+            return Serialize((byte)CODES.GET_QUESTION_CODE);
+        }
+
+
         public static Buffer Serialize(byte code, string jsonString = " ")
         {
             Buffer msg = new Buffer();

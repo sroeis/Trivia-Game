@@ -15,6 +15,6 @@ class GameManager
 public:
 	GameManager(IDataBase* database) : m_database(database) {}
 	Game& getGame(const LoggedUser& user);
-	Game createGame(Room& room);
+	Game& createGame(Room& room);
 	void deleteGame(unsigned int gameId);
 };

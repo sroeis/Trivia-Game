@@ -56,15 +56,24 @@ namespace TriviaClient.Pages
 
         private async void Timer_Tick(object sender, EventArgs e)
         {
+
             try
             {
                 GetRoomStateResponse users = await GetConnectedUsersAsync();
-                UpdateUserList(users);
+                if (!users.hasGameBegun)
+                {
+                    UpdateUserList(users);
+                    return;
+                }
+                
+                timer?.Stop();
+                TriviaLobby roomPage = new TriviaLobby(m_roomData);
+                this.NavigationService.Navigate(roomPage);
             }
             catch (Exception ex)
             {
                 // Handle any exceptions that occur during the update
-                MessageBox.Show($"An error occurred while updating the user list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{ex.Message}","Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -105,7 +114,8 @@ namespace TriviaClient.Pages
         void StartGameClick(object sender, RoutedEventArgs e)
         {
             App.m_communicator.Send(Serializer.StartGame());
-            this.NavigationService.Navigate(new Uri("Pages/TriviaLobby.xaml", UriKind.Relative));
+            TriviaLobby roomPage = new TriviaLobby(m_roomData);
+            this.NavigationService.Navigate(roomPage);
         }
         void LeaveRoomClick(object sender, RoutedEventArgs e)
         {
@@ -139,5 +149,9 @@ namespace TriviaClient.Pages
         public List<string> players { get; set; }
         public uint questionCount { get; set; }
         public long answerTimeout { get; set; }
+    }
+    public class joinGameResponse
+    {
+        public uint status { get; set; }
     }
 }

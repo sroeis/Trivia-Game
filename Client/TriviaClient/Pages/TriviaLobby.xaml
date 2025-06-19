@@ -72,7 +72,7 @@
                     Background="#E8C1C5" Content="Option1"
                     Foreground="#2C1E3F"
                     Click="Option1Click" ClickMode="Press"/>
-                <Button Name="JoinRoom" Style="{StaticResource MenuButtonStyle}" 
+                <Button Name="Option2" Style="{StaticResource MenuButtonStyle}" 
                     Background="#D7DCE3" Content="Option2"
                     Foreground="#2C1E3F"
                     Click="Option2Click" ClickMode="Press"/>

@@ -23,12 +23,12 @@ void Communicator::startHandleRequests()
 
 		std::cout << "Client accepted." << std::endl;
 
-		std::thread user_thread(&Communicator::handleNewClient, this, Client_socket);
-		user_thread.detach();
-
 		std::lock_guard<std::mutex> lock(mtx);
 		LoginRequestHandler* Handler = new LoginRequestHandler(this->m_handlerFactory);
 		m_clients[Client_socket] = Handler;
+
+		std::thread user_thread(&Communicator::handleNewClient, this, Client_socket);
+		user_thread.detach();
 	}
 }
 
@@ -103,7 +103,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 				err.message = "Error in request code.";
 				reqResult.response = JsonResponsePacketSerializer::serializeResponse(err);
 			}
-
+			
 			sendMsg(reqResult.response, clientSocket);
 		}
 	}

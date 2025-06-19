@@ -17,14 +17,13 @@ enum RequestCode {
     GET_HIGH_SCORE_CODE,      
     GET_PERSONAL_STATS_CODE,  
     CLOSE_ROOM_CODE,          
-    START_GAME_CODE,          
+    START_GAME_CODE,
     GET_ROOM_STATE_CODE,      
     LEAVE_ROOM_CODE,
 	LEAVE_GAME_CODE,
     GET_QUESTION_CODE,
 	SUBMIT_ANSWER_CODE,
-	GET_GAME_RESULTS_CODE,
-    
+	GET_GAME_RESULTS_CODE
 };
 
 #define STATUS_OK 200
@@ -90,6 +89,10 @@ struct CloseRoomResponse
 };
 
 struct StartGameResponse
+{
+    unsigned int status;
+};
+struct joinGameResponse
 {
     unsigned int status;
 };
