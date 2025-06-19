@@ -114,6 +114,7 @@ namespace TriviaClient.Pages
         void StartGameClick(object sender, RoutedEventArgs e)
         {
             App.m_communicator.Send(Serializer.StartGame());
+            App.m_communicator.Receive();
             TriviaLobby roomPage = new TriviaLobby(m_roomData);
             this.NavigationService.Navigate(roomPage);
         }

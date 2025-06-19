@@ -12,8 +12,8 @@ Game::~Game()
 	m_players.clear();
 }
 
-Game::Game(const unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players)
-	: m_gameId(gameId), m_questions(questions)
+Game::Game(const unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players, IDataBase* db)
+	: m_gameId(gameId), m_questions(questions), m_database(db)
 {
 	for (const auto& player : players)
 	{

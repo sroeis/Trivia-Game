@@ -13,9 +13,9 @@ Game& GameManager::getGame(const LoggedUser& user)
 
 Game& GameManager::createGame(Room& room)
 {
-	Game newGame(room.getRoomData().id, m_database->getQuestions(room.getRoomData().numOfQuestionsInGame <= 30 ? room.getRoomData().numOfQuestionsInGame : 30), room.getLoggedUsers());
+	Game newGame(room.getRoomData().id, m_database->getQuestions(room.getRoomData().numOfQuestionsInGame <= 30 ? room.getRoomData().numOfQuestionsInGame : 30), room.getLoggedUsers(), m_database);
 	m_games.push_back(newGame);
-	return newGame;
+	return m_games.back();
 }
 
 void GameManager::deleteGame(unsigned int gameId)

@@ -2,7 +2,7 @@
 
 using std::exception;
 
-GameRequestHandler::GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory factory) :
+GameRequestHandler::GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory& factory) :
 	m_user(user), m_game(game), m_gameManager(gameManager), m_handlerFactroy(factory)
 {
 }

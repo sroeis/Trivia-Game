@@ -20,7 +20,7 @@ class Game
 
 public:
 	~Game();
-	Game(unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players);
+	Game(unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players, IDataBase* db);
 	const vector<PlayerResults> getPlayersResults() const;
 	const int submitAnswer(const unsigned int answerId, const LoggedUser& user);
 	const bool isPlayerInGame(const LoggedUser& player) const;

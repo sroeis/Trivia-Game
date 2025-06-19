@@ -35,11 +35,12 @@ namespace TriviaClient.Pages
             InitializeComponent();
             _totalQuestions = roomdata.numOfquestionsInGame;
             MAX_TIME_PER_QUESTION = roomdata.timePerQuestion;
-            FetchAndDisplayQuestion();
+            
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
+            FetchAndDisplayQuestion();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -70,7 +71,9 @@ namespace TriviaClient.Pages
                 }
 
                 Question.Text = response.question;
-                _currentAnswers = response.answers.Values.ToList();
+                
+                // Convert 2D array to list of strings
+                _currentAnswers = response.answers.Select(answer => answer[1].ToString()).ToList();
 
                 // Update buttons
                 Option1.Content = _currentAnswers[0];
@@ -132,7 +135,7 @@ namespace TriviaClient.Pages
     public class GetQuestionResponse
     {
         public string question { get; set; }
-        public Dictionary<int, string> answers { get; set; }
+        public List<List<object>> answers { get; set; }
     }
 
     public class SubmitAnswerResponse

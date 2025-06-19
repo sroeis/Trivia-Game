@@ -19,7 +19,7 @@ private:
     const RequestResult leaveGame(const RequestInfo& request);
 
 public:
-    GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory factory);
+    GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory& factory);
     bool isRequestRelevant(const RequestInfo& request) override;
     const RequestResult handleRequest(const RequestInfo& request) override;
     
