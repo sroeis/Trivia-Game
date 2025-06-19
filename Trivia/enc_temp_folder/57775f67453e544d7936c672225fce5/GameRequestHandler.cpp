@@ -71,7 +71,6 @@ const RequestResult GameRequestHandler::submitAnswer(const RequestInfo& request)
 
 	int correctAnswerId = m_game.submitAnswer(submitReq.answerId, m_user);
 	response.correctAnswerId = correctAnswerId;
-    response.status = STATUS_OK;
 	result.response = JsonResponsePacketSerializer::serializeResponse(response);
     result.newHandler = this;
     
