@@ -15,6 +15,7 @@ Game::~Game()
 Game::Game(const unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players, IDataBase* db)
 	: m_gameId(gameId), m_questions(questions), m_database(db)
 {
+	m_numberOfPlayersThatGotResults = 0;
 	for (const auto& player : players)
 	{
 		m_players[player] = GameData{};
@@ -22,8 +23,10 @@ Game::Game(const unsigned int gameId, const vector<Question> questions, const ve
 	}
 }
 
-const vector<PlayerResults> Game::getPlayersResults() const
+const vector<PlayerResults> Game::getPlayersResults() 
 {
+	m_numberOfPlayersThatGotResults++;
+	
 	vector<PlayerResults> results;
 	for (const auto& user : m_players)
 	{
@@ -84,7 +87,8 @@ const Question& Game::getQuestionForUser(const LoggedUser& user) const
 void Game::removePlayer(const LoggedUser& player)
 {
 	submitGameStatsToDB(player);
-	m_players.erase(player);
+	m_players[player].currentQuestion = Question(); // Clear the current question for the player
+	//m_players.erase(player);
 }
 
 void Game::removeAllPlayers()
@@ -94,5 +98,20 @@ void Game::removeAllPlayers()
 		submitGameStatsToDB(player.first);
 	}*/
 	m_players.clear();
+}
+
+bool Game::IsGameEmpty()
+{
+	for(const auto& player : m_players)
+	{
+		if (player.second.currentQuestion.getQuestion() != "")
+			return false; // Game is not empty, at least one player has questions left
+	}
+	return true;
+}
+
+bool Game::didAllGotResults() const
+{
+	return m_players.size() == m_numberOfPlayersThatGotResults;
 }
 

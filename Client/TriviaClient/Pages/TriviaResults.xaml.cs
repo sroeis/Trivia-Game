@@ -21,28 +21,19 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaResults : Page
     {
-        private GetGameResultsResponse _result;
-        public TriviaResults(GetGameResultsResponse result)
+
+        public TriviaResults()
         {
             System.Diagnostics.Debug.WriteLine("got into results");
 
-            _result = result;
+    
             InitializeComponent();
-            if(result.status == 100)
-            {
-                Wait();
-            }
-            else
-            {
-                SetScores();
-            }
-
-
+            Scores.Text = "Please wait for all Players to finish the game";
+            Wait();
         }
 
         public async void Wait()
         {
-            Scores.Text = "Please wait for all Players to finish the game";
             await Task.Delay(5000);
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
@@ -50,7 +41,7 @@ namespace TriviaClient.Pages
             if (response.status != 100)
             {
                 Scores.Text = "Scores:";
-                SetScores();
+                SetScores(response);
             }
             else
             {
@@ -60,9 +51,9 @@ namespace TriviaClient.Pages
             }
             return;
         }
-        public void SetScores()
+        public void SetScores(GetGameResultsResponse response)
         {
-            foreach (PlayerResults player in _result.results)
+            foreach (PlayerResults player in response.results)
             {
                 Scores.Inlines.Add(new Run(player.username + ":")
                 {
