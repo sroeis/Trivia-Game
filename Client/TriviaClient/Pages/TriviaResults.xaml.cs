@@ -34,7 +34,7 @@ namespace TriviaClient.Pages
         public async void Wait()
         {
             PlayerScores.Text = "Please wait for all Players to finish the game";
-            await Task.Delay(5000);
+            await Task.Delay(3000);
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
             GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
@@ -66,9 +66,9 @@ namespace TriviaClient.Pages
         }
         void ExitClick(object sender, RoutedEventArgs e)
         {
-            App.m_communicator.Send(Serializer.LeaveGame());
-            string responseStr = App.m_communicator.Receive();
-            this.NavigationService.Navigate(new Uri("TriviaLoggedIn.xaml", UriKind.Relative));
+            //App.m_communicator.Send(Serializer.LeaveGame());
+            //string responseStr = App.m_communicator.Receive();
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
         }
     }
 }
