@@ -28,4 +28,6 @@ public:
 	const Question& getQuestionForUser(const LoggedUser& user) const;
 	void removePlayer(const LoggedUser& player);
 	void removeAllPlayers();
+	bool IsGameEmpty() { return m_players.empty(); }
+	map<LoggedUser, GameData>& getPlayers() { return m_players; }
 };

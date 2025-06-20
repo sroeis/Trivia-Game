@@ -33,14 +33,14 @@ const RequestResult GameRequestHandler::handleRequest(const RequestInfo& request
 const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
 {
     RequestResult result;
-    
+    GetQuestionResponse response;
+
     try
     {
-		GetQuestionResponse response;
 		const Question& question = m_gameManager.getGame(m_user).getQuestionForUser(m_user);
 		response.question = question.getQuestion();
 
-        if (response.question.empty()) throw exception();
+        if (response.question.empty()) throw exception("questions are empty");
 
         const auto& possibleAnswers = question.getPossibleAnswers();
 
@@ -49,8 +49,7 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
             response.answers[i] = possibleAnswers[i];
         }
 		response.status = STATUS_OK;
-		result.response = JsonResponsePacketSerializer::serializeResponse(response);
-        result.newHandler = this;
+
     }
     catch (std::runtime_error er)
     {
@@ -58,8 +57,14 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
     }
     catch (const exception& e)
     {
-        return leaveGame(request);
+		response.status = 100;
+        response.question = "";
+		response.answers = {};
+        //return leaveGame(request);
+		std::cout << e.what() << std::endl;
 	}
+    result.response = JsonResponsePacketSerializer::serializeResponse(response);
+    result.newHandler = this;
     return result;
 }
 
@@ -68,8 +73,16 @@ const RequestResult GameRequestHandler::submitAnswer(const RequestInfo& request)
     SubmitAnswerRequest submitReq = JsonResponsePacketDeserializer::deserializeSubmitAnswerRequest(request.buffer);
 	RequestResult result;
 	SubmitAnswerResponse response;
+    int correctAnswerId;
+    try {
+	    correctAnswerId = m_game.submitAnswer(submitReq.answerId, m_user);
+    }
+	catch (const std::exception& e)
+    {
+        std::cout << "submit" << std::endl;
 
-	int correctAnswerId = m_game.submitAnswer(submitReq.answerId, m_user);
+		std::cout << e.what() << std::endl;
+	}
 	response.correctAnswerId = correctAnswerId;
     response.status = STATUS_OK;
 	result.response = JsonResponsePacketSerializer::serializeResponse(response);
@@ -81,14 +94,33 @@ const RequestResult GameRequestHandler::submitAnswer(const RequestInfo& request)
 const RequestResult GameRequestHandler::getGameResults(const RequestInfo& request)
 {
 	GetGameResultsResponse response;
+    RequestResult result;
+    std::cout << "getting game results for" <<m_user.getUsername()<< std::endl;
+
     response.results = m_game.getPlayersResults();
 	response.status = STATUS_OK;
 
-	RequestResult result;
-	result.response = JsonResponsePacketSerializer::serializeResponse(response);
-	result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
 
-    m_gameManager.deleteGame(m_game.getGameId());
+    if (m_game.IsGameEmpty()) 
+    {
+		std::cout << "Game is empty, deleting game" << std::endl;
+        result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
+        m_gameManager.deleteGame(m_game.getGameId());
+    }
+    else {
+		std::cout << "Game is not empty, waiting for players to leave" << std::endl;
+        m_game.removePlayer(m_user);
+		result.newHandler = this;
+		//100 Is just a random code to say there are still players in the game so we need to wait
+        response.status = 100;
+		map<LoggedUser, GameData>& players = m_game.getPlayers();
+        for (const auto& pair : players) {
+            const LoggedUser& player = pair.first;
+			std::cout << player.getUsername() << std::endl;
+        }
+    }
+    result.response = JsonResponsePacketSerializer::serializeResponse(response);
+
     return result;
 }
 

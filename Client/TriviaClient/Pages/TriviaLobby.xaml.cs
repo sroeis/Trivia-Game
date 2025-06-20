@@ -61,6 +61,14 @@ namespace TriviaClient.Pages
             App.m_communicator.Send(Serializer.getQuestion());
             string responseStr = App.m_communicator.Receive();
 
+
+            if(_totalQuestions == _questionIndex-1)
+            {
+                System.Diagnostics.Debug.WriteLine("done with quesrtions getting results");
+
+                NavigateToResults();
+                return;
+            }
             try
             {
                 var response = JsonConvert.DeserializeObject<GetQuestionResponse>(responseStr);
@@ -92,6 +100,8 @@ namespace TriviaClient.Pages
             catch
             {
                 ErrorBox.Text = "Error getting question.";
+                System.Diagnostics.Debug.WriteLine("error caught getting results");
+
                 NavigateToResults();
             }
         }
@@ -118,6 +128,8 @@ namespace TriviaClient.Pages
         {
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
+            System.Diagnostics.Debug.WriteLine("got results");
+
             GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
 
 

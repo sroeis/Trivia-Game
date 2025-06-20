@@ -32,7 +32,6 @@ const vector<PlayerResults> Game::getPlayersResults() const
 		res.correctAnswerCount = user.second.correctAnswerCount;
 		res.wrongAnswerCount = user.second.wrongAnswerCount;
 		res.averageAnswerTime = user.second.averageAnswerTime;
-
 		results.push_back(res);
 	}
 
@@ -42,7 +41,12 @@ const vector<PlayerResults> Game::getPlayersResults() const
 
 const int Game::submitAnswer(const unsigned int answerId, const LoggedUser& user)
 {
+
 	GameData& gameData = m_players[user];
+	if (gameData.currentQuestionIndex >= m_questions.size()) 
+	{
+		throw std::exception("Invalid question index\n");
+	}
 	int correctAnswerId = gameData.currentQuestion.getCorrectAnswerId();
 
 	if (correctAnswerId == answerId)
@@ -80,7 +84,7 @@ const Question& Game::getQuestionForUser(const LoggedUser& user) const
 void Game::removePlayer(const LoggedUser& player)
 {
 	submitGameStatsToDB(player);
-	//m_players.erase(player);
+	m_players.erase(player);
 }
 
 void Game::removeAllPlayers()

@@ -37,7 +37,7 @@
 
 
                 <TextBlock Name ="Question" Text="" 
-                    Style="{StaticResource TextStyle}" Foreground ="White" FontSize="30" Height="135" Width="696" TextWrapping="Wrap"/>
+                    Style="{StaticResource TextStyle}" Foreground ="White" FontSize="30" Height="190" Width="696" TextWrapping="Wrap"/>
 
                 <Border CornerRadius="10" Background="#F7E6C4" Margin="10,10,10,20"  Width="300">
 

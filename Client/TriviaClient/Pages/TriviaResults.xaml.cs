@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +21,48 @@ namespace TriviaClient.Pages
     /// </summary>
     public partial class TriviaResults : Page
     {
+        private GetGameResultsResponse _result;
         public TriviaResults(GetGameResultsResponse result)
         {
+            System.Diagnostics.Debug.WriteLine("got into results");
+
+            _result = result;
             InitializeComponent();
-            foreach(PlayerResults player in result.results)
+            if(result.status == 100)
+            {
+                Wait();
+            }
+            else
+            {
+                SetScores();
+            }
+
+
+        }
+
+        public async void Wait()
+        {
+            Scores.Text = "Please wait for all Players to finish the game";
+            await Task.Delay(5000);
+            App.m_communicator.Send(Serializer.getGameResults());
+            string responseStr = App.m_communicator.Receive();
+            GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
+            if (response.status != 100)
+            {
+                Scores.Text = "Scores:";
+                SetScores();
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("waiting more");
+
+                Wait();
+            }
+            return;
+        }
+        public void SetScores()
+        {
+            foreach (PlayerResults player in _result.results)
             {
                 Scores.Inlines.Add(new Run(player.username + ":")
                 {
@@ -33,7 +72,6 @@ namespace TriviaClient.Pages
 
                 Scores.Inlines.Add(new Run($"\nWrong Answers: {player.wrongAnswerCount} Correct Answers: {player.correctAnswerCount} Average Answer Time: {player.averageAnswerTime}\n"));
             }
-
         }
     }
 }
