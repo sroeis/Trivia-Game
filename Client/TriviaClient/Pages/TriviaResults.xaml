@@ -1,0 +1,49 @@
+﻿<Page x:Class="TriviaClient.Pages.TriviaResults"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TriviaClient.Pages"
+      mc:Ignorable="d" 
+      Title="TriviaResults">
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="../images/background.png"/>
+        </Grid.Background>
+
+        <Viewbox>
+
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300,0,120" >
+                <Image Name ="img" Height="265" Margin="0,-330,0,0" Source="pack://application:,,,/images/main1.png"/>
+
+
+                <Border CornerRadius="10" Background="#99BC85" Margin="10,0,10,0">
+
+                    <Border.Effect>
+                        <DropShadowEffect 
+                        Color="{Binding Background.Color, RelativeSource={RelativeSource AncestorType={x:Type Border}}, Converter={StaticResource DarkerColorConverter}}"
+                        ShadowDepth="8" Direction="-90" BlurRadius="0"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock TextAlignment="Center" FontSize="32" 
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource TextStyle}"
+                                   Foreground="MintCream"
+                                   Text="Scores:"
+                                   >
+                        </TextBlock>
+                        <TextBlock Name="Scores" 
+                    Style="{StaticResource TextStyle}" Height="432" Width="566" FontSize="25" TextAlignment="Center"/>
+                    </StackPanel>
+
+
+                </Border>
+
+
+            </StackPanel>
+        </Viewbox>
+
+    </Grid>
+</Page>

@@ -12,7 +12,7 @@ private:
     Game& m_game;
     LoggedUser m_user;
     GameManager& m_gameManager;
-    RequestHandlerFactory& m_handlerFactroy;
+    RequestHandlerFactory& m_handlerFactory;
     const RequestResult getQuestion(const RequestInfo& request);
     const RequestResult submitAnswer(const RequestInfo& request);
     const RequestResult getGameResults(const RequestInfo& request);

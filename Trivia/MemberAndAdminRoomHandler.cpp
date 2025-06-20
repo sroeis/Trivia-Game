@@ -28,10 +28,19 @@ const RequestResult MemberAndAdminRoomHandler::getRoomState(const RequestInfo& r
 	getRoomStateResp.questionCount = roomData.numOfQuestionsInGame;
 	getRoomStateResp.answerTimeout = roomData.timePerQuestion;
 
-	if (roomData.status == GAME_STARTED)
+	if (roomData.status == GAME_STARTED) 
+	{
 		result.newHandler = m_handlerFactory.createGameRequestHandler(m_user);
+		m_roomManager.getRoom(id).removeUser(m_user);
+		if (m_roomManager.getRoom(id).getAllUsers().empty())
+		{
+			m_roomManager.deleteRoom(id);
+		}
+	}
 	else
+	{
 		result.newHandler = this; // Last changed: V3
+	}
 
 	result.response = JsonResponsePacketSerializer::serializeResponse(getRoomStateResp);
 

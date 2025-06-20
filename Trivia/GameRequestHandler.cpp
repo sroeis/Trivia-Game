@@ -3,7 +3,7 @@
 using std::exception;
 
 GameRequestHandler::GameRequestHandler(const LoggedUser& user, Game& game, GameManager& gameManager, RequestHandlerFactory& factory) :
-	m_user(user), m_game(game), m_gameManager(gameManager), m_handlerFactroy(factory)
+	m_user(user), m_game(game), m_gameManager(gameManager), m_handlerFactory(factory)
 {
 }
 
@@ -86,7 +86,7 @@ const RequestResult GameRequestHandler::getGameResults(const RequestInfo& reques
 
 	RequestResult result;
 	result.response = JsonResponsePacketSerializer::serializeResponse(response);
-	result.newHandler = m_handlerFactroy.createMenuRequestHandler(m_user);
+	result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
 
     m_gameManager.deleteGame(m_game.getGameId());
     return result;
@@ -99,7 +99,7 @@ const RequestResult GameRequestHandler::leaveGame(const RequestInfo& request)
     
 	response.status = STATUS_OK;
     result.response = JsonResponsePacketSerializer::serializeResponse(response);
-	result.newHandler = m_handlerFactroy.createMenuRequestHandler(m_user);
+	result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
 
 	m_game.removePlayer(m_user);
 

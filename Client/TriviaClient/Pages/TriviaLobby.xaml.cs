@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -76,10 +77,10 @@ namespace TriviaClient.Pages
                 _currentAnswers = response.answers.Select(answer => answer[1].ToString()).ToList();
 
                 // Update buttons
-                Option1.Content = _currentAnswers[0];
-                Option2.Content = _currentAnswers[1];
-                Option3.Content = _currentAnswers[2];
-                Option4.Content = _currentAnswers[3];
+                o1.Text = _currentAnswers[0];
+                o2.Text = _currentAnswers[1];
+                o3.Text = _currentAnswers[2];
+                o4.Text = _currentAnswers[3];
 
                 _questionIndex++;
                 QuestionCount.Text = $"Question: {_questionIndex}/{_totalQuestions}";
@@ -117,8 +118,11 @@ namespace TriviaClient.Pages
         {
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
+            GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
 
-            this.NavigationService.Navigate(new Uri("Pages/TriviaJoinRoom.xaml", UriKind.Relative));
+
+            TriviaResults roomPage = new TriviaResults(response);
+            this.NavigationService.Navigate(roomPage);
         }
 
         void ExitClick(object sender, RoutedEventArgs e)
@@ -142,5 +146,17 @@ namespace TriviaClient.Pages
     {
         public int correctAnswerId { get; set; }
     }
+    public class GetGameResultsResponse
+    {
+        public uint status;
+        public List<PlayerResults> results;
+    };
+    public class PlayerResults
+    {
+        public string username;
+        public uint correctAnswerCount;
+        public uint wrongAnswerCount;
+        public uint averageAnswerTime;
+    };
 
 }
