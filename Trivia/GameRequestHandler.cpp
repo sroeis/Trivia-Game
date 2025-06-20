@@ -57,10 +57,10 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
     }
     catch (const exception& e)
     {
-		/*response.status = 100;
+		response.status = 100;
         response.question = "";
-		response.answers = {};*/
-        return leaveGame(request);
+		response.answers = {};
+        //return leaveGame(request);
 		std::cout << e.what() << std::endl;
 	}
     result.response = JsonResponsePacketSerializer::serializeResponse(response);
