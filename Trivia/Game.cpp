@@ -42,7 +42,7 @@ const vector<PlayerResults> Game::getPlayersResults()
 
 }
 
-const int Game::submitAnswer(const unsigned int answerId, const LoggedUser& user)
+const int Game::submitAnswer(const unsigned int answerId, const unsigned int timeTaken, const LoggedUser& user)
 {
 
 	GameData& gameData = m_players[user];
@@ -58,6 +58,8 @@ const int Game::submitAnswer(const unsigned int answerId, const LoggedUser& user
 		gameData.wrongAnswerCount++;
 
 	gameData.currentQuestionIndex++;
+
+	gameData.averageAnswerTime = (gameData.averageAnswerTime * (gameData.correctAnswerCount + gameData.wrongAnswerCount) + timeTaken) / (gameData.correctAnswerCount + gameData.wrongAnswerCount);
 	if (gameData.currentQuestionIndex < m_questions.size())
 	{
 		gameData.currentQuestion = m_questions[gameData.currentQuestionIndex];

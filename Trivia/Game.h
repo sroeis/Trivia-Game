@@ -24,7 +24,7 @@ public:
 	~Game();
 	Game(unsigned int gameId, const vector<Question> questions, const vector<LoggedUser>& players, IDataBase* db);
 	const vector<PlayerResults> getPlayersResults();
-	const int submitAnswer(const unsigned int answerId, const LoggedUser& user);
+	const int submitAnswer(const unsigned int answerId, const unsigned int timeTaken, const LoggedUser& user);
 	const bool isPlayerInGame(const LoggedUser& player) const;
 	const unsigned int getGameId() const { return m_gameId; }
 	const Question& getQuestionForUser(const LoggedUser& user) const;

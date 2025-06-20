@@ -109,8 +109,8 @@ namespace TriviaClient.Pages
         private async void SubmitAnswer(int answerIndex)
         {
             _timer.Stop();
-
-            App.m_communicator.Send(Serializer.submitAnswer((uint)answerIndex));
+            
+            App.m_communicator.Send(Serializer.submitAnswer((uint)answerIndex, (uint)(MAX_TIME_PER_QUESTION - _timeRemaining)));
 
             string responseStr = App.m_communicator.Receive();
             var response = JsonConvert.DeserializeObject<SubmitAnswerResponse>(responseStr);

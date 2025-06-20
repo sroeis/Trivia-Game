@@ -40,7 +40,7 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
 		const Question& question = m_gameManager.getGame(m_user).getQuestionForUser(m_user);
 		response.question = question.getQuestion();
 
-        if (response.question.empty()) throw exception("questions are empty");
+        if (response.question.empty()) throw exception("user finished game!");
 
         const auto& possibleAnswers = question.getPossibleAnswers();
 
@@ -57,10 +57,10 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
     }
     catch (const exception& e)
     {
-		response.status = 100;
+		/*response.status = 100;
         response.question = "";
-		response.answers = {};
-        //return leaveGame(request);
+		response.answers = {};*/
+        return leaveGame(request);
 		std::cout << e.what() << std::endl;
 	}
     result.response = JsonResponsePacketSerializer::serializeResponse(response);
@@ -75,7 +75,7 @@ const RequestResult GameRequestHandler::submitAnswer(const RequestInfo& request)
 	SubmitAnswerResponse response;
     int correctAnswerId;
     try {
-	    correctAnswerId = m_game.submitAnswer(submitReq.answerId, m_user);
+        correctAnswerId = m_game.submitAnswer(submitReq.answerId, submitReq.timeTaken, m_user);
     }
 	catch (const std::exception& e)
     {

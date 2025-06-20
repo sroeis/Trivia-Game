@@ -113,11 +113,12 @@ namespace TriviaClient
         {
             return Serialize((byte)CODES.GET_GAME_RESULTS_CODE);
         }
-        internal static Buffer submitAnswer(uint answerID)
+        internal static Buffer submitAnswer(uint answerID, uint timeTaken)
         {
             Dictionary<string, uint> data = new Dictionary<string, uint>()
             {
-                { "answerId", answerID}
+                { "answerId", answerID},
+                { "timeTaken", timeTaken }
             };
 
             string jsonString = JsonConvert.SerializeObject(data);

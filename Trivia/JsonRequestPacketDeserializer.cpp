@@ -133,6 +133,7 @@ const SubmitAnswerRequest JsonResponsePacketDeserializer::deserializeSubmitAnswe
 
 	// Extract data
 	req.answerId = parsed["answerId"];
+	req.timeTaken = parsed["timeTaken"];
 
 	return req;
 }

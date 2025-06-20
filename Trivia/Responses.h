@@ -172,5 +172,6 @@ struct GetGameResultsResponse {
 struct SubmitAnswerRequest
 {
     unsigned int answerId;
+	unsigned int timeTaken;
 };
 
