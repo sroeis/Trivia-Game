@@ -27,19 +27,34 @@
                     </Border.Effect>
 
                     <StackPanel>
-                        <TextBlock TextAlignment="Center" FontSize="32" 
-                                    HorizontalAlignment="Center"
-                                    Style="{StaticResource TextStyle}"
-                                   Foreground="MintCream"
-                                   Text="Scores:"
-                                   >
+
+                        <TextBlock 
+                            x:Name="Scores"
+                            TextAlignment="Center" FontSize="32" 
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TextStyle}"
+                            Foreground="MintCream"
+                            Text="Scores:">
                         </TextBlock>
-                        <TextBlock Name="Scores" 
-                    Style="{StaticResource TextStyle}" Height="432" Width="566" FontSize="25" TextAlignment="Center"/>
+
+                        <TextBlock
+                            x:Name="PlayerScores" Text=""
+                            Style="{StaticResource TextStyle}"
+                            Height="432" Width="566" FontSize="25" 
+                            Foreground="MintCream"
+                            TextWrapping="Wrap"
+                            TextAlignment="Center"
+                        />
+
                     </StackPanel>
-
-
                 </Border>
+
+                <Button 
+                    x:Name="Exit" Style="{StaticResource MenuButtonStyle}" 
+                    Margin="0,50,0,0"
+                    Background="#99BC85" Content="EXIT"
+                    Click="ExitClick" ClickMode="Press"
+                />
 
 
             </StackPanel>

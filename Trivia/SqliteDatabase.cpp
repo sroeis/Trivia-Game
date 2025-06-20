@@ -66,7 +66,7 @@ bool SqliteDatabase::open()
 	}
 
     CreateQuestionTable();
-    Questions::getQuestions(30, "Any", "easy", *this);
+    //Questions::getQuestions(30, "Any", "easy", *this);
     
 
 	return true;
@@ -259,7 +259,7 @@ const vector<Question> SqliteDatabase::getQuestions(const int count) const
         return 0;
     };
 
-    std::string sql = "SELECT * FROM Questions LIMIT " + std::to_string(count) + ";";
+    std::string sql = "SELECT * FROM Questions ORDER BY RANDOM() LIMIT " + std::to_string(count) + ";";
     char* errMsg = nullptr;
     sqlite3_exec(_db, sql.c_str(), callback, &holder, &errMsg);
     if (errMsg) sqlite3_free(errMsg);

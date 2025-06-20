@@ -26,21 +26,21 @@ namespace TriviaClient.Pages
         {
             System.Diagnostics.Debug.WriteLine("got into results");
 
-    
+
             InitializeComponent();
-            Scores.Text = "Please wait for all Players to finish the game";
             Wait();
         }
 
         public async void Wait()
         {
+            PlayerScores.Text = "Please wait for all Players to finish the game";
             await Task.Delay(5000);
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
             GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
             if (response.status != 100)
             {
-                Scores.Text = "Scores:";
+                PlayerScores.Text = "";
                 SetScores(response);
             }
             else
@@ -55,14 +55,20 @@ namespace TriviaClient.Pages
         {
             foreach (PlayerResults player in response.results)
             {
-                Scores.Inlines.Add(new Run(player.username + ":")
+                PlayerScores.Inlines.Add(new Run(player.username + ":")
                 {
                     FontSize = 35,
                     TextDecorations = TextDecorations.Underline
                 });
 
-                Scores.Inlines.Add(new Run($"\nWrong Answers: {player.wrongAnswerCount} Correct Answers: {player.correctAnswerCount} Average Answer Time: {player.averageAnswerTime}\n"));
+                PlayerScores.Inlines.Add(new Run($"\nWrong Answers: {player.wrongAnswerCount} Correct Answers: {player.correctAnswerCount} Average Answer Time: {player.averageAnswerTime}\n"));
             }
+        }
+        void ExitClick(object sender, RoutedEventArgs e)
+        {
+            App.m_communicator.Send(Serializer.LeaveGame());
+            string responseStr = App.m_communicator.Receive();
+            this.NavigationService.Navigate(new Uri("TriviaLoggedIn.xaml", UriKind.Relative));
         }
     }
 }
