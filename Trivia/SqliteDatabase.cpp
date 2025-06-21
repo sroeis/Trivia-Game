@@ -34,6 +34,7 @@ bool SqliteDatabase::open()
 		"CorrectAnswers INTEGER, "
 		"TotalAnswers INTEGER, "
 		"GamesPlayed INTEGER, "
+		"Score INTEGER DEFAULT 0, "
 		"FOREIGN KEY(Username) REFERENCES Users(Username));";
 	res = sqlite3_exec(_db, statisticsTableSql, nullptr, nullptr, &errMsg);
 	if (res != SQLITE_OK) {
@@ -41,33 +42,9 @@ bool SqliteDatabase::open()
 		sqlite3_free(errMsg);
 	}
 
-    const char* gamesTableSql = "CREATE TABLE IF NOT EXISTS Games ("
-        "Username TEXT PRIMARY KEY, "
-        "AvgAnswerTime REAL, "
-        "CorrectAnswers INTEGER, "
-        "WrongAnswers INTEGER, "
-        "FOREIGN KEY(Username) REFERENCES Users(Username));";
-
-	res = sqlite3_exec(_db, gamesTableSql, nullptr, nullptr, &errMsg);
-    if (res != SQLITE_OK) {
-        std::cerr << "Error creating Games table: " << errMsg << std::endl;
-        sqlite3_free(errMsg);
-	}
-
-	// Create HighScores table
-	const char* highScoresTableSql = "CREATE TABLE IF NOT EXISTS HighScores ("
-		"Username TEXT PRIMARY KEY, "
-		"Score INTEGER, "
-		"FOREIGN KEY(Username) REFERENCES Users(Username));";
-	res = sqlite3_exec(_db, highScoresTableSql, nullptr, nullptr, &errMsg);
-	if (res != SQLITE_OK) {
-		std::cerr << "Error creating HighScores table: " << errMsg << std::endl;
-		sqlite3_free(errMsg);
-	}
-
-    CreateQuestionTable();
-    //Questions::getQuestions(30, "Any", "easy", *this);
-    
+	CreateQuestionTable();
+	Questions::getQuestions(30, "Any", "easy", *this);
+	
 
 	return true;
 }
@@ -182,29 +159,26 @@ void SqliteDatabase::insertQuestion(const std::string& question, const std::stri
 
 int SqliteDatabase::submitGameStatistics(const string& username, const GameData& data)
 {
-    // Insert game data
-    string insertGameSql = "INSERT OR REPLACE INTO Games (Username, AvgAnswerTime, CorrectAnswers, WrongAnswers) "
-        "VALUES ('" + username + "', " + std::to_string(data.averageAnswerTime) + ", " 
-        + std::to_string(data.correctAnswerCount) + ", " + std::to_string(data.wrongAnswerCount) + ");";
-
-    char* errMsg = nullptr;
-    if (sqlite3_exec(_db, insertGameSql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) 
-    {
-        std::cerr << "Error inserting game statistics: " << errMsg << std::endl;
-        sqlite3_free(errMsg);
-        return -1;
-    }
-
     // check if user exists in statistics table
     int gamesPlayed = getNumOfPlayerGames(username);
     
     if (gamesPlayed == 0) 
     {
-        string insertStatsSql = "INSERT INTO Statistics (Username, AvgAnswerTime, CorrectAnswers, TotalAnswers, GamesPlayed) "
+        // Calculate score for new user
+        double accuracy = (double)data.correctAnswerCount / (data.correctAnswerCount + data.wrongAnswerCount);
+        double accuracyMultiplier = 1.0 + (accuracy * 0.5);
+        int basePoints = 100;
+        int timePenalty = 2;
+        int newScore = (data.correctAnswerCount * basePoints) * accuracyMultiplier - (data.averageAnswerTime * timePenalty);
+        newScore = std::max(newScore, 0);
+
+        string insertStatsSql = "INSERT INTO Statistics (Username, AvgAnswerTime, CorrectAnswers, TotalAnswers, GamesPlayed, Score) "
             "VALUES ('" + username + "', " + std::to_string(data.averageAnswerTime) + ", " 
             + std::to_string(data.correctAnswerCount) + ", " 
-            + std::to_string(data.correctAnswerCount + data.wrongAnswerCount) + ", 1);";
+            + std::to_string(data.correctAnswerCount + data.wrongAnswerCount) + ", 1, " 
+            + std::to_string(newScore) + ");";
 
+        char* errMsg = nullptr;
         if (sqlite3_exec(_db, insertStatsSql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
             std::cerr << "Error inserting initial statistics: " << errMsg << std::endl;
             sqlite3_free(errMsg);
@@ -216,13 +190,24 @@ int SqliteDatabase::submitGameStatistics(const string& username, const GameData&
         float currentAvgTime = getPlayerAverageAnswerTime(username);
         float newAvgTime = ((currentAvgTime * gamesPlayed) + data.averageAnswerTime) / (gamesPlayed + 1);
         
+        // Calculate score for this game
+        double accuracy = (data.correctAnswerCount + data.wrongAnswerCount) > 0 ? 
+            (double)data.correctAnswerCount / (data.correctAnswerCount + data.wrongAnswerCount) : 0;
+        double accuracyMultiplier = 1.0 + (accuracy * 0.5);
+        int basePoints = 100;
+        int timePenalty = 2;
+        int gameScore = (data.correctAnswerCount * basePoints) * accuracyMultiplier - (data.averageAnswerTime * timePenalty);
+        gameScore = std::max(gameScore, 0);
+        
         string updateStatsSql = "UPDATE Statistics SET "
             "AvgAnswerTime = " + std::to_string(newAvgTime) + ", "
             "CorrectAnswers = CorrectAnswers + " + std::to_string(data.correctAnswerCount) + ", "
             "TotalAnswers = TotalAnswers + " + std::to_string(data.correctAnswerCount + data.wrongAnswerCount) + ", "
-            "GamesPlayed = GamesPlayed + 1 "
+            "GamesPlayed = GamesPlayed + 1, "
+            "Score = Score + " + std::to_string(gameScore) + " "
             "WHERE Username = '" + username + "';";
 
+        char* errMsg = nullptr;
         if (sqlite3_exec(_db, updateStatsSql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
             std::cerr << "Error updating statistics: " << errMsg << std::endl;
             sqlite3_free(errMsg);
@@ -331,20 +316,16 @@ int SqliteDatabase::getNumOfPlayerGames(const string& username) const
 
 int SqliteDatabase::getPlayerScore(const string& username) const
 {
-    int correct = getNumOfCorrectAnswers(username);
-    int total = getNumOfTotalAnswers(username);
-    int games = getNumOfPlayerGames(username);
-    double avgTime = getPlayerAverageAnswerTime(username);
-
-    double accuracy = total > 0 ? (double)correct / total : 0;
-    double accuracyMultiplier = 1.0 + (accuracy * 0.5); // bonus for higher accuracy
-
-    int basePoints = 100;
-    int timePenalty = 2;
-
-    int score = (correct * basePoints) * accuracyMultiplier - (avgTime * timePenalty);
-    score = std::max(score, 0); // prevent negative score
-
+    int score = 0;
+    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+        if (argc > 0 && argv[0])
+            *static_cast<int*>(data) = std::stoi(argv[0]);
+        return 0;
+    };
+    std::string sql = "SELECT Score FROM Statistics WHERE Username = '" + username + "';";
+    char* errMsg = nullptr;
+    sqlite3_exec(_db, sql.c_str(), callback, &score, &errMsg);
+    if (errMsg) sqlite3_free(errMsg);
     return score;
 }
 
@@ -359,7 +340,7 @@ const vector<string> SqliteDatabase::getHighScores() const
         }
         return 0;
     };
-    std::string sql = "SELECT Users.Username, HighScores.Score FROM HighScores JOIN Users ON HighScores.Username = Users.Username ORDER BY HighScores.Score DESC LIMIT 5;";
+    std::string sql = "SELECT Username, Score FROM Statistics ORDER BY Score DESC LIMIT 5;";
     char* errMsg = nullptr;
     sqlite3_exec(_db, sql.c_str(), callback, &holder, &errMsg);
     if (errMsg) sqlite3_free(errMsg);
