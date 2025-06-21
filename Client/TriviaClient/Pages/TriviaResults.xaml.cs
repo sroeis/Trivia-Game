@@ -66,9 +66,9 @@ namespace TriviaClient.Pages
         }
         void ExitClick(object sender, RoutedEventArgs e)
         {
-            App.m_communicator.Send(Serializer.LeaveGame());
-            string responseStr = App.m_communicator.Receive();
-            this.NavigationService.Navigate(new Uri("TriviaLoggedIn.xaml", UriKind.Relative));
+            //App.m_communicator.Send(Serializer.LeaveGame());
+            //string responseStr = App.m_communicator.Receive();
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
         }
     }
 }

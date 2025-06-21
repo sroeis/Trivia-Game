@@ -79,7 +79,6 @@ namespace TriviaClient.Pages
 
             var selectedRoom = RoomsListBox.SelectedItem as RoomData;
             int? selectedRoomId = selectedRoom?.id;
-
             RoomsListBox.ItemsSource = response.rooms;
 
             // Try to restore the selection  

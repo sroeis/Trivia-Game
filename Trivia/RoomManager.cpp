@@ -46,6 +46,8 @@ const std::vector<Room> RoomManager::getRooms() const
 
 	for (auto it : this->m_rooms)
 	{
+		if (it.second.getRoomData().status == GAME_STARTED)
+			continue; // skip rooms that are currently in game
 		allRooms.push_back(it.second);
 	}
 	return allRooms;
