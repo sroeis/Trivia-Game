@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,9 +44,11 @@ namespace TriviaClient.Pages
             string questionCount = NumberOfQuestionsTextBox.Text;
             string answerTimeout = TimePerQuestionTextBox.Text;
             if (string.IsNullOrEmpty(roomName) || !hasInputRoomName ||
+                Regex.IsMatch(roomName, "^[a-zA-Z0-9]*$")||
                 string.IsNullOrEmpty(maxPlayers) || !hasInputMaxPlayers ||
                 string.IsNullOrEmpty(questionCount) || !hasInputQuestionCount ||
-                string.IsNullOrEmpty(answerTimeout) || !hasInputAnswerTimeout)
+                string.IsNullOrEmpty(answerTimeout) || !hasInputAnswerTimeout ||
+                int.Parse(maxPlayers) <= 0 || int.Parse(questionCount) <= 0 || int.Parse(answerTimeout) <= 0) 
             {
                 App.ButtonErrorEvent(sender, e);
                 return;

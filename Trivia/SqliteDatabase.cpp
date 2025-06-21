@@ -58,13 +58,11 @@ bool SqliteDatabase::close()
 
 bool SqliteDatabase::DoesUserExist(const std::string& username)
 {
-	std::cout << "Checking if user exists: " << username << std::endl;
     string sqlStatement = "SELECT COUNT(*) FROM Users WHERE Username = '" + username + "';";
     int count = 0;
     
     char* errMsg = nullptr;
     int res = sqlite3_exec(_db, sqlStatement.c_str(), callback, &count, &errMsg);
-	std::cout << "SQL Result: " << res << ", Count: " << count << std::endl;
     
     
     if (res != SQLITE_OK || count == 0)

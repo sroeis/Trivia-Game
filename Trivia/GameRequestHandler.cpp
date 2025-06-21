@@ -96,7 +96,6 @@ const RequestResult GameRequestHandler::getGameResults(const RequestInfo& reques
 {
 	GetGameResultsResponse response;
     RequestResult result;
-    std::cout << "getting game results for" <<m_user.getUsername()<< std::endl;
 
     
 	response.status = STATUS_OK;
@@ -106,7 +105,6 @@ const RequestResult GameRequestHandler::getGameResults(const RequestInfo& reques
     {
         if (m_game.IsGameEmpty())
         {
-            std::cout << "Game is empty, deleting game" << std::endl;
             response.results = m_game.getPlayersResults();
             result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
             if (m_game.didAllGotResults()) 
@@ -141,12 +139,13 @@ const RequestResult GameRequestHandler::leaveGame(const RequestInfo& request)
 {
 	RequestResult result;
     LeaveGameResponse response;
-    
+
+    m_game.removePlayer(m_user);
+
 	response.status = STATUS_OK;
     result.response = JsonResponsePacketSerializer::serializeResponse(response);
 	result.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
 
-	m_game.removePlayer(m_user);
 
     return result;
 }

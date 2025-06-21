@@ -19,7 +19,6 @@ SignUpStatus LoginManager::signup(const string username, const string password, 
 
 LoginStatus LoginManager::login(const string username, const string password)
 {
-	std::cout << "login called with username: " << username << " and password: " << password << std::endl;
 	for (auto it = m_loggedUsers.begin(); it != m_loggedUsers.end(); ++it) {
 		if (it->getUsername() == username) {
 			throw exception("User already logged in");

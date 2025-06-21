@@ -78,9 +78,7 @@ namespace TriviaClient.Pages
                     NavigateToResults();
                     return;
                 }
-                Question.Text = System.Net.WebUtility.HtmlDecode(response.question);
-                Question.Text = response.question;
-                
+                Question.Text = System.Net.WebUtility.HtmlDecode(response.question);                
                 // Convert 2D array to list of strings
                 _currentAnswers = response.answers.Select(answer => answer[1].ToString()).ToList();
 
@@ -134,7 +132,7 @@ namespace TriviaClient.Pages
         {
             App.m_communicator.Send(Serializer.LeaveGame());
             string responseStr = App.m_communicator.Receive();
-            this.NavigationService.Navigate(new Uri("TriviaLoggedIn.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("Pages/TriviaLoggedIn.xaml", UriKind.Relative));
         }
         void Option1Click(object sender, RoutedEventArgs e) => SubmitAnswer(0);
         void Option2Click(object sender, RoutedEventArgs e) => SubmitAnswer(1);

@@ -44,12 +44,10 @@
 
                         <ListBox x:Name="HighScoresListBox"
                           Width="500" Height="432"
-                          
                           Background="#1c4d9a"
                           FontSize="20" FontWeight="Bold"
                           HorizontalContentAlignment="Center"
-                          VerticalContentAlignment="Center"
-                          DisplayMemberPath="name">
+                          VerticalContentAlignment="Center">
 
                         </ListBox>
                     </StackPanel>

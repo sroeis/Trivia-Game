@@ -77,7 +77,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 			// Code = 1 byte
 			int reqCode = headerBuff[CODE_POS];
-			std::cout << "Received request code: " << reqCode << std::endl;
 			// Size = 4 bytes
 			std::memcpy(&msgSize, &headerBuff[1], SIZE_LENGTH);
 
@@ -86,7 +85,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 			// Receive the payload
 			bytesReceived = recv(clientSocket, reinterpret_cast<char*>(buffer.data()), msgSize, MSG_WAITALL);
-			std::cout << "Received " << bytesReceived << " bytes of payload." << std::endl;
 
 			// Complete RequestInfo
 			ri.buffer = buffer;
