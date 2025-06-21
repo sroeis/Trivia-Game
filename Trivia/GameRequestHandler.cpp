@@ -61,6 +61,7 @@ const RequestResult GameRequestHandler::getQuestion(const RequestInfo& request)
         response.question = "";
 		response.answers = {};
         //return leaveGame(request);
+        m_game.removePlayer(m_user);
 		std::cout << e.what() << std::endl;
 	}
     result.response = JsonResponsePacketSerializer::serializeResponse(response);

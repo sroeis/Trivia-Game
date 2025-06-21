@@ -78,7 +78,7 @@ namespace TriviaClient.Pages
                     NavigateToResults();
                     return;
                 }
-
+                Question.Text = System.Net.WebUtility.HtmlDecode(response.question);
                 Question.Text = response.question;
                 
                 // Convert 2D array to list of strings

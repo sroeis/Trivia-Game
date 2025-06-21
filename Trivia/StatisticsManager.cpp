@@ -7,7 +7,7 @@ const vector<string> StatisticsManager::getHighScore() const
 
 const vector<string> StatisticsManager::getUserStatistics(const string& username) const
 {
-	vector<string> userStatistics;
+		vector<string> userStatistics;
 	float avgTime = m_dataBase->getPlayerAverageAnswerTime(username);
 	int correct = m_dataBase->getNumOfCorrectAnswers(username);
 	int total = m_dataBase->getNumOfTotalAnswers(username);

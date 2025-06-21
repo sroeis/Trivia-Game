@@ -34,7 +34,7 @@ namespace TriviaClient.Pages
         public async void Wait()
         {
             PlayerScores.Text = "Please wait for all Players to finish the game";
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             App.m_communicator.Send(Serializer.getGameResults());
             string responseStr = App.m_communicator.Receive();
             GetGameResultsResponse response = JsonConvert.DeserializeObject<GetGameResultsResponse>(responseStr);
